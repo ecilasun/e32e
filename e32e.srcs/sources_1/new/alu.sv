@@ -23,30 +23,41 @@ always_comb begin
 end
 
 wire [9:0] aluonehot = {
-	op == `ALU_ADD ? 1'b1:1'b0,
-	op == `ALU_SUB ? 1'b1:1'b0,
-	op == `ALU_SLL ? 1'b1:1'b0,
-	op == `ALU_SLT ? 1'b1:1'b0,
-	op == `ALU_SLTU ? 1'b1:1'b0,
-	op == `ALU_XOR ? 1'b1:1'b0,
-	op == `ALU_SRL ? 1'b1:1'b0,
-	op == `ALU_SRA ? 1'b1:1'b0,
-	op == `ALU_OR ? 1'b1:1'b0,
-	op == `ALU_AND ? 1'b1:1'b0 };
+	op == `ALU_ADD  ? 1'b1 : 1'b0,
+	op == `ALU_SUB  ? 1'b1 : 1'b0,
+	op == `ALU_SLL  ? 1'b1 : 1'b0,
+	op == `ALU_SLT  ? 1'b1 : 1'b0,
+	op == `ALU_SLTU ? 1'b1 : 1'b0,
+	op == `ALU_XOR  ? 1'b1 : 1'b0,
+	op == `ALU_SRL  ? 1'b1 : 1'b0,
+	op == `ALU_SRA  ? 1'b1 : 1'b0,
+	op == `ALU_OR   ? 1'b1 : 1'b0,
+	op == `ALU_AND  ? 1'b1 : 1'b0 };
 
-wire [31:0] vsum = v1 + v2;
-wire [31:0] vdiff = v1 + (~v2 + 32'd1); // v1 - v2;
-wire [31:0] vshl = v1 << v2[4:0];
-wire [31:0] vsless = $signed(v1) < $signed(v2) ? 32'd1 : 32'd0;
-wire [31:0] vless = v1 < v2 ? 32'd1 : 32'd0;
-wire [31:0] vxor = v1 ^ v2;
-wire [31:0] vshr = v1 >> v2[4:0];
-wire [31:0] vsra = $signed(v1) >>> v2[4:0];
-wire [31:0] vor = v1 | v2;
-wire [31:0] vand = v1 & v2;
+logic [31:0] vsum;
+logic [31:0] vdiff;
+logic [31:0] vshl;
+logic [31:0] vsless;
+logic [31:0] vless;
+logic [31:0] vxor;
+logic [31:0] vshr;
+logic [31:0] vsra;
+logic [31:0] vor;
+logic [31:0] vand;
 
-// integer alu
-// aluout will generate a latch
+always_comb begin
+	vsum = v1 + v2;
+	vdiff = v1 + (~v2 + 32'd1); // v1 - v2;
+	vshl = v1 << v2[4:0];
+	vsless = $signed(v1) < $signed(v2) ? 32'd1 : 32'd0;
+	vless = v1 < v2 ? 32'd1 : 32'd0;
+	vxor = v1 ^ v2;
+	vshr = v1 >> v2[4:0];
+	vsra = $signed(v1) >>> v2[4:0];
+	vor = v1 | v2;
+	vand = v1 & v2;
+end
+
 always_comb begin
 	case (1'b1)
 		// integer ops
