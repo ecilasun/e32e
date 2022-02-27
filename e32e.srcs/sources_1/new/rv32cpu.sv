@@ -79,7 +79,7 @@ registerfile IntegerRegisters(
 wire branchout;
 
 BLU BranchUnit(
-	.enable(cpustate==DECODE),
+	.enable(rready & (cpustate == FETCH)),
 	.branchout(branchout),
 	.val1(rval1),
 	.val2(rval2),
@@ -88,7 +88,7 @@ BLU BranchUnit(
 wire [31:0] aluout;
 
 ALU ArithmeticLogicUnit(
-	.enable(cpustate==DECODE),
+	.enable(rready & (cpustate == FETCH)),
 	.aluout(aluout),
 	.func3(func3),
 	.val1(rval1),
