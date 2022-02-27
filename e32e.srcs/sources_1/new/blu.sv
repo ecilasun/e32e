@@ -2,7 +2,7 @@
 
 `include "shared.vh"
 
-module BLU(
+module branchdecision(
 	input wire enable,
 	output logic branchout,
 	input wire [31:0] val1,

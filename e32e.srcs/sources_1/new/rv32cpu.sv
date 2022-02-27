@@ -14,14 +14,41 @@ module rv32cpu #(
 ) (
 	input wire aclk,
 	input wire aresetn,
-	output addr_t addr,
-	output logic [3:0] wstrb,
-	output logic ren,
-	output logic ifetch,
-	input wire [31:0] din,
-	output logic [31:0] dout,
-	input wire wready,
-	input wire rready );
+	axi_if.master a4buscached,
+	axi_if.master a4busuncached );
+
+logic ifetch = 1'b0;			// I$/D$ select
+addr_t addr;					// Memory address
+logic ren = 1'b0;				// Read enable
+logic [3:0] wstrb = 4'h0;		// Write strobe
+wire [31:0] din;				// Input to CPU
+logic [31:0] dout;				// Output from CPU
+wire wready, rready;			// Cache r/w state
+
+// bit0: unused
+// bit1: uncached when set, otherwise cached acces
+// bit2: unused
+// bit3: internal memory when set, otherwise external memory
+// we land on uncached bus when top four address bits are 0010 (uncached)
+// in this case we only have one device there, which is the UART
+// regular memory addresses in BRAM start with 1000 (internal, cached), DDR3 addresses with 0000 (external, cached)
+wire isuncached = (addr[31:28] == 4'h2) ? 1'b1 : 1'b0;
+
+systemcache CACHE(
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.uncached(isuncached),
+	// From CPU
+	.ifetch(ifetch),
+	.addr(addr),
+	.din(dout),
+	.dout(din),
+	.wstrb(wstrb),
+	.ren(ren),
+	.wready(wready),
+	.rready(rready),
+	.a4buscached(a4buscached),
+	.a4busuncached(a4busuncached) );
 
 typedef enum logic [3:0] {INIT, RETIRE, FETCH, DECODE, EXECUTE, STOREWAIT, LOADWAIT, WBACK} cpustatetype;
 cpustatetype cpustate = INIT;
@@ -43,7 +70,7 @@ wire [4:0] csrindex;
 wire [31:0] immed;
 wire immsel;
 
-decoder InstructionDecoder(
+instructiondecoder DECODER(
 	.enable(rready & (cpustate == FETCH)),
 	.instruction(din),
 	.instrOneHotOut(instrOneHotOut),
@@ -66,7 +93,7 @@ wire [31:0] rval1;
 wire [31:0] rval2;
 logic [31:0] rdin;
 
-registerfile IntegerRegisters(
+registerfile REGS(
 	.clock(aclk),
 	.rs1(rs1),
 	.rs2(rs2),
@@ -78,7 +105,7 @@ registerfile IntegerRegisters(
 
 wire branchout;
 
-BLU BranchUnit(
+branchdecision BLU(
 	.enable(rready & (cpustate == FETCH)),
 	.branchout(branchout),
 	.val1(rval1),
@@ -87,7 +114,7 @@ BLU BranchUnit(
 
 wire [31:0] aluout;
 
-ALU ArithmeticLogicUnit(
+arithmeticlogicunit ALU (
 	.enable(rready & (cpustate == FETCH)),
 	.aluout(aluout),
 	.func3(func3),

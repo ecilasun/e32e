@@ -2,7 +2,7 @@
 
 `include "shared.vh"
 
-module decoder(
+module instructiondecoder(
 	input wire enable,
 	input wire [31:0] instruction,				// Raw input instruction
 	output bit [17:0] instrOneHotOut = 18'd0,	// Current instruction class

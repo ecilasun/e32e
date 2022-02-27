@@ -5,7 +5,7 @@ import axi_pkg::*;
 module axi4uart(
 	input wire aclk,
 	input wire aresetn,
-	axi_if.slave axi4if,
+	axi_if.slave s_axi,
 	input wire uartbaseclock,
 	output wire uart_rxd_out,
 	input wire uart_txd_in,
@@ -128,19 +128,19 @@ end
 // main state machine
 always @(posedge aclk) begin
 	if (~aresetn) begin
-		axi4if.awready <= 1'b1;
+		s_axi.awready <= 1'b1;
 	end else begin
 		// write address
 		case (waddrstate)
 			2'b00: begin
-				if (axi4if.awvalid & (~uartsendfull)) begin
-					axi4if.awready <= 1'b0;
-					//writeaddress <= axi4if.awaddr; // todo: select subdevice using some bits of address
+				if (s_axi.awvalid & (~uartsendfull)) begin
+					s_axi.awready <= 1'b0;
+					//writeaddress <= s_axi.awaddr; // todo: select subdevice using some bits of address
 					waddrstate <= 2'b01;
 				end
 			end
 			default/*2'b01*/: begin
-				axi4if.awready <= 1'b1;
+				s_axi.awready <= 1'b1;
 				waddrstate <= 2'b00;
 			end
 		endcase
@@ -149,17 +149,17 @@ end
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
-		axi4if.bresp <= 2'b00; // okay
-		axi4if.bvalid <= 1'b0;
-		axi4if.wready <= 1'b1;
+		s_axi.bresp <= 2'b00; // okay
+		s_axi.bvalid <= 1'b0;
+		s_axi.wready <= 1'b1;
 	end else begin
 		// write data
 		we <= 4'h0;
 		case (writestate)
 			2'b00: begin
-				if (axi4if.wvalid) begin
-					axi4if.wready <= 1'b0;
-					case (axi4if.awaddr[3:0])
+				if (s_axi.wvalid) begin
+					s_axi.wready <= 1'b0;
+					case (s_axi.awaddr[3:0])
 						4'h0: begin // rx data
 							// Cannot write here, skip
 							writestate <= 2'b01;
@@ -167,8 +167,8 @@ always @(posedge aclk) begin
 						4'h4: begin // tx data
 							if (~uartsendfull) begin
 								// latch the data and byte select
-								din <= axi4if.wdata[7:0];
-								we <= axi4if.wstrb;
+								din <= s_axi.wdata[7:0];
+								we <= s_axi.wstrb;
 								writestate <= 2'b01;
 							end
 						end
@@ -184,14 +184,14 @@ always @(posedge aclk) begin
 				end
 			end
 			2'b01: begin
-				if (axi4if.bready) begin
-					axi4if.bvalid <= 1'b1;
+				if (s_axi.bready) begin
+					s_axi.bvalid <= 1'b1;
 					writestate <= 2'b10;
 				end
 			end
 			default/*2'b10*/: begin
-				axi4if.wready <= 1'b1;
-				axi4if.bvalid <= 1'b0;
+				s_axi.wready <= 1'b1;
+				s_axi.bvalid <= 1'b0;
 				writestate <= 2'b00;
 			end
 		endcase
@@ -200,38 +200,38 @@ end
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
-		axi4if.rlast <= 1'b1;
-		axi4if.arready <= 1'b1;
-		axi4if.rvalid <= 1'b0;
-		axi4if.rresp <= 2'b00;
+		s_axi.rlast <= 1'b1;
+		s_axi.arready <= 1'b1;
+		s_axi.rvalid <= 1'b0;
+		s_axi.rresp <= 2'b00;
 	end else begin
 		// read address
 		uartrcvre <= 1'b0;
 		case (raddrstate)
 			2'b00: begin
-				if (axi4if.arvalid) begin
-					axi4if.arready <= 1'b0;
+				if (s_axi.arvalid) begin
+					s_axi.arready <= 1'b0;
 
-					case (axi4if.awaddr[3:0])
+					case (s_axi.awaddr[3:0])
 						4'h0: begin // rx data
 							uartrcvre <= 1'b1;
 							raddrstate <= 2'b01;
 						end
 						4'h4: begin // tx data
 							// cannot read this, skip
-							axi4if.rdata <= 32'd0;
-							axi4if.rvalid <= 1'b1;
+							s_axi.rdata <= 32'd0;
+							s_axi.rvalid <= 1'b1;
 							raddrstate <= 2'b10;
 						end
 						4'h8: begin // status register
-							axi4if.rdata <= {29'd0, uartsendempty, uartrcvfull, ~uartrcvempty};
-							axi4if.rvalid <= 1'b1;
+							s_axi.rdata <= {29'd0, uartsendempty, uartrcvfull, ~uartrcvempty};
+							s_axi.rvalid <= 1'b1;
 							raddrstate <= 2'b10;
 						end
 						default/*4'hC*/: begin // control register
 							// cannot read this (yet), skip
-							axi4if.rdata <= 32'd0;
-							axi4if.rvalid <= 1'b1;
+							s_axi.rdata <= 32'd0;
+							s_axi.rvalid <= 1'b1;
 							raddrstate <= 2'b10;
 						end
 					endcase
@@ -239,18 +239,18 @@ always @(posedge aclk) begin
 			end
 			2'b01: begin
 				// master ready to accept
-				if (axi4if.rready & uartrcvvalid) begin
-					axi4if.rdata <= {uartrcvdout, uartrcvdout, uartrcvdout, uartrcvdout};
-					axi4if.rvalid <= 1'b1;
-					//axi4if.rlast <= 1'b1; // last in burst
+				if (s_axi.rready & uartrcvvalid) begin
+					s_axi.rdata <= {uartrcvdout, uartrcvdout, uartrcvdout, uartrcvdout};
+					s_axi.rvalid <= 1'b1;
+					//s_axi.rlast <= 1'b1; // last in burst
 					raddrstate <= 2'b10; // delay one clock for master to pull down arvalid
 				end
 			end
 			default/*2'b10*/: begin
 				// at this point master should have responded properly with arvalid=0
-				axi4if.rvalid <= 1'b0;
-				axi4if.arready <= 1'b1;
-				//axi4if.rlast <= 1'b0;
+				s_axi.rvalid <= 1'b0;
+				s_axi.arready <= 1'b1;
+				//s_axi.rlast <= 1'b0;
 				raddrstate <= 2'b00;
 			end
 		endcase

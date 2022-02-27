@@ -2,7 +2,7 @@
 
 `include "shared.vh"
 
-module ALU(
+module arithmeticlogicunit(
 	input wire enable,
 	output logic [31:0] aluout,
 	input wire [2:0] func3,

@@ -13,22 +13,22 @@ module systemcache(
 	input wire ifetch,
 	output logic rready,
 	output logic wready,
-	input wire rdone,
-	input wire wdone,
-	// cached (memory) controller
-	output logic [31:0] cacheaddress,
-	output data_t cachedout[0:15],
-	input data_t cachedin[0:15],
-	output logic memwritestrobe,
-	output logic memreadstrobe,
-	// uncached (memory mapped device) controller
-	output logic [31:0] ucaddrs,
-	output logic [31:0] ucdout,
-	output logic [3:0] ucwstrb,
-	input ucwritedone,
-	input wire [31:0] ucdin,
-	output logic ucre,
-	input wire ucreaddone );
+	axi_if.master a4buscached,
+	axi_if.master a4busuncached );
+
+logic [31:0] cacheaddress;
+data_t cachedin[0:15];
+data_t cachedout[0:15];
+logic memwritestrobe = 1'b0;
+logic memreadstrobe = 1'b0;
+
+logic [31:0] ucaddrs;
+logic [31:0] ucdout;
+wire [31:0] ucdin;
+logic [3:0] ucwstrb = 4'h0;
+logic ucre = 1'b0;
+wire ucwritedone;
+wire ucreaddone;
 
 logic [3:0] bsel = 4'h0;		// copy of wstrobe
 logic [1:0] rwmode = 2'b00;		// R/W mode bits
@@ -59,6 +59,40 @@ initial begin
 		ddr3tags[i]  = 14'h3fff;		// all bits set for default tag
 	end
 end
+
+// ----------------------------------------------------------------------------
+// cached/uncached memory controllers
+// ----------------------------------------------------------------------------
+
+wire rdone, wdone;
+cachedmemorycontroller CMEMCTL(
+	.aclk(aclk),
+	.areset_n(aresetn),
+	// From cache
+	.addr(cacheaddress),
+	.din(cachedout),
+	.dout(cachedin),
+	.start_read(memreadstrobe),
+	.start_write(memwritestrobe),
+	.wdone(wdone),
+	.rdone(rdone),
+	// To memory
+	.m_axi(a4buscached) );
+
+// For now we have only one device, so we directly wire it here
+uncachedmemorycontroller UCMEMCTL(
+	.aclk(aclk),
+	.areset_n(aresetn),
+	// From cache
+	.addr(ucaddrs),
+	.din(ucdout),
+	.dout(ucdin),
+	.re(ucre),
+	.wstrb(ucwstrb),
+	.wdone(ucwritedone),
+	.rdone(ucreaddone),
+	// To memory mapped devices
+	.m_axi(a4busuncached) );
 
 typedef enum logic [3:0] {IDLE, CWRITE, CREAD, CREADDELAY, UCWRITE, UCWRITEDELAY, UCREAD, UCREADDELAY, CWBACK, CWBACKWAIT, CPOPULATE, CPOPULATEWAIT, CUPDATE, CUPDATEDELAY} cachestatetype;
 cachestatetype cachestate = IDLE;
