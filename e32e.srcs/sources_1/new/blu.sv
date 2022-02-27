@@ -23,18 +23,21 @@ always_comb begin
 end
 
 wire [5:0] aluonehot = {
-	op == `BLU_EQ ? 1'b1 : 1'b0,
-	op == `BLU_NE ? 1'b1 : 1'b0,
-	op == `BLU_L ? 1'b1 : 1'b0,
-	op == `BLU_GE ? 1'b1 : 1'b0,
-	op == `BLU_LU ? 1'b1 : 1'b0,
+	op == `BLU_EQ  ? 1'b1 : 1'b0,
+	op == `BLU_NE  ? 1'b1 : 1'b0,
+	op == `BLU_L   ? 1'b1 : 1'b0,
+	op == `BLU_GE  ? 1'b1 : 1'b0,
+	op == `BLU_LU  ? 1'b1 : 1'b0,
 	op == `BLU_GEU ? 1'b1 : 1'b0 };
 
-wire eq = v1 == v2 ? 1'b1 : 1'b0;
-wire sless = $signed(v1) < $signed(v2) ? 1'b1 : 1'b0;
-wire less = v1 < v2 ? 1'b1:1'b0;
+logic eq, sless, less;
 
-// branch alu
+always_comb begin
+	eq = v1 == v2 ? 1'b1 : 1'b0;
+	sless = $signed(v1) < $signed(v2) ? 1'b1 : 1'b0;
+	less = v1 < v2 ? 1'b1 : 1'b0;
+end
+
 always_comb begin
 	case (1'b1)
 		// branch alu
