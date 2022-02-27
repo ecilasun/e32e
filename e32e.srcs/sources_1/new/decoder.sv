@@ -23,7 +23,7 @@ module decoder(
 
 logic [31:0] instrlatch = 32'd0;
 
-always_comb begin
+always_latch begin
 	if (enable) instrlatch = instruction;
 end
 

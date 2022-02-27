@@ -14,14 +14,6 @@ logic [31:0] v1 = 0;
 logic [31:0] v2 = 0;
 logic [2:0] op = 0;
 
-always_comb begin
-	if (enable) begin
-		v1 = val1;
-		v2 = val2;
-		op = bluop;
-	end
-end
-
 wire [5:0] aluonehot = {
 	op == `BLU_EQ  ? 1'b1 : 1'b0,
 	op == `BLU_NE  ? 1'b1 : 1'b0,
@@ -29,6 +21,14 @@ wire [5:0] aluonehot = {
 	op == `BLU_GE  ? 1'b1 : 1'b0,
 	op == `BLU_LU  ? 1'b1 : 1'b0,
 	op == `BLU_GEU ? 1'b1 : 1'b0 };
+
+always_latch begin
+	if (enable) begin
+		v1 = val1;
+		v2 = val2;
+		op = bluop;
+	end
+end
 
 logic eq, sless, less;
 

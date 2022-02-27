@@ -14,14 +14,6 @@ logic [31:0] v1 = 0;
 logic [31:0] v2 = 0;
 logic [3:0] op = 0;
 
-always_comb begin
-	if (enable) begin
-		v1 = val1;
-		v2 = val2;
-		op = aluop;
-	end
-end
-
 wire [9:0] aluonehot = {
 	op == `ALU_ADD  ? 1'b1 : 1'b0,
 	op == `ALU_SUB  ? 1'b1 : 1'b0,
@@ -33,6 +25,14 @@ wire [9:0] aluonehot = {
 	op == `ALU_SRA  ? 1'b1 : 1'b0,
 	op == `ALU_OR   ? 1'b1 : 1'b0,
 	op == `ALU_AND  ? 1'b1 : 1'b0 };
+
+always_latch begin
+	if (enable) begin
+		v1 = val1;
+		v2 = val2;
+		op = aluop;
+	end
+end
 
 logic [31:0] vsum;
 logic [31:0] vdiff;
