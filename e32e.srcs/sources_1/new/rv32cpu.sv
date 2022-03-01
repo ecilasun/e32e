@@ -50,7 +50,7 @@ systemcache #(.DEVICEID(3'b100)) CACHE( // DEVICEID = 0x8
 	.a4buscached(a4buscached),
 	.a4busuncached(a4busuncached) );
 
-typedef enum logic [3:0] {INIT, RETIRE, FETCH, EXECUTE, STOREWAIT, LOADWAIT, WBACK} cpustatetype;
+typedef enum logic [3:0] {INIT, RETIRE, FETCH, EXECUTE, STOREWAIT, LOADWAIT} cpustatetype;
 cpustatetype cpustate = INIT;
 
 logic [31:0] PC = RESETVECTOR;
@@ -143,7 +143,8 @@ always @(posedge aclk) begin
 			end
 
 			RETIRE: begin
-				addr <= PC;
+				PC <= nextPC;
+				addr <= nextPC;
 				ifetch <= 1'b1; // This read is to use I$, hold high until read is complete
 				ren <= 1'b1;
 				cpustate <= FETCH;
@@ -157,7 +158,7 @@ always @(posedge aclk) begin
 			end
 
 			EXECUTE: begin
-				cpustate <= WBACK;
+				cpustate <= RETIRE;
 				rwe <= isrecordingform;
 				illegalinstruction <= 1'b0;
 				nextPC <= adjacentPC;
@@ -224,7 +225,7 @@ always @(posedge aclk) begin
 			end
 
 			STOREWAIT: begin
-				cpustate <= wready ? WBACK : STOREWAIT;
+				cpustate <= wready ? RETIRE : STOREWAIT;
 			end
 
 			LOADWAIT: begin
@@ -263,13 +264,9 @@ always @(posedge aclk) begin
 					end
 				endcase
 				rwe <= rready;
-				cpustate <= rready ? WBACK : LOADWAIT;
+				cpustate <= rready ? RETIRE : LOADWAIT;
 			end
 
-			default/*WBACK*/: begin
-				PC <= nextPC;
-				cpustate <= RETIRE;
-			end
 		endcase
 
 	end
