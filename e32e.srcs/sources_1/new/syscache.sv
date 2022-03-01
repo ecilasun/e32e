@@ -1,6 +1,8 @@
 `timescale 1ns / 1ps
 
-module systemcache(
+module systemcache #(
+	parameter int DEVICEID = 3'b100
+) (
 	input wire aclk,
 	input wire aresetn,
 	// custom bus to cpu
@@ -94,7 +96,7 @@ uncachedmemorycontroller UCMEMCTL(
 	// To memory mapped devices
 	.m_axi(a4busuncached) );
 
-typedef enum logic [3:0] {IDLE, CWRITE, CREAD, CREADDELAY, UCWRITE, UCWRITEDELAY, UCREAD, UCREADDELAY, CWBACK, CWBACKWAIT, CPOPULATE, CPOPULATEWAIT, CUPDATE, CUPDATEDELAY} cachestatetype;
+typedef enum logic [3:0] {IDLE, CWRITE, CREAD, UCWRITE, UCWRITEDELAY, UCREAD, UCREADDELAY, CWBACK, CWBACKWAIT, CPOPULATE, CPOPULATEWAIT, CUPDATE, CUPDATEDELAY} cachestatetype;
 cachestatetype cachestate = IDLE;
 
 always_ff @(posedge aclk) begin
@@ -193,14 +195,8 @@ always_ff @(posedge aclk) begin
 				wready <= 1'b1;
 				cachestate <= IDLE;
 			end
-			
-			/*CREAD: begin
-				// 1 clock latency for read
-				$display("Cache read waitstate.");
-				cachestate <= CREADDELAY;
-			end*/
 
-			CREAD/*DELAY*/: begin
+			CREAD: begin
 				// Return word directly from cache
 				case (coffset)
 					4'b0000:  dout <= cdout[31:0];
@@ -225,8 +221,8 @@ always_ff @(posedge aclk) begin
 			end
 
 			CWBACK : begin
-				// Use old tag since this is from a different address (device selector stripped since we're connected to one known device, we also drop ifetch as it's not part of the address)
-				cacheaddress <= {3'd0, ptag, cline, 6'd0}; // 16 word aligned
+				// Use old memory address with device selector, aligned to cache boundary
+				cacheaddress <= {DEVICEID, ptag, cline, 6'd0}; // 16 word aligned @ 0x8...
 				cachedout <= {
 					cdout[31:0], cdout[63:32], cdout[95:64], cdout[127:96], cdout[159:128], cdout[191:160], cdout[223:192], cdout[255:224],
 					cdout[287:256], cdout[319:288], cdout[351:320], cdout[383:352], cdout[415:384], cdout[447:416], cdout[479:448], cdout[511:480] };
@@ -239,8 +235,8 @@ always_ff @(posedge aclk) begin
 			end
 
 			CPOPULATE : begin
-				// Same as current memory address, minus the device selector (since we're connected to one known device), aligned to cache boundary
-				cacheaddress <= {3'd0, ctag, cline, 6'd0}; // 16 word aligned
+				// Same as current memory address with device selector, aligned to cache boundary
+				cacheaddress <= {DEVICEID, ctag, cline, 6'd0}; // 16 word aligned @ 0x8...
 				memreadstrobe <= 1'b1;
 				cachestate <= CPOPULATEWAIT;
 			end

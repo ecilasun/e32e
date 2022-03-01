@@ -34,7 +34,7 @@ wire wready, rready;			// Cache r/w state
 // regular memory addresses in BRAM start with 1000 (internal, cached), DDR3 addresses with 0000 (external, cached)
 wire isuncached = (addr[31:28] == 4'h2) ? 1'b1 : 1'b0;
 
-systemcache CACHE(
+systemcache #(.DEVICEID(3'b100)) CACHE( // DEVICEID = 0x8
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.uncached(isuncached),
@@ -50,7 +50,7 @@ systemcache CACHE(
 	.a4buscached(a4buscached),
 	.a4busuncached(a4busuncached) );
 
-typedef enum logic [3:0] {INIT, RETIRE, FETCH, DECODE, EXECUTE, STOREWAIT, LOADWAIT, WBACK} cpustatetype;
+typedef enum logic [3:0] {INIT, RETIRE, FETCH, EXECUTE, STOREWAIT, LOADWAIT, WBACK} cpustatetype;
 cpustatetype cpustate = INIT;
 
 logic [31:0] PC = RESETVECTOR;
@@ -151,13 +151,9 @@ always @(posedge aclk) begin
 
 			FETCH: begin
 				adjacentPC <= PC + 32'd4;
-				cpustate <= rready ? DECODE : FETCH;
-			end
-
-			DECODE: begin
-				ifetch <= 1'b0;
+				ifetch <= ~rready;
 				rwaddress <= rval1 + immed;
-				cpustate <= EXECUTE;
+				cpustate <= rready ? EXECUTE : FETCH;
 			end
 
 			EXECUTE: begin
