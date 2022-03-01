@@ -17,21 +17,17 @@ module rv32cpu #(
 	axi_if.master a4buscached,
 	axi_if.master a4busuncached );
 
+// Memory wires
 logic ifetch = 1'b0;			// I$/D$ select
-addr_t addr;					// Memory address
+addr_t addr = RESETVECTOR;		// Memory address
 logic ren = 1'b0;				// Read enable
 logic [3:0] wstrb = 4'h0;		// Write strobe
 wire [31:0] din;				// Input to CPU
 logic [31:0] dout;				// Output from CPU
 wire wready, rready;			// Cache r/w state
 
-// bit0: unused
-// bit1: uncached when set, otherwise cached acces
-// bit2: unused
-// bit3: internal memory when set, otherwise external memory
-// we land on uncached bus when top four address bits are 0010 (uncached)
-// in this case we only have one device there, which is the UART
-// regular memory addresses in BRAM start with 1000 (internal, cached), DDR3 addresses with 0000 (external, cached)
+// See if this address starts with 0x2 (uncached device access)
+// Otherwise addresses are taken to start at 0x8 (cached memory)
 wire isuncached = (addr[31:28] == 4'h2) ? 1'b1 : 1'b0;
 
 systemcache #(.DEVICEID(3'b100)) CACHE( // DEVICEID = 0x8
@@ -62,11 +58,7 @@ wire [2:0] bluop;
 wire [2:0] func3;
 wire [6:0] func7;
 wire [11:0] func12;
-wire [4:0] rs1;
-wire [4:0] rs2;
-wire [4:0] rs3;
-wire [4:0] rd;
-wire [4:0] csrindex;
+wire [4:0] rs1, rs2, rs3, rd, csrindex;
 wire [31:0] immed;
 wire immsel;
 
@@ -139,6 +131,7 @@ always @(posedge aclk) begin
 			INIT: begin
 				addr <= RESETVECTOR;
 				PC <= RESETVECTOR;
+				nextPC <= RESETVECTOR;
 				cpustate <= RETIRE;
 			end
 

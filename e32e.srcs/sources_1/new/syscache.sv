@@ -32,19 +32,20 @@ logic ucre = 1'b0;
 wire ucwritedone;
 wire ucreaddone;
 
-logic [3:0] bsel = 4'h0;		// copy of wstrobe
-logic [1:0] rwmode = 2'b00;		// R/W mode bits
-logic [13:0] ptag;				// previous cache tag (14 bits)
-logic [13:0] ctag;				// current cache tag (14 bits)
-logic [3:0] coffset;			// current word offset 0..15 (each cache line is 16 words (256bits))
-wire [8:0] cline = addr[14:6];	// current cache line 0..511
+logic [3:0] bsel = 4'h0;			// copy of wstrobe
+logic [1:0] rwmode = 2'b00;			// R/W mode bits
+logic [13:0] ptag;					// previous cache tag (14 bits)
+//logic [13:0] ctag;				// current cache tag (14 bits)
+logic [3:0] coffset;				// current word offset 0..15 (each cache line is 16 words (256bits))
+wire [8:0] cline = addr[14:6];		// current cache line 0..511
+wire [13:0] ctag = addr[28:15];		// current cache tag (14 bits)
 
-logic ddr3valid[0:511];			// cache line valid bits
-logic [13:0] ddr3tags[0:511];	// cache line tags (14 bits)
+logic cachelinevalid[0:511];		// cache line valid bits
+logic [13:0] cachelinetags[0:511];	// cache line tags (14 bits)
 
-logic [63:0] cachewe = 64'd0;	// byte select for 64 byte cache line
-logic [511:0] cdin;				// input data to write to cache
-wire [511:0] cdout;				// output data read from cache
+logic [63:0] cachewe = 64'd0;		// byte select for 64 byte cache line
+logic [511:0] cdin;					// input data to write to cache
+wire [511:0] cdout;					// output data read from cache
 
 cachemem CacheMemory512(
 	.addra(cline), 				// current cache line
@@ -57,8 +58,8 @@ initial begin
 	integer i;
 	// all pages are 'clean', all tags are invalid and cache is zeroed out by default
 	for (int i=0; i<512; i=i+1) begin	// 512 lines, 8 words each
-		ddr3valid[i] = 1'b1;			// cache lines are all valid by default, so no write-back for initial cache-miss
-		ddr3tags[i]  = 14'h3fff;		// all bits set for default tag
+		cachelinevalid[i] = 1'b1;		// cache lines are all valid by default, so no write-back for initial cache-miss
+		cachelinetags[i]  = 14'h3fff;	// all bits set for default tag
 	end
 end
 
@@ -116,15 +117,15 @@ always_ff @(posedge aclk) begin
 
 		case (cachestate)
 			IDLE : begin
-				rwmode <= {ren, |wstrb};	// Record r/w mode
-				bsel <= wstrb;				// Write byte select
-				coffset <= addr[5:2];		// Cache offset 0..15
-				//cline <= addr[14:6];		// Cache line 0..511
-				ctag <= addr[28:15];		// Cache tag 0000..3fff
-				ptag <= ddr3tags[cline];	// Previous cache tag
+				rwmode <= {ren, |wstrb};		// Record r/w mode
+				bsel <= wstrb;					// Write byte select
+				coffset <= addr[5:2];			// Cache offset 0..15
+				//cline <= addr[14:6];			// Cache line 0..511
+				//ctag <= addr[28:15];			// Cache tag 0000..3fff
+				ptag <= cachelinetags[cline];	// Previous cache tag
 
 				// Cache hit when ctag == ptag, also uncached will force a cache hit
-				if ((addr[28:15] == ddr3tags[cline]) || uncached) begin
+				if ((ctag/*addr[28:15]*/ == cachelinetags[cline]) || uncached) begin
 					case ({ren, |wstrb})
 						2'b01: cachestate <= uncached ? UCWRITE : CWRITE;
 						2'b10: cachestate <= uncached ? UCREAD : CREAD;
@@ -132,7 +133,7 @@ always_ff @(posedge aclk) begin
 					endcase
 				end else begin // Cache miss when ctag != ptag
 					case ({ren, |wstrb})
-						2'b01, 2'b10: cachestate <= ~ddr3valid[cline] ? CWBACK : CPOPULATE;
+						2'b01, 2'b10: cachestate <= ~cachelinevalid[cline] ? CWBACK : CPOPULATE;
 						default: cachestate <= IDLE;
 					endcase
 				end
@@ -191,7 +192,7 @@ always_ff @(posedge aclk) begin
 					default:  cachewe <= {        bsel, 60'd0 }; // 4'b1111
 				endcase
 				// This cacbe line needs eviction next time we miss
-				ddr3valid[cline] <= 1'b0;
+				cachelinevalid[cline] <= 1'b0;
 				wready <= 1'b1;
 				cachestate <= IDLE;
 			end
@@ -250,8 +251,8 @@ always_ff @(posedge aclk) begin
 				cdin <= {
 					cachedin[15], cachedin[14], cachedin[13], cachedin[12], cachedin[11], cachedin[10], cachedin[9], cachedin[8],
 					cachedin[7], cachedin[6], cachedin[5], cachedin[4], cachedin[3], cachedin[2], cachedin[1], cachedin[0] }; // Data from memory
-				ddr3tags[cline] <= ctag;
-				ddr3valid[cline] <= 1'b1;
+				cachelinetags[cline] <= ctag;
+				cachelinevalid[cline] <= 1'b1;
 				cachestate <= CUPDATEDELAY;
 			end
 
