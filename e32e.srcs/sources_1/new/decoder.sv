@@ -24,7 +24,7 @@ module instructiondecoder(
 logic [31:0] instrlatch = 32'd0;
 
 always_latch begin
-	if (enable) instrlatch = instruction;
+	if (enable) instrlatch <= instruction;
 end
 
 wire [17:0] instrOneHot = {
