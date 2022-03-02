@@ -4,6 +4,7 @@
 
 module arithmeticlogicunit(
 	input wire enable,
+	input wire aclk,
 	output logic [31:0] aluout,
 	input wire [2:0] func3,
 	input wire [31:0] val1,
@@ -26,11 +27,11 @@ wire [9:0] aluonehot = {
 	op == `ALU_OR   ? 1'b1 : 1'b0,
 	op == `ALU_AND  ? 1'b1 : 1'b0 };
 
-always_latch begin
+always @(posedge aclk) begin
 	if (enable) begin
-		v1 = val1;
-		v2 = val2;
-		op = aluop;
+		v1 <= val1;
+		v2 <= val2;
+		op <= aluop;
 	end
 end
 

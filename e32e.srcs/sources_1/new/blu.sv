@@ -4,6 +4,7 @@
 
 module branchdecision(
 	input wire enable,
+	input wire aclk,
 	output logic branchout,
 	input wire [31:0] val1,
 	input wire [31:0] val2,
@@ -22,11 +23,11 @@ wire [5:0] aluonehot = {
 	op == `BLU_LU  ? 1'b1 : 1'b0,
 	op == `BLU_GEU ? 1'b1 : 1'b0 };
 
-always_latch begin
+always @(posedge aclk) begin
 	if (enable) begin
-		v1 = val1;
-		v2 = val2;
-		op = bluop;
+		v1 <= val1;
+		v2 <= val2;
+		op <= bluop;
 	end
 end
 

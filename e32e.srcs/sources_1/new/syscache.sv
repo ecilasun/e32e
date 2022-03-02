@@ -1,5 +1,7 @@
 `timescale 1ns / 1ps
 
+`include "shared.vh"
+
 module systemcache #(
 	parameter int DEVICEID = 3'b100
 ) (
@@ -35,10 +37,9 @@ wire ucreaddone;
 logic [3:0] bsel = 4'h0;			// copy of wstrobe
 logic [1:0] rwmode = 2'b00;			// R/W mode bits
 logic [13:0] ptag;					// previous cache tag (14 bits)
-//logic [13:0] ctag;				// current cache tag (14 bits)
+logic [13:0] ctag;					// current cache tag (14 bits)
 logic [3:0] coffset;				// current word offset 0..15 (each cache line is 16 words (256bits))
-wire [8:0] cline = addr[14:6];		// current cache line 0..511
-wire [13:0] ctag = addr[28:15];		// current cache tag (14 bits)
+logic [8:0] cline;					// current cache line 0..511
 
 logic cachelinevalid[0:511];		// cache line valid bits
 logic [13:0] cachelinetags[0:511];	// cache line tags (14 bits)
@@ -48,11 +49,11 @@ logic [511:0] cdin;					// input data to write to cache
 wire [511:0] cdout;					// output data read from cache
 
 cachemem CacheMemory512(
-	.addra(cline), 				// current cache line
-	.clka(aclk),				// cache clock
-	.dina(cdin),				// updated cache data to write
-	.wea(cachewe),				// write strobe for current cache line
-	.douta(cdout) );			// output of currently selected cache line
+	.addra(addr[14:6]/*cline*/),	// current cache line
+	.clka(aclk),					// cache clock
+	.dina(cdin),					// updated cache data to write
+	.wea(cachewe),					// write strobe for current cache line
+	.douta(cdout) );				// output of currently selected cache line
 
 initial begin
 	integer i;
@@ -117,26 +118,18 @@ always_ff @(posedge aclk) begin
 
 		case (cachestate)
 			IDLE : begin
-				rwmode <= {ren, |wstrb};		// Record r/w mode
-				bsel <= wstrb;					// Write byte select
-				coffset <= addr[5:2];			// Cache offset 0..15
-				//cline <= addr[14:6];			// Cache line 0..511
-				//ctag <= addr[28:15];			// Cache tag 0000..3fff
-				ptag <= cachelinetags[cline];	// Previous cache tag
+				rwmode <= {ren, |wstrb};			// Record r/w mode
+				bsel <= wstrb;						// Write byte select
+				coffset <= addr[5:2];				// Cache offset 0..15
+				cline <= addr[14:6];				// Cache line 0..511
+				ctag <= addr[28:15];				// Cache tag 0000..3fff
+				ptag <= cachelinetags[addr[14:6]];	// Previous cache tag
 
-				// Cache hit when ctag == ptag, also uncached will force a cache hit
-				if ((ctag/*addr[28:15]*/ == cachelinetags[cline]) || uncached) begin
-					case ({ren, |wstrb})
-						2'b01: cachestate <= uncached ? UCWRITE : CWRITE;
-						2'b10: cachestate <= uncached ? UCREAD : CREAD;
-						default: cachestate <= IDLE;
-					endcase
-				end else begin // Cache miss when ctag != ptag
-					case ({ren, |wstrb})
-						2'b01, 2'b10: cachestate <= ~cachelinevalid[cline] ? CWBACK : CPOPULATE;
-						default: cachestate <= IDLE;
-					endcase
-				end
+				case ({ren, |wstrb})
+					2'b01: cachestate <= uncached ? UCWRITE : CWRITE;
+					2'b10: cachestate <= uncached ? UCREAD : CREAD;
+					default: cachestate <= IDLE;
+				endcase
 			end
 
 			UCWRITE: begin
@@ -172,61 +165,71 @@ always_ff @(posedge aclk) begin
 			end
 
 			CWRITE: begin
-				cdin <= {din, din, din, din, din, din, din, din, din, din, din, din, din, din, din, din};	// Incoming data replicated to be masked by cachewe
-				case (coffset)
-					4'b0000:  cachewe <= { 60'd0, bsel        };
-					4'b0001:  cachewe <= { 56'd0, bsel, 4'd0  };
-					4'b0010:  cachewe <= { 52'd0, bsel, 8'd0  };
-					4'b0011:  cachewe <= { 48'd0, bsel, 12'd0 };
-					4'b0100:  cachewe <= { 44'd0, bsel, 16'd0 };
-					4'b0101:  cachewe <= { 40'd0, bsel, 20'd0 };
-					4'b0110:  cachewe <= { 36'd0, bsel, 24'd0 };
-					4'b0111:  cachewe <= { 32'd0, bsel, 28'd0 };
-					4'b1000:  cachewe <= { 28'd0, bsel, 32'd0 };
-					4'b1001:  cachewe <= { 24'd0, bsel, 36'd0 };
-					4'b1010:  cachewe <= { 20'd0, bsel, 40'd0 };
-					4'b1011:  cachewe <= { 16'd0, bsel, 44'd0 };
-					4'b1100:  cachewe <= { 12'd0, bsel, 48'd0 };
-					4'b1101:  cachewe <= { 8'd0,  bsel, 52'd0 };
-					4'b1110:  cachewe <= { 4'd0,  bsel, 56'd0 };
-					default:  cachewe <= {        bsel, 60'd0 }; // 4'b1111
-				endcase
-				// This cacbe line needs eviction next time we miss
-				cachelinevalid[cline] <= 1'b0;
-				wready <= 1'b1;
-				cachestate <= IDLE;
+				if (ctag == ptag) begin
+					cdin <= {din, din, din, din, din, din, din, din, din, din, din, din, din, din, din, din};	// Incoming data replicated to be masked by cachewe
+					case (coffset)
+						4'b0000:  cachewe <= { 60'd0, bsel        };
+						4'b0001:  cachewe <= { 56'd0, bsel, 4'd0  };
+						4'b0010:  cachewe <= { 52'd0, bsel, 8'd0  };
+						4'b0011:  cachewe <= { 48'd0, bsel, 12'd0 };
+						4'b0100:  cachewe <= { 44'd0, bsel, 16'd0 };
+						4'b0101:  cachewe <= { 40'd0, bsel, 20'd0 };
+						4'b0110:  cachewe <= { 36'd0, bsel, 24'd0 };
+						4'b0111:  cachewe <= { 32'd0, bsel, 28'd0 };
+						4'b1000:  cachewe <= { 28'd0, bsel, 32'd0 };
+						4'b1001:  cachewe <= { 24'd0, bsel, 36'd0 };
+						4'b1010:  cachewe <= { 20'd0, bsel, 40'd0 };
+						4'b1011:  cachewe <= { 16'd0, bsel, 44'd0 };
+						4'b1100:  cachewe <= { 12'd0, bsel, 48'd0 };
+						4'b1101:  cachewe <= { 8'd0,  bsel, 52'd0 };
+						4'b1110:  cachewe <= { 4'd0,  bsel, 56'd0 };
+						default:  cachewe <= {        bsel, 60'd0 }; // 4'b1111
+					endcase
+					// This cacbe line needs eviction next time we miss
+					cachelinevalid[cline] <= 1'b0;
+					wready <= 1'b1;
+					cachestate <= IDLE;
+				end else begin
+					cachestate <= ~cachelinevalid[cline] ? CWBACK : CPOPULATE;
+				end
 			end
 
 			CREAD: begin
-				// Return word directly from cache
-				case (coffset)
-					4'b0000:  dout <= cdout[31:0];
-					4'b0001:  dout <= cdout[63:32];
-					4'b0010:  dout <= cdout[95:64];
-					4'b0011:  dout <= cdout[127:96];
-					4'b0100:  dout <= cdout[159:128];
-					4'b0101:  dout <= cdout[191:160];
-					4'b0110:  dout <= cdout[223:192];
-					4'b0111:  dout <= cdout[255:224];
-					4'b1000:  dout <= cdout[287:256];
-					4'b1001:  dout <= cdout[319:288];
-					4'b1010:  dout <= cdout[351:320];
-					4'b1011:  dout <= cdout[383:352];
-					4'b1100:  dout <= cdout[415:384];
-					4'b1101:  dout <= cdout[447:416];
-					4'b1110:  dout <= cdout[479:448];
-					default:  dout <= cdout[511:480]; // 4'b1111
-				endcase
-				rready <= 1'b1;
-				cachestate <= IDLE;
+				if (ctag == ptag) begin
+					// Return word directly from cache
+					case (coffset)
+						4'b0000:  dout <= cdout[31:0];
+						4'b0001:  dout <= cdout[63:32];
+						4'b0010:  dout <= cdout[95:64];
+						4'b0011:  dout <= cdout[127:96];
+						4'b0100:  dout <= cdout[159:128];
+						4'b0101:  dout <= cdout[191:160];
+						4'b0110:  dout <= cdout[223:192];
+						4'b0111:  dout <= cdout[255:224];
+						4'b1000:  dout <= cdout[287:256];
+						4'b1001:  dout <= cdout[319:288];
+						4'b1010:  dout <= cdout[351:320];
+						4'b1011:  dout <= cdout[383:352];
+						4'b1100:  dout <= cdout[415:384];
+						4'b1101:  dout <= cdout[447:416];
+						4'b1110:  dout <= cdout[479:448];
+						default:  dout <= cdout[511:480]; // 4'b1111
+					endcase
+					rready <= 1'b1;
+					cachestate <= IDLE;
+				end else begin // Cache miss when ctag != ptag
+					cachestate <= ~cachelinevalid[cline] ? CWBACK : CPOPULATE;
+				end
 			end
 
 			CWBACK : begin
 				// Use old memory address with device selector, aligned to cache boundary
 				cacheaddress <= {DEVICEID, ptag, cline, 6'd0}; // 16 word aligned @ 0x8...
 				cachedout <= {
-					cdout[31:0], cdout[63:32], cdout[95:64], cdout[127:96], cdout[159:128], cdout[191:160], cdout[223:192], cdout[255:224],
-					cdout[287:256], cdout[319:288], cdout[351:320], cdout[383:352], cdout[415:384], cdout[447:416], cdout[479:448], cdout[511:480] };
+					cdout[31:0],    cdout[63:32],   cdout[95:64],   cdout[127:96],
+					cdout[159:128], cdout[191:160], cdout[223:192], cdout[255:224],
+					cdout[287:256], cdout[319:288], cdout[351:320], cdout[383:352],
+					cdout[415:384], cdout[447:416], cdout[479:448], cdout[511:480] };
 				memwritestrobe <= 1'b1;
 				cachestate <= CWBACKWAIT;
 			end
@@ -249,8 +252,11 @@ always_ff @(posedge aclk) begin
 			CUPDATE: begin
 				cachewe <= 64'hFFFFFFFFFFFFFFFF; // All entries
 				cdin <= {
-					cachedin[15], cachedin[14], cachedin[13], cachedin[12], cachedin[11], cachedin[10], cachedin[9], cachedin[8],
-					cachedin[7], cachedin[6], cachedin[5], cachedin[4], cachedin[3], cachedin[2], cachedin[1], cachedin[0] }; // Data from memory
+					cachedin[15], cachedin[14], cachedin[13], cachedin[12],
+					cachedin[11], cachedin[10], cachedin[9],  cachedin[8],
+					cachedin[7],  cachedin[6],  cachedin[5],  cachedin[4],
+					cachedin[3],  cachedin[2],  cachedin[1],  cachedin[0] }; // Data from memory
+				ptag <= ctag;
 				cachelinetags[cline] <= ctag;
 				cachelinevalid[cline] <= 1'b1;
 				cachestate <= CUPDATEDELAY;

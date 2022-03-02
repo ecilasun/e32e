@@ -99,6 +99,7 @@ wire branchout;
 
 branchdecision BLU(
 	.enable(rready & (cpustate == FETCH)),
+	.aclk(aclk),
 	.branchout(branchout),
 	.val1(rval1),
 	.val2(rval2),
@@ -108,6 +109,7 @@ wire [31:0] aluout;
 
 arithmeticlogicunit ALU (
 	.enable(rready & (cpustate == FETCH)),
+	.aclk(aclk),
 	.aluout(aluout),
 	.func3(func3),
 	.val1(rval1),
