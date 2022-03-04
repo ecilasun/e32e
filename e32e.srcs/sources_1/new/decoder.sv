@@ -4,21 +4,21 @@
 
 module instructiondecoder(
 	input wire enable,
-	input wire [31:0] instruction,				// Raw input instruction
-	output bit [17:0] instrOneHotOut = 18'd0,	// Current instruction class
-	output bit isrecordingform = 1'b0,			// High when we can save result to register
-	output bit [3:0] aluop = 4'h0,				// Current ALU op
-	output bit [2:0] bluop = 3'h0,				// Current BLU op
-	output bit [2:0] func3 = 3'd0,				// Sub-instruction
-	output bit [6:0] func7 = 7'd0,				// Sub-instruction
-	output bit [11:0] func12 = 12'd0,			// Sub-instruction
-	output bit [4:0] rs1 = 5'd0,				// Source register one
-	output bit [4:0] rs2 = 5'd0,				// Source register two
-	output bit [4:0] rs3 = 5'd0,				// Used by fused multiplyadd/sub
-	output bit [4:0] rd = 5'd0,					// Destination register
-	output bit [4:0] csrindex,					// Index of selected CSR register
-	output bit [31:0] immed = 32'd0,			// Unpacked immediate integer value
-	output bit selectimmedasrval2 = 1'b0		// Select rval2 or unpacked integer during EXEC
+	input wire [31:0] instruction,		// Raw input instruction
+	output bit [17:0] instrOneHotOut,	// Current instruction class
+	output bit isrecordingform,			// High when we can save result to register
+	output bit [3:0] aluop,				// Current ALU op
+	output bit [2:0] bluop,				// Current BLU op
+	output bit [2:0] func3,				// Sub-instruction
+	output bit [6:0] func7,				// Sub-instruction
+	output bit [11:0] func12,			// Sub-instruction
+	output bit [4:0] rs1,				// Source register one
+	output bit [4:0] rs2,				// Source register two
+	output bit [4:0] rs3,				// Used by fused multiplyadd/sub
+	output bit [4:0] rd,				// Destination register
+	output bit [4:0] csrindex,			// Index of selected CSR register
+	output bit [31:0] immed,			// Unpacked immediate integer value
+	output bit selectimmedasrval2		// Select rval2 or unpacked integer during EXEC
 );
 
 logic [31:0] instrlatch = 32'd0;

@@ -30,8 +30,6 @@ clockandreset ClockAndResetGen(
 axi_if A4CH0();
 axi_if A4UCH0();
 
-axi_if brambus();
-
 // ----------------------------------------------------------------------------
 // HARTs
 // ----------------------------------------------------------------------------
@@ -46,7 +44,7 @@ rv32cpu #(.RESETVECTOR(32'h80000000), .HARTID(0)) HART0 (
 // Cached devices
 // ----------------------------------------------------------------------------
 
-// TODO: AXI crossbar here to reduce all A4CH* to one A4UCH bus
+// TODO: AXI crossbar here to reduce all A4CH* to one A4CH bus
 
 a4bram BRAM64(
 	.aclk(aclk),

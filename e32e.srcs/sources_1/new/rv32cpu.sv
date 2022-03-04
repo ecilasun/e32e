@@ -60,7 +60,7 @@ wire [6:0] func7;
 wire [11:0] func12;
 wire [4:0] rs1, rs2, rs3, rd, csrindex;
 wire [31:0] immed;
-wire immsel;
+wire immsel, isrecordingform;
 
 instructiondecoder DECODER(
 	.enable(rready & (cpustate == FETCH)),

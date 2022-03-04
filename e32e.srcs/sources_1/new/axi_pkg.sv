@@ -3,7 +3,7 @@
 package axi_pkg;
 
 	localparam ADDR_WIDTH = 32;
-	localparam DATA_WIDTH = 32;
+	localparam DATA_WIDTH = 256;
 	localparam STRB_WIDTH = DATA_WIDTH / 8;
 
 	localparam SIZE_1_BYTE   = 3'b000;

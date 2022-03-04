@@ -21,8 +21,8 @@ module systemcache #(
 	axi_if.master a4busuncached );
 
 logic [31:0] cacheaddress;
-data_t cachedin[0:15];
-data_t cachedout[0:15];
+data_t cachedin[0:1];
+data_t cachedout[0:1];
 logic memwritestrobe = 1'b0;
 logic memreadstrobe = 1'b0;
 
@@ -225,11 +225,7 @@ always_ff @(posedge aclk) begin
 			CWBACK : begin
 				// Use old memory address with device selector, aligned to cache boundary
 				cacheaddress <= {DEVICEID, ptag, cline, 6'd0}; // 16 word aligned @ 0x8...
-				cachedout <= {
-					cdout[31:0],    cdout[63:32],   cdout[95:64],   cdout[127:96],
-					cdout[159:128], cdout[191:160], cdout[223:192], cdout[255:224],
-					cdout[287:256], cdout[319:288], cdout[351:320], cdout[383:352],
-					cdout[415:384], cdout[447:416], cdout[479:448], cdout[511:480] };
+				cachedout <= {cdout[255:0], cdout[511:256]};
 				memwritestrobe <= 1'b1;
 				cachestate <= CWBACKWAIT;
 			end
@@ -251,11 +247,7 @@ always_ff @(posedge aclk) begin
 
 			CUPDATE: begin
 				cachewe <= 64'hFFFFFFFFFFFFFFFF; // All entries
-				cdin <= {
-					cachedin[15], cachedin[14], cachedin[13], cachedin[12],
-					cachedin[11], cachedin[10], cachedin[9],  cachedin[8],
-					cachedin[7],  cachedin[6],  cachedin[5],  cachedin[4],
-					cachedin[3],  cachedin[2],  cachedin[1],  cachedin[0] }; // Data from memory
+				cdin <= {cachedin[1], cachedin[0]}; // Data from memory
 				ptag <= ctag;
 				cachelinetags[cline] <= ctag;
 				cachelinevalid[cline] <= 1'b1;
