@@ -36,20 +36,20 @@ wire ucreaddone;
 
 logic [3:0] bsel = 4'h0;			// copy of wstrobe
 logic [1:0] rwmode = 2'b00;			// R/W mode bits
-logic [13:0] ptag;					// previous cache tag (14 bits)
-logic [13:0] ctag;					// current cache tag (14 bits)
-logic [3:0] coffset;				// current word offset 0..15 (each cache line is 16 words (256bits))
+logic [14:0] ptag;					// previous cache tag (15 bits)
+logic [14:0] ctag;					// current cache tag (15 bits)
+logic [3:0] coffset;				// current word offset 0..15
 logic [8:0] cline;					// current cache line 0..511
 
 logic cachelinevalid[0:511];		// cache line valid bits
-logic [13:0] cachelinetags[0:511];	// cache line tags (14 bits)
+logic [14:0] cachelinetags[0:511];	// cache line tags (15 bits)
 
 logic [63:0] cachewe = 64'd0;		// byte select for 64 byte cache line
 logic [511:0] cdin;					// input data to write to cache
 wire [511:0] cdout;					// output data read from cache
 
 cachemem CacheMemory512(
-	.addra(addr[14:6]/*cline*/),	// current cache line
+	.addra({ifetch,addr[13:6]}/*cline*/),	// current cache line
 	.clka(aclk),					// cache clock
 	.dina(cdin),					// updated cache data to write
 	.wea(cachewe),					// write strobe for current cache line
@@ -58,9 +58,9 @@ cachemem CacheMemory512(
 initial begin
 	integer i;
 	// all pages are 'clean', all tags are invalid and cache is zeroed out by default
-	for (int i=0; i<512; i=i+1) begin	// 512 lines, 8 words each
+	for (int i=0; i<512; i=i+1) begin	// 512 lines (I$, D$)
 		cachelinevalid[i] = 1'b1;		// cache lines are all valid by default, so no write-back for initial cache-miss
-		cachelinetags[i]  = 14'h3fff;	// all bits set for default tag
+		cachelinetags[i]  = 15'h7fff;	// all bits set for default tag
 	end
 end
 
@@ -118,12 +118,12 @@ always_ff @(posedge aclk) begin
 
 		case (cachestate)
 			IDLE : begin
-				rwmode <= {ren, |wstrb};			// Record r/w mode
-				bsel <= wstrb;						// Write byte select
-				coffset <= addr[5:2];				// Cache offset 0..15
-				cline <= addr[14:6];				// Cache line 0..511
-				ctag <= addr[28:15];				// Cache tag 0000..3fff
-				ptag <= cachelinetags[addr[14:6]];	// Previous cache tag
+				rwmode <= {ren, |wstrb};					// Record r/w mode
+				bsel <= wstrb;								// Write byte select
+				coffset <= addr[5:2];						// Cache offset 0..15
+				cline <= {ifetch,addr[13:6]};				// Cache line
+				ctag <= addr[28:14];						// Cache tag 0000..7fff
+				ptag <= cachelinetags[{ifetch,addr[13:6]}];	// Previous cache tag
 
 				case ({ren, |wstrb})
 					2'b01: cachestate <= uncached ? UCWRITE : CWRITE;
@@ -224,7 +224,7 @@ always_ff @(posedge aclk) begin
 
 			CWBACK : begin
 				// Use old memory address with device selector, aligned to cache boundary
-				cacheaddress <= {DEVICEID, ptag, cline, 6'd0}; // 16 word aligned @ 0x8...
+				cacheaddress <= {DEVICEID, ptag, cline[7:0], 6'd0}; // 16 word aligned @ 0x8...
 				cachedout <= {cdout[255:0], cdout[511:256]};
 				memwritestrobe <= 1'b1;
 				cachestate <= CWBACKWAIT;
@@ -236,7 +236,7 @@ always_ff @(posedge aclk) begin
 
 			CPOPULATE : begin
 				// Same as current memory address with device selector, aligned to cache boundary
-				cacheaddress <= {DEVICEID, ctag, cline, 6'd0}; // 16 word aligned @ 0x8...
+				cacheaddress <= {DEVICEID, ctag, cline[7:0], 6'd0}; // 16 word aligned @ 0x8...
 				memreadstrobe <= 1'b1;
 				cachestate <= CPOPULATEWAIT;
 			end

@@ -13,15 +13,18 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="9,137.600 ns"></ZoomStartTime>
-      <ZoomEndTime time="10,229.601 ns"></ZoomEndTime>
-      <Cursor1Time time="9,470.000 ns"></Cursor1Time>
+      <ZoomStartTime time="1.232500 us"></ZoomStartTime>
+      <ZoomEndTime time="4,381.232501 us"></ZoomEndTime>
+      <Cursor1Time time="1,597.232500 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="254"></NameColumnWidth>
-      <ValueColumnWidth column_width="98"></ValueColumnWidth>
+      <ValueColumnWidth column_width="92"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="72" />
+   <wave_markers>
+      <marker time="1597232500" label="" />
+   </wave_markers>
    <wvobject fp_name="/topsim/tophatsiminst/sys_clock" type="logic">
       <obj_property name="ElementShortName">sys_clock</obj_property>
       <obj_property name="ObjectShortName">sys_clock</obj_property>
@@ -113,10 +116,14 @@
    <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/memwritestrobe" type="logic">
       <obj_property name="ElementShortName">memwritestrobe</obj_property>
       <obj_property name="ObjectShortName">memwritestrobe</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/memreadstrobe" type="logic">
       <obj_property name="ElementShortName">memreadstrobe</obj_property>
       <obj_property name="ObjectShortName">memreadstrobe</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucaddrs" type="array">
       <obj_property name="ElementShortName">ucaddrs[31:0]</obj_property>
