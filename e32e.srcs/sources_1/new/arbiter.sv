@@ -133,39 +133,51 @@ always_ff @(posedge aclk) begin
 	end
 end
 
+logic m0valid = 0;
+logic m1valid = 0;
+logic svalid = 0;
+
+always_comb begin
+	m0valid = M[0].arvalid || M[0].awvalid;
+	m1valid = M[1].arvalid || M[1].awvalid;
+	svalid = (S.rvalid && S.rlast) || S.bvalid;
+end
+
 always_comb begin
 	case (arbiterstate)
 		INIT: begin
 			nextarbiterstate = ARBITRATE;
+			round = 0;
+			sel_m = 0;
 		end
 
 		ARBITRATE: begin
 			case (round)
 				0: begin
-					if (M[0].arvalid || M[0].awvalid) begin
+					if (m0valid) begin
 						sel_m = 0;
-					end else if (M[1].arvalid || M[1].awvalid) begin
+					end else if (m1valid) begin
 						sel_m = 1;
 					end else begin
 						sel_m = 0;
 					end
 				end
 				default: begin
-					if (M[1].arvalid || M[1].awvalid) begin
+					if (m1valid) begin
 						sel_m = 1;
-					end else if (M[0].arvalid || M[0].awvalid) begin
+					end else if (m0valid) begin
 						sel_m = 0;
 					end else begin
 						sel_m = 0;
 					end
 				end
 			endcase
-			nextarbiterstate = (M[0].arvalid || M[0].awvalid || M[1].arvalid || M[1].awvalid) ? GRANTED : ARBITRATE;
+			nextarbiterstate = (m0valid || m1valid) ? GRANTED : ARBITRATE;
 		end
 
 		default/*GRANTED*/: begin
-			nextarbiterstate = ((S.rvalid && S.rlast) || S.bvalid) ? ARBITRATE : GRANTED;
-			round = ((S.rvalid && S.rlast) || S.bvalid) ? ~round : round;
+			nextarbiterstate = svalid ? ARBITRATE : GRANTED;
+			round = svalid ? ~round : round;
 		end
 	endcase
 end
