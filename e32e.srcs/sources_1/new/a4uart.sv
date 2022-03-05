@@ -242,7 +242,6 @@ always @(posedge aclk) begin
 				if (s_axi.rready & uartrcvvalid) begin
 					s_axi.rdata <= {uartrcvdout, uartrcvdout, uartrcvdout, uartrcvdout};
 					s_axi.rvalid <= 1'b1;
-					//s_axi.rlast <= 1'b1; // last in burst
 					raddrstate <= 2'b10; // delay one clock for master to pull down arvalid
 				end
 			end
@@ -250,7 +249,6 @@ always @(posedge aclk) begin
 				// at this point master should have responded properly with arvalid=0
 				s_axi.rvalid <= 1'b0;
 				s_axi.arready <= 1'b1;
-				//s_axi.rlast <= 1'b0;
 				raddrstate <= 2'b00;
 			end
 		endcase

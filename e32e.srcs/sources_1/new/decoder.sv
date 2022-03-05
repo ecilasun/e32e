@@ -51,7 +51,7 @@ wire [17:0] instrOneHot = {
 //9:8 -> lowest privilege level allowed
 always_comb begin
 	case ({instrlatch[31:25], instrlatch[24:20]})
-		default: csrindex = `CSR_UNUSED;	// Illegal instruction exception
+		default: csrindex = `CSR_MCAUSE;	// Illegal instruction exception
 		
 		//12'hF15: csrindex = `CSR_UNUSED;	// mconfigptr, defaults to zero, no exception
 
@@ -65,7 +65,7 @@ always_comb begin
 		
 		//12'h340: scratch register for machine trap mscratch
 		//12'h301: isa / extension type misa
-		//12'hF14: hardware thread id hartid
+		12'hF14: csrindex = `CSR_MHARTID;	// r
 
 		12'h800: csrindex = `CSR_TIMECMPLO;	// r/w
 		12'h801: csrindex = `CSR_TIMECMPHI;	// r/w

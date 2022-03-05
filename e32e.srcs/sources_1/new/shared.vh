@@ -154,12 +154,12 @@
 
 `define CSR_REGISTER_COUNT 16
 
-`define CSR_UNUSED		5'd0
+`define CSR_MCAUSE		5'd0
 `define CSR_MSTATUS		5'd1
 `define CSR_MIE			5'd2
 `define CSR_MTVEC		5'd3
 `define CSR_MEPC		5'd4
-`define CSR_MCAUSE		5'd5
+`define CSR_MHARTID		5'd5
 `define CSR_MTVAL		5'd6
 `define CSR_MIP			5'd7
 `define CSR_TIMECMPLO	5'd8

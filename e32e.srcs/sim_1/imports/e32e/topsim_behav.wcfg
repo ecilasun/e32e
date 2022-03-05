@@ -13,17 +13,17 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="9,917.950 ns"></ZoomStartTime>
-      <ZoomEndTime time="10,358.351 ns"></ZoomEndTime>
-      <Cursor1Time time="9,463.750 ns"></Cursor1Time>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="11,070.000001 us"></ZoomEndTime>
+      <Cursor1Time time="4,213.021750 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="246"></NameColumnWidth>
+      <NameColumnWidth column_width="234"></NameColumnWidth>
       <ValueColumnWidth column_width="88"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="114" />
+   <WVObjectSize size="120" />
    <wave_markers>
-      <marker time="1597232500" label="" />
+      <marker time="1595626250" label="" />
    </wave_markers>
    <wvobject fp_name="/topsim/tophatsiminst/sys_clock" type="logic">
       <obj_property name="ElementShortName">sys_clock</obj_property>
@@ -49,305 +49,333 @@
       <obj_property name="label">HART0</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/PC" type="array">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART0/cpustate" type="array">
       <obj_property name="ElementShortName">cpustate[3:0]</obj_property>
       <obj_property name="ObjectShortName">cpustate[3:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/uncached" type="logic">
-      <obj_property name="ElementShortName">uncached</obj_property>
-      <obj_property name="ObjectShortName">uncached</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/addr" type="array">
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/addr" type="array">
       <obj_property name="ElementShortName">addr[31:0]</obj_property>
       <obj_property name="ObjectShortName">addr[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/din" type="array">
-      <obj_property name="ElementShortName">din[31:0]</obj_property>
-      <obj_property name="ObjectShortName">din[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/dout" type="array">
-      <obj_property name="ElementShortName">dout[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/wstrb" type="array">
-      <obj_property name="ElementShortName">wstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">wstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ren" type="logic">
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/ren" type="logic">
       <obj_property name="ElementShortName">ren</obj_property>
       <obj_property name="ObjectShortName">ren</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ifetch" type="logic">
-      <obj_property name="ElementShortName">ifetch</obj_property>
-      <obj_property name="ObjectShortName">ifetch</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/wstrb" type="array">
+      <obj_property name="ElementShortName">wstrb[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wstrb[3:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/rready" type="logic">
-      <obj_property name="ElementShortName">rready</obj_property>
-      <obj_property name="ObjectShortName">rready</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/din" type="array">
+      <obj_property name="ElementShortName">din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">din[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/wready" type="logic">
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/dout" type="array">
+      <obj_property name="ElementShortName">dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/wready" type="logic">
       <obj_property name="ElementShortName">wready</obj_property>
       <obj_property name="ObjectShortName">wready</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cacheaddress" type="array">
-      <obj_property name="ElementShortName">cacheaddress[31:0]</obj_property>
-      <obj_property name="ObjectShortName">cacheaddress[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rready" type="logic">
+      <obj_property name="ElementShortName">rready</obj_property>
+      <obj_property name="ObjectShortName">rready</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachedin" type="array">
-      <obj_property name="ElementShortName">cachedin[0:1][255:0]</obj_property>
-      <obj_property name="ObjectShortName">cachedin[0:1][255:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/isuncached" type="logic">
+      <obj_property name="ElementShortName">isuncached</obj_property>
+      <obj_property name="ObjectShortName">isuncached</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachedout" type="array">
-      <obj_property name="ElementShortName">cachedout[0:1][255:0]</obj_property>
-      <obj_property name="ObjectShortName">cachedout[0:1][255:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/nextPC" type="array">
+      <obj_property name="ElementShortName">nextPC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">nextPC[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/memwritestrobe" type="logic">
-      <obj_property name="ElementShortName">memwritestrobe</obj_property>
-      <obj_property name="ObjectShortName">memwritestrobe</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/instrOneHotOut" type="array">
+      <obj_property name="ElementShortName">instrOneHotOut[17:0]</obj_property>
+      <obj_property name="ObjectShortName">instrOneHotOut[17:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/memreadstrobe" type="logic">
-      <obj_property name="ElementShortName">memreadstrobe</obj_property>
-      <obj_property name="ObjectShortName">memreadstrobe</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/aluop" type="array">
+      <obj_property name="ElementShortName">aluop[3:0]</obj_property>
+      <obj_property name="ObjectShortName">aluop[3:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucaddrs" type="array">
-      <obj_property name="ElementShortName">ucaddrs[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucaddrs[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/bluop" type="array">
+      <obj_property name="ElementShortName">bluop[2:0]</obj_property>
+      <obj_property name="ObjectShortName">bluop[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucdout" type="array">
-      <obj_property name="ElementShortName">ucdout[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucdout[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/func3" type="array">
+      <obj_property name="ElementShortName">func3[2:0]</obj_property>
+      <obj_property name="ObjectShortName">func3[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucdin" type="array">
-      <obj_property name="ElementShortName">ucdin[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucdin[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/func7" type="array">
+      <obj_property name="ElementShortName">func7[6:0]</obj_property>
+      <obj_property name="ObjectShortName">func7[6:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucwstrb" type="array">
-      <obj_property name="ElementShortName">ucwstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">ucwstrb[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/func12" type="array">
+      <obj_property name="ElementShortName">func12[11:0]</obj_property>
+      <obj_property name="ObjectShortName">func12[11:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucre" type="logic">
-      <obj_property name="ElementShortName">ucre</obj_property>
-      <obj_property name="ObjectShortName">ucre</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rs1" type="array">
+      <obj_property name="ElementShortName">rs1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs1[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucwritedone" type="logic">
-      <obj_property name="ElementShortName">ucwritedone</obj_property>
-      <obj_property name="ObjectShortName">ucwritedone</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rs2" type="array">
+      <obj_property name="ElementShortName">rs2[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs2[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucreaddone" type="logic">
-      <obj_property name="ElementShortName">ucreaddone</obj_property>
-      <obj_property name="ObjectShortName">ucreaddone</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rs3" type="array">
+      <obj_property name="ElementShortName">rs3[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs3[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/bsel" type="array">
-      <obj_property name="ElementShortName">bsel[3:0]</obj_property>
-      <obj_property name="ObjectShortName">bsel[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rd" type="array">
+      <obj_property name="ElementShortName">rd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rd[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/rwmode" type="array">
-      <obj_property name="ElementShortName">rwmode[1:0]</obj_property>
-      <obj_property name="ObjectShortName">rwmode[1:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/immed" type="array">
+      <obj_property name="ElementShortName">immed[31:0]</obj_property>
+      <obj_property name="ObjectShortName">immed[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ptag" type="array">
-      <obj_property name="ElementShortName">ptag[14:0]</obj_property>
-      <obj_property name="ObjectShortName">ptag[14:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/immsel" type="logic">
+      <obj_property name="ElementShortName">immsel</obj_property>
+      <obj_property name="ObjectShortName">immsel</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ctag" type="array">
-      <obj_property name="ElementShortName">ctag[14:0]</obj_property>
-      <obj_property name="ObjectShortName">ctag[14:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/isrecordingform" type="logic">
+      <obj_property name="ElementShortName">isrecordingform</obj_property>
+      <obj_property name="ObjectShortName">isrecordingform</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/coffset" type="array">
-      <obj_property name="ElementShortName">coffset[3:0]</obj_property>
-      <obj_property name="ObjectShortName">coffset[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rwe" type="logic">
+      <obj_property name="ElementShortName">rwe</obj_property>
+      <obj_property name="ObjectShortName">rwe</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cline" type="array">
-      <obj_property name="ElementShortName">cline[8:0]</obj_property>
-      <obj_property name="ObjectShortName">cline[8:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rval1" type="array">
+      <obj_property name="ElementShortName">rval1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval1[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachelinevalid" type="array">
-      <obj_property name="ElementShortName">cachelinevalid[0:511]</obj_property>
-      <obj_property name="ObjectShortName">cachelinevalid[0:511]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rval2" type="array">
+      <obj_property name="ElementShortName">rval2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval2[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachelinetags" type="array">
-      <obj_property name="ElementShortName">cachelinetags[0:511][14:0]</obj_property>
-      <obj_property name="ObjectShortName">cachelinetags[0:511][14:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rdin" type="array">
+      <obj_property name="ElementShortName">rdin[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rdin[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachewe" type="array">
-      <obj_property name="ElementShortName">cachewe[63:0]</obj_property>
-      <obj_property name="ObjectShortName">cachewe[63:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/csrwe" type="logic">
+      <obj_property name="ElementShortName">csrwe</obj_property>
+      <obj_property name="ObjectShortName">csrwe</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cdin" type="array">
-      <obj_property name="ElementShortName">cdin[511:0]</obj_property>
-      <obj_property name="ObjectShortName">cdin[511:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/csrdin" type="array">
+      <obj_property name="ElementShortName">csrdin[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csrdin[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cdout" type="array">
-      <obj_property name="ElementShortName">cdout[511:0]</obj_property>
-      <obj_property name="ObjectShortName">cdout[511:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/csrindex" type="array">
+      <obj_property name="ElementShortName">csrindex[4:0]</obj_property>
+      <obj_property name="ObjectShortName">csrindex[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/rdone" type="logic">
-      <obj_property name="ElementShortName">rdone</obj_property>
-      <obj_property name="ObjectShortName">rdone</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/csrprevval" type="array">
+      <obj_property name="ElementShortName">csrprevval[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csrprevval[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/wdone" type="logic">
-      <obj_property name="ElementShortName">wdone</obj_property>
-      <obj_property name="ObjectShortName">wdone</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/csrdout" type="array">
+      <obj_property name="ElementShortName">csrdout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csrdout[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachestate" type="array">
-      <obj_property name="ElementShortName">cachestate[3:0]</obj_property>
-      <obj_property name="ObjectShortName">cachestate[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/branchout" type="logic">
+      <obj_property name="ElementShortName">branchout</obj_property>
+      <obj_property name="ObjectShortName">branchout</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/DEVICEID" type="array">
-      <obj_property name="ElementShortName">DEVICEID[31:0]</obj_property>
-      <obj_property name="ObjectShortName">DEVICEID[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/aluout" type="array">
+      <obj_property name="ElementShortName">aluout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">aluout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/illegalinstruction" type="logic">
+      <obj_property name="ElementShortName">illegalinstruction</obj_property>
+      <obj_property name="ObjectShortName">illegalinstruction</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/rwaddress" type="array">
+      <obj_property name="ElementShortName">rwaddress[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rwaddress[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/adjacentPC" type="array">
+      <obj_property name="ElementShortName">adjacentPC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">adjacentPC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/RESETVECTOR" type="array">
+      <obj_property name="ElementShortName">RESETVECTOR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RESETVECTOR[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/HARTID" type="array">
+      <obj_property name="ElementShortName">HARTID[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HARTID[31:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider73">
       <obj_property name="label">HART1</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/PC" type="array">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART1/cpustate" type="array">
       <obj_property name="ElementShortName">cpustate[3:0]</obj_property>
       <obj_property name="ObjectShortName">cpustate[3:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/uncached" type="logic">
-      <obj_property name="ElementShortName">uncached</obj_property>
-      <obj_property name="ObjectShortName">uncached</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/addr" type="array">
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/addr" type="array">
       <obj_property name="ElementShortName">addr[31:0]</obj_property>
       <obj_property name="ObjectShortName">addr[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/din" type="array">
-      <obj_property name="ElementShortName">din[31:0]</obj_property>
-      <obj_property name="ObjectShortName">din[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/dout" type="array">
-      <obj_property name="ElementShortName">dout[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/wstrb" type="array">
-      <obj_property name="ElementShortName">wstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">wstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ren" type="logic">
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/ren" type="logic">
       <obj_property name="ElementShortName">ren</obj_property>
       <obj_property name="ObjectShortName">ren</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ifetch" type="logic">
-      <obj_property name="ElementShortName">ifetch</obj_property>
-      <obj_property name="ObjectShortName">ifetch</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/wstrb" type="array">
+      <obj_property name="ElementShortName">wstrb[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wstrb[3:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/rready" type="logic">
-      <obj_property name="ElementShortName">rready</obj_property>
-      <obj_property name="ObjectShortName">rready</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/din" type="array">
+      <obj_property name="ElementShortName">din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">din[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/wready" type="logic">
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/dout" type="array">
+      <obj_property name="ElementShortName">dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/wready" type="logic">
       <obj_property name="ElementShortName">wready</obj_property>
       <obj_property name="ObjectShortName">wready</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cacheaddress" type="array">
-      <obj_property name="ElementShortName">cacheaddress[31:0]</obj_property>
-      <obj_property name="ObjectShortName">cacheaddress[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rready" type="logic">
+      <obj_property name="ElementShortName">rready</obj_property>
+      <obj_property name="ObjectShortName">rready</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cachedin" type="array">
-      <obj_property name="ElementShortName">cachedin[0:1][255:0]</obj_property>
-      <obj_property name="ObjectShortName">cachedin[0:1][255:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/isuncached" type="logic">
+      <obj_property name="ElementShortName">isuncached</obj_property>
+      <obj_property name="ObjectShortName">isuncached</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cachedout" type="array">
-      <obj_property name="ElementShortName">cachedout[0:1][255:0]</obj_property>
-      <obj_property name="ObjectShortName">cachedout[0:1][255:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/nextPC" type="array">
+      <obj_property name="ElementShortName">nextPC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">nextPC[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/memwritestrobe" type="logic">
-      <obj_property name="ElementShortName">memwritestrobe</obj_property>
-      <obj_property name="ObjectShortName">memwritestrobe</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/instrOneHotOut" type="array">
+      <obj_property name="ElementShortName">instrOneHotOut[17:0]</obj_property>
+      <obj_property name="ObjectShortName">instrOneHotOut[17:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/memreadstrobe" type="logic">
-      <obj_property name="ElementShortName">memreadstrobe</obj_property>
-      <obj_property name="ObjectShortName">memreadstrobe</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/aluop" type="array">
+      <obj_property name="ElementShortName">aluop[3:0]</obj_property>
+      <obj_property name="ObjectShortName">aluop[3:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ucaddrs" type="array">
-      <obj_property name="ElementShortName">ucaddrs[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucaddrs[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/bluop" type="array">
+      <obj_property name="ElementShortName">bluop[2:0]</obj_property>
+      <obj_property name="ObjectShortName">bluop[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ucdout" type="array">
-      <obj_property name="ElementShortName">ucdout[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucdout[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/func3" type="array">
+      <obj_property name="ElementShortName">func3[2:0]</obj_property>
+      <obj_property name="ObjectShortName">func3[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ucdin" type="array">
-      <obj_property name="ElementShortName">ucdin[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucdin[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/func7" type="array">
+      <obj_property name="ElementShortName">func7[6:0]</obj_property>
+      <obj_property name="ObjectShortName">func7[6:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ucwstrb" type="array">
-      <obj_property name="ElementShortName">ucwstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">ucwstrb[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/func12" type="array">
+      <obj_property name="ElementShortName">func12[11:0]</obj_property>
+      <obj_property name="ObjectShortName">func12[11:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ucre" type="logic">
-      <obj_property name="ElementShortName">ucre</obj_property>
-      <obj_property name="ObjectShortName">ucre</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rs1" type="array">
+      <obj_property name="ElementShortName">rs1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs1[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ucwritedone" type="logic">
-      <obj_property name="ElementShortName">ucwritedone</obj_property>
-      <obj_property name="ObjectShortName">ucwritedone</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rs2" type="array">
+      <obj_property name="ElementShortName">rs2[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs2[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ucreaddone" type="logic">
-      <obj_property name="ElementShortName">ucreaddone</obj_property>
-      <obj_property name="ObjectShortName">ucreaddone</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rs3" type="array">
+      <obj_property name="ElementShortName">rs3[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs3[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/bsel" type="array">
-      <obj_property name="ElementShortName">bsel[3:0]</obj_property>
-      <obj_property name="ObjectShortName">bsel[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rd" type="array">
+      <obj_property name="ElementShortName">rd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rd[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/rwmode" type="array">
-      <obj_property name="ElementShortName">rwmode[1:0]</obj_property>
-      <obj_property name="ObjectShortName">rwmode[1:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/csrindex" type="array">
+      <obj_property name="ElementShortName">csrindex[4:0]</obj_property>
+      <obj_property name="ObjectShortName">csrindex[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ptag" type="array">
-      <obj_property name="ElementShortName">ptag[14:0]</obj_property>
-      <obj_property name="ObjectShortName">ptag[14:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/immed" type="array">
+      <obj_property name="ElementShortName">immed[31:0]</obj_property>
+      <obj_property name="ObjectShortName">immed[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/ctag" type="array">
-      <obj_property name="ElementShortName">ctag[14:0]</obj_property>
-      <obj_property name="ObjectShortName">ctag[14:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/immsel" type="logic">
+      <obj_property name="ElementShortName">immsel</obj_property>
+      <obj_property name="ObjectShortName">immsel</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/coffset" type="array">
-      <obj_property name="ElementShortName">coffset[3:0]</obj_property>
-      <obj_property name="ObjectShortName">coffset[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/isrecordingform" type="logic">
+      <obj_property name="ElementShortName">isrecordingform</obj_property>
+      <obj_property name="ObjectShortName">isrecordingform</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cline" type="array">
-      <obj_property name="ElementShortName">cline[8:0]</obj_property>
-      <obj_property name="ObjectShortName">cline[8:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rwe" type="logic">
+      <obj_property name="ElementShortName">rwe</obj_property>
+      <obj_property name="ObjectShortName">rwe</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cachelinevalid" type="array">
-      <obj_property name="ElementShortName">cachelinevalid[0:511]</obj_property>
-      <obj_property name="ObjectShortName">cachelinevalid[0:511]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rval1" type="array">
+      <obj_property name="ElementShortName">rval1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval1[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cachelinetags" type="array">
-      <obj_property name="ElementShortName">cachelinetags[0:511][14:0]</obj_property>
-      <obj_property name="ObjectShortName">cachelinetags[0:511][14:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rval2" type="array">
+      <obj_property name="ElementShortName">rval2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval2[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cachewe" type="array">
-      <obj_property name="ElementShortName">cachewe[63:0]</obj_property>
-      <obj_property name="ObjectShortName">cachewe[63:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rdin" type="array">
+      <obj_property name="ElementShortName">rdin[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rdin[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cdin" type="array">
-      <obj_property name="ElementShortName">cdin[511:0]</obj_property>
-      <obj_property name="ObjectShortName">cdin[511:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/csrwe" type="logic">
+      <obj_property name="ElementShortName">csrwe</obj_property>
+      <obj_property name="ObjectShortName">csrwe</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cdout" type="array">
-      <obj_property name="ElementShortName">cdout[511:0]</obj_property>
-      <obj_property name="ObjectShortName">cdout[511:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/csrdin" type="array">
+      <obj_property name="ElementShortName">csrdin[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csrdin[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/rdone" type="logic">
-      <obj_property name="ElementShortName">rdone</obj_property>
-      <obj_property name="ObjectShortName">rdone</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/csrprevval" type="array">
+      <obj_property name="ElementShortName">csrprevval[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csrprevval[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/wdone" type="logic">
-      <obj_property name="ElementShortName">wdone</obj_property>
-      <obj_property name="ObjectShortName">wdone</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/csrdout" type="array">
+      <obj_property name="ElementShortName">csrdout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csrdout[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cachestate" type="array">
-      <obj_property name="ElementShortName">cachestate[3:0]</obj_property>
-      <obj_property name="ObjectShortName">cachestate[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/branchout" type="logic">
+      <obj_property name="ElementShortName">branchout</obj_property>
+      <obj_property name="ObjectShortName">branchout</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/DEVICEID" type="array">
-      <obj_property name="ElementShortName">DEVICEID[31:0]</obj_property>
-      <obj_property name="ObjectShortName">DEVICEID[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/aluout" type="array">
+      <obj_property name="ElementShortName">aluout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">aluout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/illegalinstruction" type="logic">
+      <obj_property name="ElementShortName">illegalinstruction</obj_property>
+      <obj_property name="ObjectShortName">illegalinstruction</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/rwaddress" type="array">
+      <obj_property name="ElementShortName">rwaddress[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rwaddress[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/adjacentPC" type="array">
+      <obj_property name="ElementShortName">adjacentPC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">adjacentPC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/RESETVECTOR" type="array">
+      <obj_property name="ElementShortName">RESETVECTOR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RESETVECTOR[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/HARTID" type="array">
+      <obj_property name="ElementShortName">HARTID[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HARTID[31:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider151">
       <obj_property name="label">ARBITER</obj_property>

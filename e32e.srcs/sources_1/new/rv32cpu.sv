@@ -95,6 +95,17 @@ registerfile REGS(
 	.rval1(rval1),
 	.rval2(rval2) );
 
+logic csrwe = 1'b0;
+logic [31:0] csrdin = 0;
+logic [31:0] csrprevval;
+wire [31:0] csrdout;
+csrregisterfile #(.HARTID(HARTID)) CSRREGS (
+	.clock(aclk),
+	.csrindex(csrindex),
+	.we(csrwe),
+	.dout(csrdout),
+	.din(csrdin) );
+
 wire branchout;
 
 branchdecision BLU(
@@ -128,6 +139,7 @@ always @(posedge aclk) begin
 		wstrb <= 4'h0;
 	 	ren <= 1'b0;
 	 	rwe <= 1'b0;
+	 	csrwe <= 1'b0;
 
 		case (cpustate)
 			INIT: begin
@@ -149,6 +161,7 @@ always @(posedge aclk) begin
 				adjacentPC <= PC + 32'd4;
 				ifetch <= ~rready;
 				rwaddress <= rval1 + immed;
+				csrprevval <= csrdout;
 				cpustate <= rready ? EXECUTE : FETCH;
 			end
 
@@ -210,9 +223,36 @@ always @(posedge aclk) begin
 						cpustate <= STOREWAIT;
 					end
 					/*instrOneHotOut[`O_H_FENCE]: begin
-					end
-					instrOneHotOut[`O_H_SYSTEM]: begin
 					end*/
+					instrOneHotOut[`O_H_SYSTEM]: begin
+						rdin <= csrprevval;
+						rwe <= 1'b1;
+						csrwe <= 1'b1;
+						case (func3)
+							default/*3'b000*/: begin
+								csrdin <= csrprevval;
+								csrwe <= 1'b0;
+							end
+							3'b001: begin
+								csrdin <= rval1;
+							end
+							3'b101: begin
+								csrdin <= immed;
+							end
+							3'b010: begin
+								csrdin <= csrprevval | rval1;
+							end
+							3'b110: begin
+								csrdin <= csrprevval | immed;
+							end
+							3'b011: begin
+								csrdin <= csrprevval & (~rval1);
+							end
+							3'b111: begin
+								csrdin <= csrprevval & (~immed);
+							end
+						endcase
+					end
 					default: begin
 						illegalinstruction <= 1'b1;
 					end
