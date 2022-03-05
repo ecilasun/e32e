@@ -6,7 +6,7 @@ module arbiter(
 	axi_if.slave M[1:0],
 	axi_if.master S );
 
-typedef enum logic [3:0] {INIT, IDLE, GRANTED} arbiterstatetype;
+typedef enum logic [3:0] {INIT, ARBITRATE, GRANTED} arbiterstatetype;
 arbiterstatetype arbiterstate = INIT, nextarbiterstate = INIT;
 
 logic sel_m = 0;
@@ -66,15 +66,6 @@ always_comb begin
 			S.wvalid = M[1].wvalid;
 			S.wlast = M[1].wlast;
 			S.bready = M[1].bready;
-			M[1].arready = S.arready;
-			M[1].rdata = S.rdata;
-			M[1].rresp = S.rresp;
-			M[1].rvalid = S.rvalid;
-			M[1].rlast = S.rlast;
-			M[1].awready = S.awready;
-			M[1].wready = S.wready;
-			M[1].bresp = S.bresp;
-			M[1].bvalid = S.bvalid;
 			M[0].arready = 0;
 			M[0].rdata = 0;
 			M[0].rresp = 0;
@@ -84,6 +75,15 @@ always_comb begin
 			M[0].wready = 0;
 			M[0].bresp = 0;
 			M[0].bvalid = 0;
+			M[1].arready = S.arready;
+			M[1].rdata = S.rdata;
+			M[1].rresp = S.rresp;
+			M[1].rvalid = S.rvalid;
+			M[1].rlast = S.rlast;
+			M[1].awready = S.awready;
+			M[1].wready = S.wready;
+			M[1].bresp = S.bresp;
+			M[1].bvalid = S.bvalid;
 		end
 	end else begin
 		S.araddr = 0;
@@ -136,18 +136,16 @@ end
 always_comb begin
 	case (arbiterstate)
 		INIT: begin
-			nextarbiterstate = IDLE;
+			nextarbiterstate = ARBITRATE;
 		end
 
-		IDLE: begin
+		ARBITRATE: begin
 			case (round)
 				0: begin
 					if (M[0].arvalid || M[0].awvalid) begin
 						sel_m = 0;
-						round = 1;
 					end else if (M[1].arvalid || M[1].awvalid) begin
 						sel_m = 1;
-						round = 0;
 					end else begin
 						sel_m = 0;
 					end
@@ -155,20 +153,19 @@ always_comb begin
 				default: begin
 					if (M[1].arvalid || M[1].awvalid) begin
 						sel_m = 1;
-						round = 0;
 					end else if (M[0].arvalid || M[0].awvalid) begin
 						sel_m = 0;
-						round = 1;
 					end else begin
 						sel_m = 0;
 					end
 				end
 			endcase
-			nextarbiterstate = (M[0].arvalid || M[0].awvalid || M[1].arvalid || M[1].awvalid) ? GRANTED : IDLE;
+			nextarbiterstate = (M[0].arvalid || M[0].awvalid || M[1].arvalid || M[1].awvalid) ? GRANTED : ARBITRATE;
 		end
 
 		default/*GRANTED*/: begin
-			nextarbiterstate = ((S.rvalid&&S.rlast) || S.bvalid) ? IDLE : GRANTED;
+			nextarbiterstate = ((S.rvalid && S.rlast) || S.bvalid) ? ARBITRATE : GRANTED;
+			round = ((S.rvalid && S.rlast) || S.bvalid) ? ~round : round;
 		end
 	endcase
 end

@@ -26,9 +26,8 @@ wire [31:0] din;				// Input to CPU
 logic [31:0] dout;				// Output from CPU
 wire wready, rready;			// Cache r/w state
 
-// See if this address starts with 0x2 (uncached device access)
-// Otherwise addresses are taken to start at 0x8 (cached memory)
-wire isuncached = (addr[31:28] == 4'h2) ? 1'b1 : 1'b0;
+// Check for uncached devices
+wire isuncached = (addr[31]==1'b1) ? 1'b0 : 1'b1;
 
 systemcache #(.DEVICEID(3'b100)) CACHE( // DEVICEID = 0x8
 	.aclk(aclk),

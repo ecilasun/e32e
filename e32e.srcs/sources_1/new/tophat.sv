@@ -51,6 +51,10 @@ rv32cpu #(.RESETVECTOR(32'h80000000), .HARTID(1)) HART1 (
 	.a4buscached(A4CH1),
 	.a4busuncached(A4UCH1) );
 
+// ----------------------------------------------------------------------------
+// HART arbiters for cached and uncached busses
+// ----------------------------------------------------------------------------
+
 arbiter BusArbiterCached(
 	.aclk(aclk),
 	.aresetn(aresetn),
@@ -64,7 +68,7 @@ arbiter BusArbiterUncached(
 	.S(A4UCH) );
 
 // ----------------------------------------------------------------------------
-// Cached devices
+// Cached devices (unrouted for now)
 // ----------------------------------------------------------------------------
 
 a4bram BRAM64(
@@ -73,17 +77,15 @@ a4bram BRAM64(
 	.s_axi(A4CH) );
 
 // ----------------------------------------------------------------------------
-// Uncached devices
+// Uncached device router
 // ----------------------------------------------------------------------------
 
-wire uartrcvempty; // TODO: to drive interrupts with
-axi4uart UART(
+uncacheddevicechain DEVICECHAIN(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.s_axi(A4UCH),
 	.uartbaseclock(uartbaseclock),
 	.uart_rxd_out(uart_rxd_out),
 	.uart_txd_in(uart_txd_in),
-	.uartrcvempty(uartrcvempty) );
+	.axi4if(A4UCH) );
 
 endmodule

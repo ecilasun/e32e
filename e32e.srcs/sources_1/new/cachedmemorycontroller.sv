@@ -108,7 +108,7 @@ module cachedmemorycontroller (
 					m_axi.wvalid <= 0;
 					m_axi.wstrb <= 32'h00000000;
 					m_axi.wlast <= 0;
-					if (m_axi.bvalid  && m_axi.bready) begin
+					if (m_axi.bvalid /*&& m_axi.bready*/) begin
 						m_axi.bready <= 0;
 						wdone <= 1'b1;
 						state <= IDLE;
