@@ -13,15 +13,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="9,381.666 ns"></ZoomStartTime>
-      <ZoomEndTime time="10,123.667 ns"></ZoomEndTime>
-      <Cursor1Time time="10,000.000 ns"></Cursor1Time>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="440.400001 us"></ZoomEndTime>
+      <Cursor1Time time="142.200000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="192"></NameColumnWidth>
-      <ValueColumnWidth column_width="88"></ValueColumnWidth>
+      <NameColumnWidth column_width="238"></NameColumnWidth>
+      <ValueColumnWidth column_width="96"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="74" />
+   <WVObjectSize size="54" />
    <wave_markers>
       <marker time="8736667" label="" />
       <marker time="20811667" label="" />
@@ -53,9 +53,15 @@
       <obj_property name="label">HART0</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/uncached" type="logic">
+      <obj_property name="ElementShortName">uncached</obj_property>
+      <obj_property name="ObjectShortName">uncached</obj_property>
+   </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART0/PC" type="array">
       <obj_property name="ElementShortName">PC[31:0]</obj_property>
       <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART0/cpustate" type="array">
       <obj_property name="ElementShortName">cpustate[3:0]</obj_property>
@@ -89,9 +95,15 @@
       <obj_property name="label">HART1</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/uncached" type="logic">
+      <obj_property name="ElementShortName">uncached</obj_property>
+      <obj_property name="ObjectShortName">uncached</obj_property>
+   </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART1/PC" type="array">
       <obj_property name="ElementShortName">PC[31:0]</obj_property>
       <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART1/cpustate" type="array">
       <obj_property name="ElementShortName">cpustate[3:0]</obj_property>
@@ -112,7 +124,6 @@
    <wvobject fp_name="/topsim/tophatsiminst/HART1/REGS/registers" type="array">
       <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
       <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cdin" type="array">
       <obj_property name="ElementShortName">cdin[511:0]</obj_property>
@@ -170,6 +181,22 @@
       <obj_property name="ElementShortName">svalid</obj_property>
       <obj_property name="ObjectShortName">svalid</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/validwaddr_bram" type="logic">
+      <obj_property name="ElementShortName">validwaddr_bram</obj_property>
+      <obj_property name="ObjectShortName">validwaddr_bram</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/validraddr_bram" type="logic">
+      <obj_property name="ElementShortName">validraddr_bram</obj_property>
+      <obj_property name="ObjectShortName">validraddr_bram</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/axi4if/araddr" type="array">
+      <obj_property name="ElementShortName">araddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">araddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/axi4if/awaddr" type="array">
+      <obj_property name="ElementShortName">awaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">awaddr[31:0]</obj_property>
+   </wvobject>
    <wvobject type="divider" fp_name="divider455">
       <obj_property name="label">UNCACHEDARBITER</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -206,132 +233,28 @@
       <obj_property name="ElementShortName">svalid</obj_property>
       <obj_property name="ObjectShortName">svalid</obj_property>
    </wvobject>
-   <wvobject type="divider" fp_name="divider4451">
-      <obj_property name="label">device</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validwaddr_mailbox" type="logic">
+      <obj_property name="ElementShortName">validwaddr_mailbox</obj_property>
+      <obj_property name="ObjectShortName">validwaddr_mailbox</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_aclk" type="logic">
-      <obj_property name="ElementShortName">s_aclk</obj_property>
-      <obj_property name="ObjectShortName">s_aclk</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validraddr_mailbox" type="logic">
+      <obj_property name="ElementShortName">validraddr_mailbox</obj_property>
+      <obj_property name="ObjectShortName">validraddr_mailbox</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_aresetn" type="logic">
-      <obj_property name="ElementShortName">s_aresetn</obj_property>
-      <obj_property name="ObjectShortName">s_aresetn</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validwaddr_uart" type="logic">
+      <obj_property name="ElementShortName">validwaddr_uart</obj_property>
+      <obj_property name="ObjectShortName">validwaddr_uart</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_awid" type="array">
-      <obj_property name="ElementShortName">s_axi_awid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awid[3:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validraddr_uart" type="logic">
+      <obj_property name="ElementShortName">validraddr_uart</obj_property>
+      <obj_property name="ObjectShortName">validraddr_uart</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_awaddr" type="array">
-      <obj_property name="ElementShortName">s_axi_awaddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awaddr[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/axi4if/araddr" type="array">
+      <obj_property name="ElementShortName">araddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">araddr[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_awlen" type="array">
-      <obj_property name="ElementShortName">s_axi_awlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_awsize" type="array">
-      <obj_property name="ElementShortName">s_axi_awsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_awburst" type="array">
-      <obj_property name="ElementShortName">s_axi_awburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_awvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_awvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_awready" type="logic">
-      <obj_property name="ElementShortName">s_axi_awready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_wdata" type="array">
-      <obj_property name="ElementShortName">s_axi_wdata[255:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wdata[255:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_wstrb" type="array">
-      <obj_property name="ElementShortName">s_axi_wstrb[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wstrb[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_wlast" type="logic">
-      <obj_property name="ElementShortName">s_axi_wlast</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_wvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_wvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_wready" type="logic">
-      <obj_property name="ElementShortName">s_axi_wready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_bid" type="array">
-      <obj_property name="ElementShortName">s_axi_bid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_bresp" type="array">
-      <obj_property name="ElementShortName">s_axi_bresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_bvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_bready" type="logic">
-      <obj_property name="ElementShortName">s_axi_bready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_arid" type="array">
-      <obj_property name="ElementShortName">s_axi_arid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_araddr" type="array">
-      <obj_property name="ElementShortName">s_axi_araddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_araddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_arlen" type="array">
-      <obj_property name="ElementShortName">s_axi_arlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_arsize" type="array">
-      <obj_property name="ElementShortName">s_axi_arsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_arburst" type="array">
-      <obj_property name="ElementShortName">s_axi_arburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_arvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_arvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_arready" type="logic">
-      <obj_property name="ElementShortName">s_axi_arready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_rid" type="array">
-      <obj_property name="ElementShortName">s_axi_rid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_rdata" type="array">
-      <obj_property name="ElementShortName">s_axi_rdata[255:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rdata[255:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_rresp" type="array">
-      <obj_property name="ElementShortName">s_axi_rresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_rlast" type="logic">
-      <obj_property name="ElementShortName">s_axi_rlast</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_rvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_rvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BRAM64/BRAM/s_axi_rready" type="logic">
-      <obj_property name="ElementShortName">s_axi_rready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rready</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/axi4if/awaddr" type="array">
+      <obj_property name="ElementShortName">awaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">awaddr[31:0]</obj_property>
    </wvobject>
 </wave_config>

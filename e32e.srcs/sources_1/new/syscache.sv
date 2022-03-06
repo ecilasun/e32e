@@ -2,9 +2,7 @@
 
 `include "shared.vh"
 
-module systemcache #(
-	parameter int DEVICEID = 3'b100
-) (
+module systemcache(
 	input wire aclk,
 	input wire aresetn,
 	// custom bus to cpu
@@ -36,13 +34,13 @@ wire ucreaddone;
 
 logic [3:0] bsel = 4'h0;			// copy of wstrobe
 logic [1:0] rwmode = 2'b00;			// R/W mode bits
-logic [14:0] ptag;					// previous cache tag (15 bits)
-logic [14:0] ctag;					// current cache tag (15 bits)
+logic [16:0] ptag;					// previous cache tag (17 bits)
+logic [16:0] ctag;					// current cache tag (17 bits)
 logic [3:0] coffset;				// current word offset 0..15
 logic [8:0] cline;					// current cache line 0..511
 
 logic cachelinevalid[0:511];		// cache line valid bits
-logic [14:0] cachelinetags[0:511];	// cache line tags (15 bits)
+logic [16:0] cachelinetags[0:511];	// cache line tags (17 bits)
 
 logic [63:0] cachewe = 64'd0;		// byte select for 64 byte cache line
 logic [511:0] cdin;					// input data to write to cache
@@ -58,9 +56,9 @@ cachemem CacheMemory512(
 initial begin
 	integer i;
 	// all pages are 'clean', all tags are invalid and cache is zeroed out by default
-	for (int i=0; i<512; i=i+1) begin	// 512 lines (I$, D$)
+	for (int i=0; i<512; i=i+1) begin	// 512 lines (256 I$, 256 D$)
 		cachelinevalid[i] = 1'b1;		// cache lines are all valid by default, so no write-back for initial cache-miss
-		cachelinetags[i]  = 15'h7fff;	// all bits set for default tag
+		cachelinetags[i]  = 17'h1ffff;	// all bits set for default tag
 	end
 end
 
@@ -101,6 +99,8 @@ uncachedmemorycontroller UCMEMCTL(
 typedef enum logic [3:0] {IDLE, CWRITE, CREAD, UCWRITE, UCWRITEDELAY, UCREAD, UCREADDELAY, CWBACK, CWBACKWAIT, CPOPULATE, CPOPULATEWAIT, CUPDATE, CUPDATEDELAY} cachestatetype;
 cachestatetype cachestate = IDLE;
 
+wire cachehit = ctag == ptag ? 1'b1 : 1'b0;
+
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
 		cachestate <= IDLE;
@@ -122,7 +122,7 @@ always_ff @(posedge aclk) begin
 				bsel <= wstrb;								// Write byte select
 				coffset <= addr[5:2];						// Cache offset 0..15
 				cline <= {ifetch,addr[13:6]};				// Cache line
-				ctag <= addr[28:14];						// Cache tag 0000..7fff
+				ctag <= addr[30:14];						// Cache tag 00000..1ffff
 				ptag <= cachelinetags[{ifetch,addr[13:6]}];	// Previous cache tag
 
 				case ({ren, |wstrb})
@@ -165,7 +165,7 @@ always_ff @(posedge aclk) begin
 			end
 
 			CWRITE: begin
-				if (ctag == ptag) begin
+				if (cachehit) begin
 					cdin <= {din, din, din, din, din, din, din, din, din, din, din, din, din, din, din, din};	// Incoming data replicated to be masked by cachewe
 					case (coffset)
 						4'b0000:  cachewe <= { 60'd0, bsel        };
@@ -195,7 +195,7 @@ always_ff @(posedge aclk) begin
 			end
 
 			CREAD: begin
-				if (ctag == ptag) begin
+				if (cachehit) begin
 					// Return word directly from cache
 					case (coffset)
 						4'b0000:  dout <= cdout[31:0];
@@ -223,8 +223,8 @@ always_ff @(posedge aclk) begin
 			end
 
 			CWBACK : begin
-				// Use old memory address with device selector, aligned to cache boundary
-				cacheaddress <= {DEVICEID, ptag, cline[7:0], 6'd0}; // 16 word aligned @ 0x8...
+				// Use old memory address with device selector, aligned to cache boundary, top bit ignored (cached address)
+				cacheaddress <= {1'b0, ptag, cline[7:0], 6'd0};
 				cachedout <= {cdout[255:0], cdout[511:256]};
 				memwritestrobe <= 1'b1;
 				cachestate <= CWBACKWAIT;
@@ -235,8 +235,8 @@ always_ff @(posedge aclk) begin
 			end
 
 			CPOPULATE : begin
-				// Same as current memory address with device selector, aligned to cache boundary
-				cacheaddress <= {DEVICEID, ctag, cline[7:0], 6'd0}; // 16 word aligned @ 0x8...
+				// Same as current memory address with device selector, aligned to cache boundary, top bit ignored (cached address)
+				cacheaddress <= {1'b0, ctag, cline[7:0], 6'd0};
 				memreadstrobe <= 1'b1;
 				cachestate <= CPOPULATEWAIT;
 			end
@@ -248,18 +248,14 @@ always_ff @(posedge aclk) begin
 			CUPDATE: begin
 				cachewe <= 64'hFFFFFFFFFFFFFFFF; // All entries
 				cdin <= {cachedin[1], cachedin[0]}; // Data from memory
-				ptag <= ctag;
-				cachelinetags[cline] <= ctag;
-				cachelinevalid[cline] <= 1'b1;
 				cachestate <= CUPDATEDELAY;
 			end
 
 			default: begin // CUPDATEDELAY
-				if (rwmode == 2'b01) begin // Write
-					cachestate <= CWRITE;
-				end else begin /*if (rwmode == 2'b10) // Read*/
-					cachestate <= CREAD;
-				end
+				ptag <= ctag;
+				cachelinetags[cline] <= ctag;
+				cachelinevalid[cline] <= 1'b1;
+				cachestate <= (rwmode == 2'b01) ? CWRITE : CREAD;
 			end
 		endcase
 	end

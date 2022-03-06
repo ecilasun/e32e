@@ -9,7 +9,7 @@ import axi_pkg::*;
 // ----------------------------------------------------------------------------
 
 module rv32cpu #(
-	parameter int RESETVECTOR = 32'h80000000,
+	parameter int RESETVECTOR = 32'h20000000,
 	parameter int HARTID = 32'h00000000
 ) (
 	input wire aclk,
@@ -26,10 +26,25 @@ wire [31:0] din;				// Input to CPU
 logic [31:0] dout;				// Output from CPU
 wire wready, rready;			// Cache r/w state
 
-// Check for uncached devices
-wire isuncached = (addr[31]==1'b1) ? 1'b0 : 1'b1;
+// Address space is arranged so that device addresses below 0x80000000 are cached
+// DDR3: 00000000..20000000 : cached r/w
+// BRAM: 20000000..2000FFFF : cached r/w
+// ... : 20001000..3FFFFFFF : unused
+// FB0 : 40000000..4001FFFF : cached r/w
+// FB1 : 40020000..4002FFFF : cached r/w
+// PAL : 40040000..400400FF : cached r/w
+// GCTL: 40080000..400800FF : cached r/w
+// ... : 40080100..7FFFFFFF : unused
+// MAIL: 80000000..80000FFF : uncached r/w
+// UART: 80001000..8000100F : uncached r/w
+// SPI : 80001010..8000101F : uncached r/w
+// PS/2: 80001020..8000102F : uncached r/w
+// BTN : 80001030..8000103F : uncached r/w
+// LED : 80001040..8000104F : uncached r/w
+// ... : 80001050..FFFFFFFF : unused
+wire isuncached = addr[31]; // Anything at and above 0x8... is uncached memory
 
-systemcache #(.DEVICEID(3'b100)) CACHE( // DEVICEID = 0x8
+systemcache CACHE(
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.uncached(isuncached),

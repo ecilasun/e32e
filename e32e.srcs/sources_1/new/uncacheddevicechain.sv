@@ -15,9 +15,18 @@ module uncacheddevicechain(
 // Memory mapped hardware
 // ------------------------------------------------------------------------------------
 
-// uart @20000000
-wire validwaddr_uart = axi4if.awaddr>=32'h20000000 && axi4if.awaddr<32'h20001000;
-wire validraddr_uart = axi4if.araddr>=32'h20000000 && axi4if.araddr<32'h20001000;
+// mailbox @80000000
+wire validwaddr_mailbox = axi4if.awaddr>=32'h80000000 && axi4if.awaddr<32'h80001000;
+wire validraddr_mailbox = axi4if.araddr>=32'h80000000 && axi4if.araddr<32'h80001000;
+axi_if mailboxif();
+axi4mailbox mailbox(
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.s_axi(mailboxif) );
+
+// uart @80001000
+wire validwaddr_uart = axi4if.awaddr>=32'h80001000 && axi4if.awaddr<32'h80001010;
+wire validraddr_uart = axi4if.araddr>=32'h80001000 && axi4if.araddr<32'h80001010;
 axi_if uartif();
 wire uartrcvempty;
 axi4uart UART(
@@ -29,9 +38,9 @@ axi4uart UART(
 	.uart_txd_in(uart_txd_in),
 	.uartrcvempty(uartrcvempty) );
 
-// spimaster @20001000
-/*wire validwaddr_spi = axi4if.awaddr>=32'h20001000 && axi4if.awaddr<32'h20002000;
-wire validraddr_spi = axi4if.araddr>=32'h20001000 && axi4if.araddr<32'h20002000;
+// spimaster @80001010
+/*wire validwaddr_spi = axi4if.awaddr>=32'h80001010 && axi4if.awaddr<32'h80001020;
+wire validraddr_spi = axi4if.araddr>=32'h80001010 && axi4if.araddr<32'h80001020;
 axi_if spiif();
 axi4spi spimaster(
 	.aclk(aclk),
@@ -40,9 +49,9 @@ axi4spi spimaster(
 	.clocks(clocks),
 	.wires(wires) );*/
 
-// ps2 keyboard @20002000
-/*wire validwaddr_ps2 = axi4if.awaddr>=32'h20002000 && axi4if.awaddr<32'h20003000;
-wire validraddr_ps2 = axi4if.araddr>=32'h20002000 && axi4if.araddr<32'h20003000;
+// ps2 keyboard @80001020
+/*wire validwaddr_ps2 = axi4if.awaddr>=32'h80001020 && axi4if.awaddr<32'h80001030;
+wire validraddr_ps2 = axi4if.araddr>=32'h80001020 && axi4if.araddr<32'h80001030;
 uart_txd_in ps2if();
 wire ps2fifoempty;
 axi4ps2keyboard ps2keyboard(
@@ -53,18 +62,9 @@ axi4ps2keyboard ps2keyboard(
 	.wires(wires),
 	.ps2fifoempty(ps2fifoempty) );*/
 
-// fpu @20003000
-/*wire validwaddr_fpu = axi4if.awaddr>=32'h20003000 && axi4if.awaddr<32'h20004000;
-wire validraddr_fpu = axi4if.araddr>=32'h20003000 && axi4if.araddr<32'h20004000;
-axi_if fpuif();
-axi4fpu floatingpointunit(
-	.aclk(aclk),
-	.aresetn(aresetn),
-	.axi4if(fpuif) );*/
-
-// buttons @20004000
-/*wire validwaddr_button = axi4if.awaddr>=32'h20004000 && axi4if.awaddr<32'h20005000;
-wire validraddr_button = axi4if.araddr>=32'h20004000 && axi4if.araddr<32'h20005000;
+// buttons @80001040
+/*wire validwaddr_button = axi4if.awaddr>=32'h80001030 && axi4if.awaddr<32'h80001040;
+wire validraddr_button = axi4if.araddr>=32'h80001030 && axi4if.araddr<32'h80001040;
 axi_if buttonif();
 wire buttonfifoempty;
 axi4buttons devicebuttons(
@@ -75,15 +75,7 @@ axi4buttons devicebuttons(
 	.wires(wires),
 	.buttonfifoempty(buttonfifoempty) );*/
 
-
-// mailbox @20005000
-wire validwaddr_mailbox = axi4if.awaddr>=32'h20005000 && axi4if.awaddr<32'h20006000;
-wire validraddr_mailbox = axi4if.araddr>=32'h20005000 && axi4if.araddr<32'h20006000;
-axi_if mailboxif();
-axi4mailbox mailbox(
-	.aclk(aclk),
-	.aresetn(aresetn),
-	.s_axi(mailboxif) );
+// LEDs @80001040-80001050
 
 // ------------------------------------------------------------------------------------
 // interrupt setup
@@ -138,13 +130,13 @@ always_comb begin
 	ps2if.bready = validwaddr_ps2 ? axi4if.bready : 1'b0;
 	ps2if.wlast = validwaddr_ps2 ? axi4if.wlast : 1'b0;*/
 
-	/*fpuif.awaddr = validwaddr_fpu ? waddr : 32'dz;
-	fpuif.awvalid = validwaddr_fpu ? axi4if.awvalid : 1'b0;
-	fpuif.wdata = validwaddr_fpu ? axi4if.wdata : 32'dz;
-	fpuif.wstrb = validwaddr_fpu ? axi4if.wstrb : 4'h0;
-	fpuif.wvalid = validwaddr_fpu ? axi4if.wvalid : 1'b0;
-	fpuif.bready = validwaddr_fpu ? axi4if.bready : 1'b0;
-	fpuif.wlast = validwaddr_fpu ? axi4if.wlast : 1'b0;*/
+	/*ledif.awaddr = validwaddr_led ? waddr : 32'dz;
+	ledif.awvalid = validwaddr_led ? axi4if.awvalid : 1'b0;
+	ledif.wdata = validwaddr_led ? axi4if.wdata : 32'dz;
+	ledif.wstrb = validwaddr_led ? axi4if.wstrb : 4'h0;
+	ledif.wvalid = validwaddr_led ? axi4if.wvalid : 1'b0;
+	ledif.bready = validwaddr_led ? axi4if.bready : 1'b0;
+	ledif.wlast = validwaddr_led ? axi4if.wlast : 1'b0;*/
 
 	/*ddr3if.awaddr = validwaddr_ddr3 ? waddr : 32'dz;
 	ddr3if.awvalid = validwaddr_ddr3 ? axi4if.awvalid : 1'b0;
@@ -175,7 +167,7 @@ always_comb begin
 		axi4if.bresp = uartif.bresp;
 		axi4if.bvalid = uartif.bvalid;
 		axi4if.wready = uartif.wready;
-	end else begin/*if (validwaddr_mailbox) begin*/
+	end else if (validwaddr_mailbox) begin
 		axi4if.awready = mailboxif.awready;
 		axi4if.bresp = mailboxif.bresp;
 		axi4if.bvalid = mailboxif.bvalid;
@@ -190,11 +182,11 @@ always_comb begin
 		axi4if.bresp = ps2if.bresp;
 		axi4if.bvalid = ps2if.bvalid;
 		axi4if.wready = ps2if.wready;*/
-	/*end else if (validwaddr_fpu) begin
-		axi4if.awready = fpuif.awready;
-		axi4if.bresp = fpuif.bresp;
-		axi4if.bvalid = fpuif.bvalid;
-		axi4if.wready = fpuif.wready;*/
+	/*end else if (validwaddr_led) begin
+		axi4if.awready = ledif.awready;
+		axi4if.bresp = ledif.bresp;
+		axi4if.bvalid = ledif.bvalid;
+		axi4if.wready = ledif.wready;*/
 	/*end else if (validwaddr_bram) begin
 		axi4if.awready = bramif.awready;
 		axi4if.bresp = bramif.bresp;
@@ -215,6 +207,11 @@ always_comb begin
 		axi4if.bresp = buttonif.bresp;
 		axi4if.bvalid = buttonif.bvalid;
 		axi4if.wready = buttonif.wready;*/
+	end else begin
+		axi4if.awready = 0;
+		axi4if.bresp = 0;
+		axi4if.bvalid = 0;
+		axi4if.wready = 0;
 	end
 end
 
@@ -252,9 +249,9 @@ always_comb begin
 	ps2if.arvalid = validraddr_ps2 ? axi4if.arvalid : 1'b0;
 	ps2if.rready = validraddr_ps2 ? axi4if.rready : 1'b0;*/
 
-	/*fpuif.araddr = validraddr_fpu ? raddr : 32'dz;
-	fpuif.arvalid = validraddr_fpu ? axi4if.arvalid : 1'b0;
-	fpuif.rready = validraddr_fpu ? axi4if.rready : 1'b0;*/
+	/*ledif.araddr = validraddr_led ? raddr : 32'dz;
+	ledif.arvalid = validraddr_led ? axi4if.arvalid : 1'b0;
+	ledif.rready = validraddr_led ? axi4if.rready : 1'b0;*/
 
 	/*ddr3if.araddr = validraddr_ddr3 ? raddr : 32'dz;
 	ddr3if.arvalid = validraddr_ddr3 ? axi4if.arvalid : 1'b0;
@@ -274,7 +271,7 @@ always_comb begin
 		axi4if.rresp = uartif.rresp;
 		axi4if.rvalid = uartif.rvalid;
 		axi4if.rlast = uartif.rlast;
-	end else begin /*if (validraddr_mailbox) begin*/
+	end else if (validraddr_mailbox) begin
 		axi4if.arready = mailboxif.arready;
 		axi4if.rdata = mailboxif.rdata;
 		axi4if.rresp = mailboxif.rresp;
@@ -292,12 +289,12 @@ always_comb begin
 		axi4if.rresp = ps2if.rresp;
 		axi4if.rvalid = ps2if.rvalid;
 		axi4if.rlast = ps2if.rlast;*/
-	/*end else if (validraddr_fpu) begin
-		axi4if.arready = fpuif.arready;
-		axi4if.rdata = fpuif.rdata;
-		axi4if.rresp = fpuif.rresp;
-		axi4if.rvalid = fpuif.rvalid;
-		axi4if.rlast = fpuif.rlast;*/
+	/*end else if (validraddr_led) begin
+		axi4if.arready = ledif.arready;
+		axi4if.rdata = ledif.rdata;
+		axi4if.rresp = ledif.rresp;
+		axi4if.rvalid = ledif.rvalid;
+		axi4if.rlast = ledif.rlast;*/
 	/*end else if (validraddr_bram) begin
 		axi4if.arready = bramif.arready;
 		axi4if.rdata = bramif.rdata;
@@ -322,6 +319,12 @@ always_comb begin
 		axi4if.rresp = buttonif.rresp;
 		axi4if.rvalid = buttonif.rvalid;
 		axi4if.rlast = buttonif.rlast;*/
+	end else begin
+		axi4if.arready = 0;
+		axi4if.rdata = 0;
+		axi4if.rresp = 0;
+		axi4if.rvalid = 0;
+		axi4if.rlast = 0;
 	end
 end
 

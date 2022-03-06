@@ -35,17 +35,19 @@ axi_if A4UCH1();
 axi_if A4CH();
 axi_if A4UCH();
 
+wire [3:0] irq;
+
 // ----------------------------------------------------------------------------
 // HARTs
 // ----------------------------------------------------------------------------
 
-rv32cpu #(.RESETVECTOR(32'h80000000), .HARTID(0)) HART0 (
+rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.a4buscached(A4CH0),
 	.a4busuncached(A4UCH0) );
 
-rv32cpu #(.RESETVECTOR(32'h80000000), .HARTID(1)) HART1 (
+rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.a4buscached(A4CH1),
@@ -55,13 +57,13 @@ rv32cpu #(.RESETVECTOR(32'h80000000), .HARTID(1)) HART1 (
 // HART arbiters for cached and uncached busses
 // ----------------------------------------------------------------------------
 
-arbiter BusArbiterCached(
+arbiter ARBCACHED(
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.M({A4CH1, A4CH0}),
 	.S(A4CH) );
 
-arbiter BusArbiterUncached(
+arbiter ARBUNCACHED(
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.M({A4UCH1, A4UCH0}),
@@ -71,21 +73,22 @@ arbiter BusArbiterUncached(
 // Cached devices (unrouted for now)
 // ----------------------------------------------------------------------------
 
-a4bram BRAM64(
+cacheddevicechain CDEVICECHAIN(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.s_axi(A4CH) );
+	.axi4if(A4CH) );
 
 // ----------------------------------------------------------------------------
 // Uncached device router
 // ----------------------------------------------------------------------------
 
-uncacheddevicechain DEVICECHAIN(
+uncacheddevicechain UCDEVICECHAIN(
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.uartbaseclock(uartbaseclock),
 	.uart_rxd_out(uart_rxd_out),
 	.uart_txd_in(uart_txd_in),
-	.axi4if(A4UCH) );
+	.axi4if(A4UCH),
+	.irq(irq) );
 
 endmodule
