@@ -23,6 +23,7 @@ logic sel_m = 0;
 
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
+		sel_m = 0;
 	end else begin
 		if (arbiterstate == ARBITRATE) // Available next clock (in GRANT state)
 			sel_m <= m0valid ? 0 : (m1valid ? 1 : 0);
