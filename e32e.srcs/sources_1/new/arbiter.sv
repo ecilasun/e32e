@@ -9,8 +9,25 @@ module arbiter(
 typedef enum logic [3:0] {INIT, ARBITRATE, GRANTED} arbiterstatetype;
 arbiterstatetype arbiterstate = INIT, nextarbiterstate = INIT;
 
+logic m0valid = 0;
+logic m1valid = 0;
+logic svalid = 0;
+
+always_comb begin
+	m0valid = M[0].arvalid || M[0].awvalid;
+	m1valid = M[1].arvalid || M[1].awvalid;
+	svalid = (S.rvalid && S.rlast) || S.bvalid;
+end
+
 logic sel_m = 0;
-logic round = 0;
+
+always_ff @(posedge aclk) begin
+	if (~aresetn) begin
+	end else begin
+		if (arbiterstate == ARBITRATE) // Available next clock (in GRANT state)
+			sel_m <= m0valid ? 0 : (m1valid ? 1 : 0);
+	end
+end
 
 always_comb begin
 	if (arbiterstate == GRANTED) begin
@@ -133,51 +150,18 @@ always_ff @(posedge aclk) begin
 	end
 end
 
-logic m0valid = 0;
-logic m1valid = 0;
-logic svalid = 0;
-
-always_comb begin
-	m0valid = M[0].arvalid || M[0].awvalid;
-	m1valid = M[1].arvalid || M[1].awvalid;
-	svalid = (S.rvalid && S.rlast) || S.bvalid;
-end
-
 always_comb begin
 	case (arbiterstate)
 		INIT: begin
 			nextarbiterstate = ARBITRATE;
-			round = 0;
-			sel_m = 0;
 		end
 
 		ARBITRATE: begin
-			case (round)
-				0: begin
-					if (m0valid) begin
-						sel_m = 0;
-					end else if (m1valid) begin
-						sel_m = 1;
-					end else begin
-						sel_m = 0;
-					end
-				end
-				default: begin
-					if (m1valid) begin
-						sel_m = 1;
-					end else if (m0valid) begin
-						sel_m = 0;
-					end else begin
-						sel_m = 0;
-					end
-				end
-			endcase
 			nextarbiterstate = (m0valid || m1valid) ? GRANTED : ARBITRATE;
 		end
 
 		default/*GRANTED*/: begin
 			nextarbiterstate = svalid ? ARBITRATE : GRANTED;
-			round = svalid ? ~round : round;
 		end
 	endcase
 end
