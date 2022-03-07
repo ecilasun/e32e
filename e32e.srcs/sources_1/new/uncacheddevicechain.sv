@@ -237,10 +237,6 @@ always_comb begin
 	mailboxif.arvalid = validraddr_mailbox ? axi4if.arvalid : 1'b0;
 	mailboxif.rready = validraddr_mailbox ? axi4if.rready : 1'b0;
 
-	/*mailboxif.araddr = validraddr_mailbox ? raddr : 32'dz;
-	mailboxif.arvalid = validraddr_mailbox ? axi4if.arvalid : 1'b0;
-	mailboxif.rready = validraddr_mailbox ? axi4if.rready : 1'b0;*/
-
 	/*spiif.araddr = validraddr_spi ? raddr : 32'dz;
 	spiif.arvalid = validraddr_spi ? axi4if.arvalid : 1'b0;
 	spiif.rready = validraddr_spi ? axi4if.rready : 1'b0;*/

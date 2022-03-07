@@ -60,7 +60,7 @@ systemcache CACHE(
 	.a4buscached(a4buscached),
 	.a4busuncached(a4busuncached) );
 
-typedef enum logic [3:0] {INIT, RETIRE, FETCH, EXECUTE, STOREWAIT, LOADWAIT} cpustatetype;
+typedef enum logic [3:0] {INIT, RETIRE, FETCH, EXECUTE, STOREWAIT, LOADWAIT, IMATHWAIT} cpustatetype;
 cpustatetype cpustate = INIT;
 
 logic [31:0] PC = RESETVECTOR;
@@ -141,6 +141,51 @@ arithmeticlogicunit ALU (
 	.val2(immsel ? immed : rval2),
 	.aluop(aluop) );
 
+wire isexecuting = (cpustate==EXECUTE);
+wire isexecutingop = isexecuting & instrOneHotOut[`O_H_OP];
+
+wire mulready;
+wire mulstart = isexecutingop & (aluop==`ALU_MUL);
+wire [31:0] product;
+integermultiplier IMULSU(
+    .aclk(aclk),
+    .aresetn(aresetn),
+    .start(mulstart),
+    .ready(mulready),
+    .func3(func3),
+    .multiplicand(rval1),
+    .multiplier(rval2),
+    .product(product) );
+
+wire divuready;
+wire divustart = isexecutingop & (aluop==`ALU_DIV | aluop==`ALU_REM);
+wire [31:0] quotientu, remainderu;
+integerdividerunsigned IDIVU (
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.start(divustart),
+	.ready(divuready),
+	.dividend(rval1),
+	.divisor(rval2),
+	.quotient(quotientu),
+	.remainder(remainderu) );
+
+wire divready;
+wire divstart = isexecutingop & (aluop==`ALU_DIV | aluop==`ALU_REM);
+wire [31:0] quotient, remainder;
+integerdividersigned IDIVS (
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.start(divstart),
+	.ready(divready),
+	.dividend(rval1),
+	.divisor(rval2),
+	.quotient(quotient),
+	.remainder(remainder) );
+
+wire imathstart = divstart | divustart | mulstart;
+wire imathready = divready | divuready | mulready;
+
 logic illegalinstruction = 1'b0;
 logic [31:0] rwaddress = 32'd0;
 logic [31:0] adjacentPC = 32'd0;
@@ -181,7 +226,7 @@ always @(posedge aclk) begin
 
 			EXECUTE: begin
 				cpustate <= RETIRE;
-				rwe <= isrecordingform;
+				rwe <= imathstart ? 1'b0 : isrecordingform;
 				illegalinstruction <= 1'b0;
 				nextPC <= adjacentPC;
 				case (1'b1)
@@ -203,6 +248,7 @@ always @(posedge aclk) begin
 						nextPC <= branchout == 1'b1 ? (PC + immed) : adjacentPC;
 					end
 					instrOneHotOut[`O_H_OP], instrOneHotOut[`O_H_OP_IMM]: begin
+						cpustate <= imathstart ? IMATHWAIT : RETIRE;
 						rdin <= aluout;
 					end
 					instrOneHotOut[`O_H_LOAD]: begin
@@ -314,6 +360,29 @@ always @(posedge aclk) begin
 				endcase
 				rwe <= rready;
 				cpustate <= rready ? RETIRE : LOADWAIT;
+			end
+			
+			IMATHWAIT: begin
+				if (imathready) begin
+					rwe <= 1'b1;
+					case (aluop)
+						`ALU_MUL: begin
+							rdin <= product;
+						end
+						`ALU_DIV: begin
+							rdin <= func3==`F3_DIV ? quotient : quotientu;
+						end
+						`ALU_REM: begin
+							rdin <= func3==`F3_REM ? remainder : remainderu;
+						end
+						default: begin
+							rdin <= 32'd0;
+						end
+					endcase
+					cpustate <= RETIRE;
+				end else begin
+					cpustate <= IMATHWAIT;
+				end
 			end
 
 		endcase

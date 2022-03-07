@@ -13,34 +13,19 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="440.400001 us"></ZoomEndTime>
-      <Cursor1Time time="142.200000 us"></Cursor1Time>
+      <ZoomStartTime time="126,288.933 ns"></ZoomStartTime>
+      <ZoomEndTime time="126,734.734 ns"></ZoomEndTime>
+      <Cursor1Time time="126,327.933 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="238"></NameColumnWidth>
-      <ValueColumnWidth column_width="96"></ValueColumnWidth>
+      <NameColumnWidth column_width="208"></NameColumnWidth>
+      <ValueColumnWidth column_width="99"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="54" />
+   <WVObjectSize size="21" />
    <wave_markers>
-      <marker time="8736667" label="" />
-      <marker time="20811667" label="" />
-      <marker time="30853333" label="" />
-      <marker time="54986667" label="" />
       <marker time="1595588750" label="" />
+      <marker time="870120667" label="" />
    </wave_markers>
-   <wvobject fp_name="/topsim/tophatsiminst/sys_clock" type="logic">
-      <obj_property name="ElementShortName">sys_clock</obj_property>
-      <obj_property name="ObjectShortName">sys_clock</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/wallclock" type="logic">
-      <obj_property name="ElementShortName">wallclock</obj_property>
-      <obj_property name="ObjectShortName">wallclock</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/uartbaseclock" type="logic">
-      <obj_property name="ElementShortName">uartbaseclock</obj_property>
-      <obj_property name="ObjectShortName">uartbaseclock</obj_property>
-   </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/aclk" type="logic">
       <obj_property name="ElementShortName">aclk</obj_property>
       <obj_property name="ObjectShortName">aclk</obj_property>
@@ -52,10 +37,6 @@
    <wvobject type="divider" fp_name="divider146">
       <obj_property name="label">HART0</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/uncached" type="logic">
-      <obj_property name="ElementShortName">uncached</obj_property>
-      <obj_property name="ObjectShortName">uncached</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART0/PC" type="array">
       <obj_property name="ElementShortName">PC[31:0]</obj_property>
@@ -70,18 +51,8 @@
    <wvobject fp_name="/topsim/tophatsiminst/HART0/addr" type="array">
       <obj_property name="ElementShortName">addr[31:0]</obj_property>
       <obj_property name="ObjectShortName">addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/REGS/registers[2]" type="array">
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="ElementShortName">[2][31:0]</obj_property>
-      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
       <obj_property name="CustomSignalColor">#FF00FF</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
-      <obj_property name="label">SP</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/REGS/registers" type="array">
-      <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
-      <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART0/din" type="array">
       <obj_property name="ElementShortName">din[31:0]</obj_property>
@@ -94,10 +65,6 @@
    <wvobject type="divider" fp_name="divider73">
       <obj_property name="label">HART1</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/uncached" type="logic">
-      <obj_property name="ElementShortName">uncached</obj_property>
-      <obj_property name="ObjectShortName">uncached</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART1/PC" type="array">
       <obj_property name="ElementShortName">PC[31:0]</obj_property>
@@ -112,30 +79,8 @@
    <wvobject fp_name="/topsim/tophatsiminst/HART1/addr" type="array">
       <obj_property name="ElementShortName">addr[31:0]</obj_property>
       <obj_property name="ObjectShortName">addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/REGS/registers[2]" type="array">
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="ElementShortName">[2][31:0]</obj_property>
-      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
       <obj_property name="CustomSignalColor">#FF00FF</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
-      <obj_property name="label">SP</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/REGS/registers" type="array">
-      <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
-      <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cdin" type="array">
-      <obj_property name="ElementShortName">cdin[511:0]</obj_property>
-      <obj_property name="ObjectShortName">cdin[511:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/cdout" type="array">
-      <obj_property name="ElementShortName">cdout[511:0]</obj_property>
-      <obj_property name="ObjectShortName">cdout[511:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART1/CACHE/coffset" type="array">
-      <obj_property name="ElementShortName">coffset[3:0]</obj_property>
-      <obj_property name="ObjectShortName">coffset[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/HART1/din" type="array">
       <obj_property name="ElementShortName">din[31:0]</obj_property>
@@ -146,92 +91,18 @@
       <obj_property name="ObjectShortName">dout[31:0]</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider151">
-      <obj_property name="label">CACHEDARBITER</obj_property>
+      <obj_property name="label">DEVICE</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterCached/aclk" type="logic">
-      <obj_property name="ElementShortName">aclk</obj_property>
-      <obj_property name="ObjectShortName">aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterCached/aresetn" type="logic">
-      <obj_property name="ElementShortName">aresetn</obj_property>
-      <obj_property name="ObjectShortName">aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterCached/arbiterstate" type="array">
-      <obj_property name="ElementShortName">arbiterstate[3:0]</obj_property>
-      <obj_property name="ObjectShortName">arbiterstate[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterCached/nextarbiterstate" type="array">
-      <obj_property name="ElementShortName">nextarbiterstate[3:0]</obj_property>
-      <obj_property name="ObjectShortName">nextarbiterstate[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterCached/sel_m" type="logic">
-      <obj_property name="ElementShortName">sel_m</obj_property>
-      <obj_property name="ObjectShortName">sel_m</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterCached/m0valid" type="logic">
-      <obj_property name="ElementShortName">m0valid</obj_property>
-      <obj_property name="ObjectShortName">m0valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterCached/m1valid" type="logic">
-      <obj_property name="ElementShortName">m1valid</obj_property>
-      <obj_property name="ObjectShortName">m1valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterCached/svalid" type="logic">
-      <obj_property name="ElementShortName">svalid</obj_property>
-      <obj_property name="ObjectShortName">svalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/validwaddr_bram" type="logic">
-      <obj_property name="ElementShortName">validwaddr_bram</obj_property>
-      <obj_property name="ObjectShortName">validwaddr_bram</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/validraddr_bram" type="logic">
-      <obj_property name="ElementShortName">validraddr_bram</obj_property>
-      <obj_property name="ObjectShortName">validraddr_bram</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/axi4if/araddr" type="array">
-      <obj_property name="ElementShortName">araddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">araddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/axi4if/awaddr" type="array">
-      <obj_property name="ElementShortName">awaddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">awaddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider455">
-      <obj_property name="label">UNCACHEDARBITER</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validwaddr_uart" type="logic">
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">validwaddr_uart</obj_property>
+      <obj_property name="ObjectShortName">validwaddr_uart</obj_property>
+      <obj_property name="label">validwaddr_uart</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterUncached/aclk" type="logic">
-      <obj_property name="ElementShortName">aclk</obj_property>
-      <obj_property name="ObjectShortName">aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterUncached/aresetn" type="logic">
-      <obj_property name="ElementShortName">aresetn</obj_property>
-      <obj_property name="ObjectShortName">aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterUncached/arbiterstate" type="array">
-      <obj_property name="ElementShortName">arbiterstate[3:0]</obj_property>
-      <obj_property name="ObjectShortName">arbiterstate[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterUncached/nextarbiterstate" type="array">
-      <obj_property name="ElementShortName">nextarbiterstate[3:0]</obj_property>
-      <obj_property name="ObjectShortName">nextarbiterstate[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterUncached/sel_m" type="logic">
-      <obj_property name="ElementShortName">sel_m</obj_property>
-      <obj_property name="ObjectShortName">sel_m</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterUncached/m0valid" type="logic">
-      <obj_property name="ElementShortName">m0valid</obj_property>
-      <obj_property name="ObjectShortName">m0valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterUncached/m1valid" type="logic">
-      <obj_property name="ElementShortName">m1valid</obj_property>
-      <obj_property name="ObjectShortName">m1valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/BusArbiterUncached/svalid" type="logic">
-      <obj_property name="ElementShortName">svalid</obj_property>
-      <obj_property name="ObjectShortName">svalid</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validraddr_uart" type="logic">
+      <obj_property name="ElementShortName">validraddr_uart</obj_property>
+      <obj_property name="ObjectShortName">validraddr_uart</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validwaddr_mailbox" type="logic">
       <obj_property name="ElementShortName">validwaddr_mailbox</obj_property>
@@ -241,20 +112,12 @@
       <obj_property name="ElementShortName">validraddr_mailbox</obj_property>
       <obj_property name="ObjectShortName">validraddr_mailbox</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validwaddr_uart" type="logic">
-      <obj_property name="ElementShortName">validwaddr_uart</obj_property>
-      <obj_property name="ObjectShortName">validwaddr_uart</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/validwaddr_bram" type="logic">
+      <obj_property name="ElementShortName">validwaddr_bram</obj_property>
+      <obj_property name="ObjectShortName">validwaddr_bram</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validraddr_uart" type="logic">
-      <obj_property name="ElementShortName">validraddr_uart</obj_property>
-      <obj_property name="ObjectShortName">validraddr_uart</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/axi4if/araddr" type="array">
-      <obj_property name="ElementShortName">araddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">araddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/axi4if/awaddr" type="array">
-      <obj_property name="ElementShortName">awaddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">awaddr[31:0]</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/validraddr_bram" type="logic">
+      <obj_property name="ElementShortName">validraddr_bram</obj_property>
+      <obj_property name="ObjectShortName">validraddr_bram</obj_property>
    </wvobject>
 </wave_config>
