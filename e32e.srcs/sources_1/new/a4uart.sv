@@ -204,7 +204,7 @@ end
 always @(posedge aclk) begin
 	if (~aresetn) begin
 		s_axi.rlast <= 1'b1;
-		s_axi.arready <= 1'b1;
+		s_axi.arready <= 1'b0;
 		s_axi.rvalid <= 1'b0;
 		s_axi.rresp <= 2'b00;
 	end else begin
@@ -213,45 +213,47 @@ always @(posedge aclk) begin
 		case (raddrstate)
 			2'b00: begin
 				if (s_axi.arvalid) begin
-					s_axi.arready <= 1'b0;
-
-					case (s_axi.awaddr[3:0])
-						4'h0: begin // rx data
-							uartrcvre <= 1'b1;
-							raddrstate <= 2'b01;
-						end
-						4'h4: begin // tx data
-							// cannot read this, skip
-							s_axi.rdata[31:0] <= 32'd0;
-							s_axi.rvalid <= 1'b1;
-							raddrstate <= 2'b10;
-						end
-						4'h8: begin // status register
-							s_axi.rdata[31:0] <= {29'd0, uartsendempty, uartrcvfull, ~uartrcvempty};
-							s_axi.rvalid <= 1'b1;
-							raddrstate <= 2'b10;
-						end
-						default/*4'hC*/: begin // control register
-							// cannot read this (yet), skip
-							s_axi.rdata[31:0] <= 32'd0;
-							s_axi.rvalid <= 1'b1;
-							raddrstate <= 2'b10;
-						end
-					endcase
+					s_axi.arready <= 1'b1;
+					raddrstate <= 2'b01;
 				end
 			end
 			2'b01: begin
+				s_axi.arready <= 1'b0;
+				case (s_axi.araddr[3:0])
+					4'h0: begin // rx data
+						uartrcvre <= 1'b1;
+						raddrstate <= 2'b10;
+					end
+					4'h4: begin // tx data
+						// cannot read this, skip
+						s_axi.rdata[31:0] <= 32'd0;
+						s_axi.rvalid <= 1'b1;
+						raddrstate <= 2'b11;
+					end
+					4'h8: begin // status register
+						s_axi.rdata[31:0] <= {29'd0, uartsendempty, uartrcvfull, ~uartrcvempty};
+						s_axi.rvalid <= 1'b1;
+						raddrstate <= 2'b11;
+					end
+					default/*4'hC*/: begin // control register
+						// cannot read this (yet), skip
+						s_axi.rdata[31:0] <= 32'd0;
+						s_axi.rvalid <= 1'b1;
+						raddrstate <= 2'b11;
+					end
+				endcase
+			end
+			2'b10: begin
 				// master ready to accept
 				if (s_axi.rready & uartrcvvalid) begin
 					s_axi.rdata[31:0] <= {uartrcvdout, uartrcvdout, uartrcvdout, uartrcvdout};
 					s_axi.rvalid <= 1'b1;
-					raddrstate <= 2'b10; // delay one clock for master to pull down arvalid
+					raddrstate <= 2'b11; // delay one clock for master to pull down arvalid
 				end
 			end
-			default/*2'b10*/: begin
+			default/*2'b11*/: begin
 				// at this point master should have responded properly with arvalid=0
 				s_axi.rvalid <= 1'b0;
-				s_axi.arready <= 1'b1;
 				raddrstate <= 2'b00;
 			end
 		endcase

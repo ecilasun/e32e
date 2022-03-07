@@ -104,7 +104,7 @@ module cachedmemorycontroller (
 						state <= WRESP;
 					end
 				end
-				WRESP : begin
+				default/*WRESP*/ : begin
 					m_axi.wvalid <= 0;
 					m_axi.wstrb <= 32'h00000000;
 					m_axi.wlast <= 0;
