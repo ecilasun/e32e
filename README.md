@@ -9,11 +9,11 @@ What's available
 - Two very simple arbiters; one for cached one for uncached bus
 - A very simple device chain; one UART (with built-in FIFOs) and one shared mailbox memory (4KBytes)
 - A sample ROM image (source here: https://github.com/ecilasun/riscvtool/tree/main/e32e) which shows dual core operation and mailbox synchronization
+- Video output via HDMI port (DVI format), with a single (uncached) framebuffer
 
 Work in progress
 - Make cost of cache hit less than 3 clocks (2 clocks experimented with, works properly)
 - Very few CSR registers working (only the MHARTID is used at the moment)
 - Enable other CSR registers (timer/interrupt vectors etc)
 - Add DDR3 memory module
-- Add video unit
 - Experiment with more cores
