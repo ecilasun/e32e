@@ -158,6 +158,7 @@ end
 always @(posedge aclk) begin
 	if (~aresetn) begin
 		axi4if.wready <= 1'b0;
+		axi4if.bvalid <= 1'b0;
 	end else begin
 		// write data
 		fbwe <= 4'h0;
@@ -205,6 +206,7 @@ always @(posedge aclk) begin
 		axi4if.arready <= 1'b0;
 		axi4if.rvalid <= 1'b0;
 		axi4if.rresp <= 2'b00;
+		axi4if.rlast <= 1'b1;
 	end else begin
 		// read address
 		//re <= 1'b0;
@@ -229,7 +231,6 @@ always @(posedge aclk) begin
 			default/*2'b10*/: begin
 				// at this point master should have responded properly with arvalid=0
 				axi4if.rvalid <= 1'b0;
-				//axi4if.rlast <= 1'b0;
 				raddrstate <= 2'b00;
 			end
 		endcase

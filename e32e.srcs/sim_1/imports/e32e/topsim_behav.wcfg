@@ -14,14 +14,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="11,175.000001 us"></ZoomEndTime>
-      <Cursor1Time time="1,767.091000 us"></Cursor1Time>
+      <ZoomEndTime time="2,247.000001 us"></ZoomEndTime>
+      <Cursor1Time time="2,039.895000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="208"></NameColumnWidth>
-      <ValueColumnWidth column_width="93"></ValueColumnWidth>
+      <NameColumnWidth column_width="201"></NameColumnWidth>
+      <ValueColumnWidth column_width="88"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="114" />
+   <WVObjectSize size="134" />
    <wave_markers>
       <marker time="1595588750" label="" />
       <marker time="870120667" label="" />
@@ -62,6 +62,10 @@
       <obj_property name="ElementShortName">dout[31:0]</obj_property>
       <obj_property name="ObjectShortName">dout[31:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART0/REGS/registers[2]" type="array">
+      <obj_property name="ElementShortName">[2][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+   </wvobject>
    <wvobject type="divider" fp_name="divider73">
       <obj_property name="label">HART1</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -89,6 +93,82 @@
    <wvobject fp_name="/topsim/tophatsiminst/HART1/dout" type="array">
       <obj_property name="ElementShortName">dout[31:0]</obj_property>
       <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART1/REGS/registers[2]" type="array">
+      <obj_property name="ElementShortName">[2][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider115">
+      <obj_property name="label">CARB</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBCACHED/aclk" type="logic">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBCACHED/aresetn" type="logic">
+      <obj_property name="ElementShortName">aresetn</obj_property>
+      <obj_property name="ObjectShortName">aresetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBCACHED/arbiterstate" type="array">
+      <obj_property name="ElementShortName">arbiterstate[3:0]</obj_property>
+      <obj_property name="ObjectShortName">arbiterstate[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBCACHED/nextarbiterstate" type="array">
+      <obj_property name="ElementShortName">nextarbiterstate[3:0]</obj_property>
+      <obj_property name="ObjectShortName">nextarbiterstate[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBCACHED/m0valid" type="logic">
+      <obj_property name="ElementShortName">m0valid</obj_property>
+      <obj_property name="ObjectShortName">m0valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBCACHED/m1valid" type="logic">
+      <obj_property name="ElementShortName">m1valid</obj_property>
+      <obj_property name="ObjectShortName">m1valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBCACHED/svalid" type="logic">
+      <obj_property name="ElementShortName">svalid</obj_property>
+      <obj_property name="ObjectShortName">svalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBCACHED/sel_m" type="logic">
+      <obj_property name="ElementShortName">sel_m</obj_property>
+      <obj_property name="ObjectShortName">sel_m</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider124">
+      <obj_property name="label">UCARB</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBUNCACHED/aclk" type="logic">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBUNCACHED/aresetn" type="logic">
+      <obj_property name="ElementShortName">aresetn</obj_property>
+      <obj_property name="ObjectShortName">aresetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBUNCACHED/arbiterstate" type="array">
+      <obj_property name="ElementShortName">arbiterstate[3:0]</obj_property>
+      <obj_property name="ObjectShortName">arbiterstate[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBUNCACHED/nextarbiterstate" type="array">
+      <obj_property name="ElementShortName">nextarbiterstate[3:0]</obj_property>
+      <obj_property name="ObjectShortName">nextarbiterstate[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBUNCACHED/m0valid" type="logic">
+      <obj_property name="ElementShortName">m0valid</obj_property>
+      <obj_property name="ObjectShortName">m0valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBUNCACHED/m1valid" type="logic">
+      <obj_property name="ElementShortName">m1valid</obj_property>
+      <obj_property name="ObjectShortName">m1valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBUNCACHED/svalid" type="logic">
+      <obj_property name="ElementShortName">svalid</obj_property>
+      <obj_property name="ObjectShortName">svalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/ARBUNCACHED/sel_m" type="logic">
+      <obj_property name="ElementShortName">sel_m</obj_property>
+      <obj_property name="ObjectShortName">sel_m</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider151">
       <obj_property name="label">DEVICE</obj_property>

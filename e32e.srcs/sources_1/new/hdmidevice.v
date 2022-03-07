@@ -37,8 +37,8 @@ localparam OUT_TMDS_MSB = DDR_ENABLED ? 1 : 0;
 wire [9:0] tmds_red;
 wire [9:0] tmds_green;
 wire [9:0] tmds_blue;
-tmds_encoder tmsds_encoder_i0(pclk, ~in_vga_blank, in_vga_red,   0,          0,              tmds_red);
-tmds_encoder tmsds_encoder_i1(pclk, ~in_vga_blank, in_vga_green, 0,          0,              tmds_green);
+tmds_encoder tmsds_encoder_i0(pclk, ~in_vga_blank, in_vga_red,   1'b0,          1'b0,        tmds_red);
+tmds_encoder tmsds_encoder_i1(pclk, ~in_vga_blank, in_vga_green, 1'b0,          1'b0,        tmds_green);
 tmds_encoder tmsds_encoder_i2(pclk, ~in_vga_blank, in_vga_blue,  in_vga_vsync, in_vga_hsync, tmds_blue);
 
 /**/
