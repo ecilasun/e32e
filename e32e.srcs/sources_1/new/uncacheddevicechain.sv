@@ -4,11 +4,14 @@ import axi_pkg::*;
 
 module uncacheddevicechain(
 	input wire aclk,
+	input wire pixelclock,
+	input wire videoclock,
 	input wire aresetn,
 	input wire uartbaseclock,
 	output wire uart_rxd_out,
 	input wire uart_txd_in,
 	axi_if.slave axi4if,
+	gpudataoutput.def gpudata,
 	output wire [3:0] irq);
 
 // ------------------------------------------------------------------------------------
@@ -76,6 +79,19 @@ axi4buttons devicebuttons(
 	.buttonfifoempty(buttonfifoempty) );*/
 
 // LEDs @80001040-80001050
+
+// GPU @81000000
+
+wire validwaddr_gpu = axi4if.awaddr>=32'h81000000 && axi4if.awaddr<32'h81050000;
+wire validraddr_gpu = axi4if.araddr>=32'h81000000 && axi4if.araddr<32'h81050000;
+axi_if gpuif();
+axi4gpu GPU(
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.pixelclock(pixelclock),
+	.videoclock(videoclock),
+	.axi4if(gpuif),
+	.gpudata(gpudata) );
 
 // ------------------------------------------------------------------------------------
 // interrupt setup
@@ -146,13 +162,16 @@ always_comb begin
 	ddr3if.bready = validwaddr_ddr3 ? axi4if.bready : 1'b0;
 	ddr3if.wlast = validwaddr_ddr3 ? axi4if.wlast : 1'b0;*/
 
-	/*gpuif.awaddr = validwaddr_gpu ? waddr : 32'dz;
+	gpuif.awaddr = validwaddr_gpu ? waddr : 32'dz;
 	gpuif.awvalid = validwaddr_gpu ? axi4if.awvalid : 1'b0;
+	gpuif.awlen = validwaddr_gpu ? axi4if.awlen : 0;
+	gpuif.awsize = validwaddr_gpu ? axi4if.awsize : 0;
+	gpuif.awburst = validwaddr_gpu ? axi4if.awburst : 0;
 	gpuif.wdata = validwaddr_gpu ? axi4if.wdata : 32'dz;
 	gpuif.wstrb = validwaddr_gpu ? axi4if.wstrb : 4'h0;
 	gpuif.wvalid = validwaddr_gpu ? axi4if.wvalid : 1'b0;
 	gpuif.bready = validwaddr_gpu ? axi4if.bready : 1'b0;
-	gpuif.wlast = validwaddr_gpu ? axi4if.wlast : 1'b0;*/
+	gpuif.wlast = validwaddr_gpu ? axi4if.wlast : 1'b0;
 
 	/*buttonif.awaddr = validwaddr_button ? waddr : 32'dz;
 	buttonif.awvalid = validwaddr_button ? axi4if.awvalid : 1'b0;
@@ -197,11 +216,11 @@ always_comb begin
 		axi4if.bresp = ddr3if.bresp;
 		axi4if.bvalid = ddr3if.bvalid;
 		axi4if.wready = ddr3if.wready;*/
-	/*end else if (validwaddr_gpu) begin
+	end else if (validwaddr_gpu) begin
 		axi4if.awready = gpuif.awready;
 		axi4if.bresp = gpuif.bresp;
 		axi4if.bvalid = gpuif.bvalid;
-		axi4if.wready = gpuif.wready;*/
+		axi4if.wready = gpuif.wready;
 	/*end else begin //if (validwaddr_button) begin
 		axi4if.awready = buttonif.awready;
 		axi4if.bresp = buttonif.bresp;
@@ -253,9 +272,12 @@ always_comb begin
 	ddr3if.arvalid = validraddr_ddr3 ? axi4if.arvalid : 1'b0;
 	ddr3if.rready = validraddr_ddr3 ? axi4if.rready : 1'b0;*/
 
-	/*gpuif.araddr = validraddr_gpu ? raddr : 32'dz;
+	gpuif.araddr = validraddr_gpu ? raddr : 32'dz;
+	gpuif.arlen = validraddr_gpu ? axi4if.arlen : 0;
+	gpuif.arsize = validraddr_gpu ? axi4if.arsize : 0;
+	gpuif.arburst = validraddr_gpu ? axi4if.arburst : 0;
 	gpuif.arvalid = validraddr_gpu ? axi4if.arvalid : 1'b0;
-	gpuif.rready = validraddr_gpu ? axi4if.rready : 1'b0;*/
+	gpuif.rready = validraddr_gpu ? axi4if.rready : 1'b0;
 
 	/*buttonif.araddr = validraddr_button ? raddr : 32'dz;
 	buttonif.arvalid = validraddr_button ? axi4if.arvalid : 1'b0;
@@ -303,12 +325,12 @@ always_comb begin
 		axi4if.rresp = ddr3if.rresp;
 		axi4if.rvalid = ddr3if.rvalid;
 		axi4if.rlast = ddr3if.rlast;*/
-	/*end else if (validraddr_gpu) begin
+	end else if (validraddr_gpu) begin
 		axi4if.arready = gpuif.arready;
 		axi4if.rdata = gpuif.rdata;
 		axi4if.rresp = gpuif.rresp;
 		axi4if.rvalid = gpuif.rvalid;
-		axi4if.rlast = gpuif.rlast;*/
+		axi4if.rlast = gpuif.rlast;
 	/*end else begin //if (validraddr_button) begin
 		axi4if.arready = buttonif.arready;
 		axi4if.rdata = buttonif.rdata;

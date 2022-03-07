@@ -29,15 +29,6 @@ a4bram BRAM64(
 	.aresetn(aresetn),
 	.s_axi(bramif) );
 
-// framebuffer0 @40000000
-/*wire validwaddr_fb = axi4if.awaddr>=32'h40000000 && axi4if.awaddr<32'h40020000;
-wire validraddr_fb = axi4if.araddr>=32'h40000000 && axi4if.araddr<32'h40020000;
-axi_if fbif();
-axi4fb framebufferunit(
-	.aclk(aclk),
-	.aresetn(aresetn),
-	.axi4if(fbif) );*/
-
 // ------------------------------------------------------------------------------------
 // write router
 // ------------------------------------------------------------------------------------
@@ -56,27 +47,27 @@ always_comb begin
 	bramif.bready = validwaddr_bram ? axi4if.bready : 1'b0;
 	bramif.wlast = validwaddr_bram ? axi4if.wlast : 1'b0;
 
-	/*fbif.awaddr = validwaddr_fb ? waddr : 32'dz;
-	fbif.awvalid = validwaddr_fb ? axi4if.awvalid : 1'b0;
-	fbif.awlen = validwaddr_fb ? axi4if.awlen : 0;
-	fbif.awsize = validwaddr_fb ? axi4if.awsize : 0;
-	fbif.awburst = validwaddr_fb ? axi4if.awburst : 0;
-	fbif.wdata = validwaddr_fb ? axi4if.wdata : 32'dz;
-	fbif.wstrb = validwaddr_fb ? axi4if.wstrb : 4'h0;
-	fbif.wvalid = validwaddr_fb ? axi4if.wvalid : 1'b0;
-	fbif.bready = validwaddr_fb ? axi4if.bready : 1'b0;
-	fbif.wlast = validwaddr_fb ? axi4if.wlast : 1'b0;*/
+	/*gpuif.awaddr = validwaddr_gpu ? waddr : 32'dz;
+	gpuif.awvalid = validwaddr_gpu ? axi4if.awvalid : 1'b0;
+	gpuif.awlen = validwaddr_gpu ? axi4if.awlen : 0;
+	gpuif.awsize = validwaddr_gpu ? axi4if.awsize : 0;
+	gpuif.awburst = validwaddr_gpu ? axi4if.awburst : 0;
+	gpuif.wdata = validwaddr_gpu ? axi4if.wdata : 32'dz;
+	gpuif.wstrb = validwaddr_gpu ? axi4if.wstrb : 4'h0;
+	gpuif.wvalid = validwaddr_gpu ? axi4if.wvalid : 1'b0;
+	gpuif.bready = validwaddr_gpu ? axi4if.bready : 1'b0;
+	gpuif.wlast = validwaddr_gpu ? axi4if.wlast : 1'b0;*/
 
 	if (validwaddr_bram) begin
 		axi4if.awready = bramif.awready;
 		axi4if.bresp = bramif.bresp;
 		axi4if.bvalid = bramif.bvalid;
 		axi4if.wready = bramif.wready;
-	/*end else if (validwaddr_fb) begin
-		axi4if.awready = fbif.awready;
-		axi4if.bresp = fbif.bresp;
-		axi4if.bvalid = fbif.bvalid;
-		axi4if.wready = fbif.wready;*/
+	/*end else if (validwaddr_gpu) begin
+		axi4if.awready = gpuif.awready;
+		axi4if.bresp = gpuif.bresp;
+		axi4if.bvalid = gpuif.bvalid;
+		axi4if.wready = gpuif.wready;*/
 	end else begin
 		axi4if.awready = 0;
 		axi4if.bresp = 0;
@@ -100,12 +91,12 @@ always_comb begin
 	bramif.arvalid = validraddr_bram ? axi4if.arvalid : 1'b0;
 	bramif.rready = validraddr_bram ? axi4if.rready : 1'b0;
 
-	/*fbif.araddr = validraddr_fb ? raddr : 32'dz;
-	fbif.arlen = validraddr_fb ? axi4if.arlen : 0;
-	fbif.arsize = validraddr_fb ? axi4if.arsize : 0;
-	fbif.arburst = validraddr_fb ? axi4if.arburst : 0;
-	fbif.arvalid = validraddr_fb ? axi4if.arvalid : 1'b0;
-	fbif.rready = validraddr_fb ? axi4if.rready : 1'b0;*/
+	/*gpuif.araddr = validraddr_gpu ? raddr : 32'dz;
+	gpuif.arlen = validraddr_gpu ? axi4if.arlen : 0;
+	gpuif.arsize = validraddr_gpu ? axi4if.arsize : 0;
+	gpuif.arburst = validraddr_gpu ? axi4if.arburst : 0;
+	gpuif.arvalid = validraddr_gpu ? axi4if.arvalid : 1'b0;
+	gpuif.rready = validraddr_gpu ? axi4if.rready : 1'b0;*/
 
 	if (validraddr_bram) begin
 		axi4if.arready = bramif.arready;
@@ -113,12 +104,12 @@ always_comb begin
 		axi4if.rresp = bramif.rresp;
 		axi4if.rvalid = bramif.rvalid;
 		axi4if.rlast = bramif.rlast;
-	/*end else if (validraddr_fb) begin
-		axi4if.arready = fbif.arready;
-		axi4if.rdata = fbif.rdata;
-		axi4if.rresp = fbif.rresp;
-		axi4if.rvalid = fbif.rvalid;
-		axi4if.rlast = fbif.rlast;*/
+	/*end else if (validraddr_gpu) begin
+		axi4if.arready = gpuif.arready;
+		axi4if.rdata = gpuif.rdata;
+		axi4if.rresp = gpuif.rresp;
+		axi4if.rvalid = gpuif.rvalid;
+		axi4if.rlast = gpuif.rlast;*/
 	end else begin
 		axi4if.arready = 0;
 		axi4if.rdata = 0;

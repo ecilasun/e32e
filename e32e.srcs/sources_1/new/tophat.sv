@@ -3,22 +3,29 @@
 import axi_pkg::*;
 
 module tophat(
+	// Board clock
 	input wire sys_clock,
+	// UART
 	output wire uart_rxd_out,
-	input wire uart_txd_in );
+	input wire uart_txd_in,
+	// HDMI/DVI
+	output wire [2:0] hdmi_tx_p,
+	output wire [2:0] hdmi_tx_n,
+	output wire hdmi_tx_clk_p,
+	output wire hdmi_tx_clk_n );
 
 // ----------------------------------------------------------------------------
 // Clock / Reset generator
 // ----------------------------------------------------------------------------
 
-wire aclk, wallclock, uartbaseclock, aresetn;
+wire aclk, wallclock, uartbaseclock, pixelclock, videoclock, aresetn;
 clockandreset ClockAndResetGen(
 	.sys_clock_i(sys_clock),
 	.busclock(aclk),
 	.wallclock(wallclock),
 	.uartbaseclock(uartbaseclock),
-	//.pixelclock(pixelclock),
-	//.videoclock(videoclock),
+	.pixelclock(pixelclock),
+	.videoclock(videoclock),
 	//.clk_sys_i(clk_sys_i),
 	//.clk_ref_i(clk_ref_i),
 	.selfresetn(aresetn) );
@@ -73,6 +80,12 @@ arbiter ARBUNCACHED(
 // Cached devices (unrouted for now)
 // ----------------------------------------------------------------------------
 
+gpudataoutput gpudata(
+	.tmdsp(hdmi_tx_p),
+	.tmdsn(hdmi_tx_n),
+	.tmdsclkp(hdmi_tx_clk_p ),
+	.tmdsclkn(hdmi_tx_clk_n) );
+
 cacheddevicechain CDEVICECHAIN(
 	.aclk(aclk),
 	.aresetn(aresetn),
@@ -84,11 +97,14 @@ cacheddevicechain CDEVICECHAIN(
 
 uncacheddevicechain UCDEVICECHAIN(
 	.aclk(aclk),
-	.aresetn(aresetn),
+	.pixelclock(pixelclock),
+	.videoclock(videoclock),
 	.uartbaseclock(uartbaseclock),
+	.aresetn(aresetn),
 	.uart_rxd_out(uart_rxd_out),
 	.uart_txd_in(uart_txd_in),
 	.axi4if(A4UCH),
+	.gpudata(gpudata),
 	.irq(irq) );
 
 endmodule

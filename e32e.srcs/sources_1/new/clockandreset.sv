@@ -5,13 +5,13 @@ module clockandreset(
 	output wire busclock,
 	output wire wallclock,
 	output wire uartbaseclock,
-	//output wire pixelclock,
-	//output wire videoclock,
+	output wire pixelclock,
+	output wire videoclock,
 	//output wire clk_sys_i,
 	//output wire clk_ref_i,
 	output logic selfresetn );
 
-wire centralclocklocked;//, videoclklocked, ddr3clklocked;
+wire centralclocklocked, videoclklocked;//, ddr3clklocked;
 
 centralclockgen centralclock(
 	.clk_in1(sys_clock_i),
@@ -24,17 +24,17 @@ centralclockgen centralclock(
 	.clk_in1(sys_clock_i),
 	.clk_sys_i(clk_sys_i),
 	.clk_ref_i(clk_ref_i),
-	.locked(ddr3clklocked) );
+	.locked(ddr3clklocked) );*/
 
 videoclockgen graphicsclock(
 	.clk_in1(sys_clock_i),
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
-	.locked(videoclklocked) );*/
+	.locked(videoclklocked) );
 
 // Hold reset until clocks are locked
 //wire internalreset = ~(centralclocklocked & videoclklocked & ddr3clklocked);
-wire internalreset = ~(centralclocklocked);
+wire internalreset = ~(centralclocklocked & videoclklocked);
 
 // delayed reset post-clock-lock
 logic [3:0] resetcountdown = 4'hf;
