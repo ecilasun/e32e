@@ -35,7 +35,7 @@ module cachedmemorycontroller (
 		if (~areset_n) begin
 			rdata_cnt <= 0;
 		end else begin
-			if (state == RDATA && m_axi.rvalid  && m_axi.rready) begin
+			if (state == RDATA && m_axi.rvalid /* && m_axi.rready*/) begin
 				dout[rdata_cnt] <= m_axi.rdata;
 				rdata_cnt <= rdata_cnt + 1;
 			end
