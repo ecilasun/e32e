@@ -23,55 +23,55 @@ always_comb begin
 	svalid = (S.rvalid && S.rlast) || S.bvalid;
 end
 
-logic [1:0] sel_m = 2'd0;
+logic [3:0] grant = 4'b0000;
 
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
-		sel_m = 0;
+		grant = 0;
 	end else begin
 		if (arbiterstate == ARBITRATE) // Available next clock (in GRANT state)
-			sel_m <= m0valid ? 2'd0 : (m1valid ? 2'd1 : (m2valid ? 2'd2 : (m3valid ? 2'd3 : 2'd0)));
+			grant <= m0valid ? 4'b1000 : (m1valid ? 4'b0100 : (m2valid ? 4'b0010 : (m3valid ? 4'b0001 : 4'b0000)));
 	end
 end
 
 always_comb begin
 	if(arbiterstate == GRANTED) begin
-		M[0].arready = sel_m == 0 ? S.arready : 0;
-		M[0].rdata   = sel_m == 0 ? S.rdata : 0;
-		M[0].rresp   = sel_m == 0 ? S.rresp : 0;
-		M[0].rvalid  = sel_m == 0 ? S.rvalid : 0;
-		M[0].rlast   = sel_m == 0 ? S.rlast : 0;
-		M[0].awready = sel_m == 0 ? S.awready : 0;
-		M[0].wready  = sel_m == 0 ? S.wready : 0;
-		M[0].bresp   = sel_m == 0 ? S.bresp : 0;
-		M[0].bvalid  = sel_m == 0 ? S.bvalid : 0;
-		M[1].arready = sel_m == 1 ? S.arready : 0;
-		M[1].rdata   = sel_m == 1 ? S.rdata : 0;
-		M[1].rresp   = sel_m == 1 ? S.rresp : 0;
-		M[1].rvalid  = sel_m == 1 ? S.rvalid : 0;
-		M[1].rlast   = sel_m == 1 ? S.rlast : 0;
-		M[1].awready = sel_m == 1 ? S.awready : 0;
-		M[1].wready  = sel_m == 1 ? S.wready : 0;
-		M[1].bresp   = sel_m == 1 ? S.bresp : 0;
-		M[1].bvalid  = sel_m == 1 ? S.bvalid : 0;
-		M[2].arready = sel_m == 2 ? S.arready : 0;
-		M[2].rdata   = sel_m == 2 ? S.rdata : 0;
-		M[2].rresp   = sel_m == 2 ? S.rresp : 0;
-		M[2].rvalid  = sel_m == 2 ? S.rvalid : 0;
-		M[2].rlast   = sel_m == 2 ? S.rlast : 0;
-		M[2].awready = sel_m == 2 ? S.awready : 0;
-		M[2].wready  = sel_m == 2 ? S.wready : 0;
-		M[2].bresp   = sel_m == 2 ? S.bresp : 0;
-		M[2].bvalid  = sel_m == 2 ? S.bvalid : 0;
-		M[3].arready = sel_m == 3 ? S.arready : 0;
-		M[3].rdata   = sel_m == 3 ? S.rdata : 0;
-		M[3].rresp   = sel_m == 3 ? S.rresp : 0;
-		M[3].rvalid  = sel_m == 3 ? S.rvalid : 0;
-		M[3].rlast   = sel_m == 3 ? S.rlast : 0;
-		M[3].awready = sel_m == 3 ? S.awready : 0;
-		M[3].wready  = sel_m == 3 ? S.wready : 0;
-		M[3].bresp   = sel_m == 3 ? S.bresp : 0;
-		M[3].bvalid  = sel_m == 3 ? S.bvalid : 0;
+		M[0].arready = grant == 4'b1000 ? S.arready : 0;
+		M[0].rdata   = grant == 4'b1000 ? S.rdata : 0;
+		M[0].rresp   = grant == 4'b1000 ? S.rresp : 0;
+		M[0].rvalid  = grant == 4'b1000 ? S.rvalid : 0;
+		M[0].rlast   = grant == 4'b1000 ? S.rlast : 0;
+		M[0].awready = grant == 4'b1000 ? S.awready : 0;
+		M[0].wready  = grant == 4'b1000 ? S.wready : 0;
+		M[0].bresp   = grant == 4'b1000 ? S.bresp : 0;
+		M[0].bvalid  = grant == 4'b1000 ? S.bvalid : 0;
+		M[1].arready = grant == 4'b0100 ? S.arready : 0;
+		M[1].rdata   = grant == 4'b0100 ? S.rdata : 0;
+		M[1].rresp   = grant == 4'b0100 ? S.rresp : 0;
+		M[1].rvalid  = grant == 4'b0100 ? S.rvalid : 0;
+		M[1].rlast   = grant == 4'b0100 ? S.rlast : 0;
+		M[1].awready = grant == 4'b0100 ? S.awready : 0;
+		M[1].wready  = grant == 4'b0100 ? S.wready : 0;
+		M[1].bresp   = grant == 4'b0100 ? S.bresp : 0;
+		M[1].bvalid  = grant == 4'b0100 ? S.bvalid : 0;
+		M[2].arready = grant == 4'b0010 ? S.arready : 0;
+		M[2].rdata   = grant == 4'b0010 ? S.rdata : 0;
+		M[2].rresp   = grant == 4'b0010 ? S.rresp : 0;
+		M[2].rvalid  = grant == 4'b0010 ? S.rvalid : 0;
+		M[2].rlast   = grant == 4'b0010 ? S.rlast : 0;
+		M[2].awready = grant == 4'b0010 ? S.awready : 0;
+		M[2].wready  = grant == 4'b0010 ? S.wready : 0;
+		M[2].bresp   = grant == 4'b0010 ? S.bresp : 0;
+		M[2].bvalid  = grant == 4'b0010 ? S.bvalid : 0;
+		M[3].arready = grant == 4'b0001 ? S.arready : 0;
+		M[3].rdata   = grant == 4'b0001 ? S.rdata : 0;
+		M[3].rresp   = grant == 4'b0001 ? S.rresp : 0;
+		M[3].rvalid  = grant == 4'b0001 ? S.rvalid : 0;
+		M[3].rlast   = grant == 4'b0001 ? S.rlast : 0;
+		M[3].awready = grant == 4'b0001 ? S.awready : 0;
+		M[3].wready  = grant == 4'b0001 ? S.wready : 0;
+		M[3].bresp   = grant == 4'b0001 ? S.bresp : 0;
+		M[3].bvalid  = grant == 4'b0001 ? S.bvalid : 0;
 	end else begin
 		M[0].arready = 0;
 		M[0].rdata = 0;
@@ -114,7 +114,7 @@ end
 
 always_comb begin
 	if (arbiterstate == GRANTED) begin
-		if (sel_m == 2'd3) begin
+		if (grant == 4'b0001) begin
 			S.araddr = M[3].araddr;
 			S.arvalid = M[3].arvalid;
 			S.arlen = M[3].arlen;
@@ -131,7 +131,7 @@ always_comb begin
 			S.wvalid = M[3].wvalid;
 			S.wlast = M[3].wlast;
 			S.bready = M[3].bready;
-		end else if (sel_m == 2'd2) begin
+		end else if (grant == 4'b0010) begin
 			S.araddr = M[2].araddr;
 			S.arvalid = M[2].arvalid;
 			S.arlen = M[2].arlen;
@@ -148,7 +148,7 @@ always_comb begin
 			S.wvalid = M[2].wvalid;
 			S.wlast = M[2].wlast;
 			S.bready = M[2].bready;
-		end else if (sel_m == 2'd1) begin
+		end else if (grant == 4'b0100) begin
 			S.araddr = M[1].araddr;
 			S.arvalid = M[1].arvalid;
 			S.arlen = M[1].arlen;
@@ -165,7 +165,7 @@ always_comb begin
 			S.wvalid = M[1].wvalid;
 			S.wlast = M[1].wlast;
 			S.bready = M[1].bready;
-		end else begin // sel_m == 2'd0
+		end else if (grant == 4'b1000) begin
 			S.araddr = M[0].araddr;
 			S.arvalid = M[0].arvalid;
 			S.arlen = M[0].arlen;
@@ -182,6 +182,23 @@ always_comb begin
 			S.wvalid = M[0].wvalid;
 			S.wlast = M[0].wlast;
 			S.bready = M[0].bready;
+		end else begin
+			S.araddr = 0;
+			S.arvalid = 0;
+			S.arlen = 0;
+			S.arsize = 0;
+			S.arburst = 0;
+			S.rready = 0;
+			S.awaddr = 0;
+			S.awvalid = 0;
+			S.awlen = 0;
+			S.awsize = 0;
+			S.awburst = 0;
+			S.wdata = 0;
+			S.wstrb = 0;
+			S.wvalid = 0;
+			S.wlast = 0;
+			S.bready = 0;
 		end
 	end else begin
 		S.araddr = 0;
