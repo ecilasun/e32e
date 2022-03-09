@@ -252,11 +252,13 @@ always @(posedge aclk) begin
 						cpustate <= imathstart ? IMATHWAIT : RETIRE;
 						rdin <= aluout;
 					end
+					/*instrOneHotOut[`O_H_FLOAT_LDW],*/
 					instrOneHotOut[`O_H_LOAD]: begin
 						addr <= rwaddress;
 						ren <= 1'b1; // This read is to use D$ (i.e. ifetch == 0 here)
 						cpustate <= LOADWAIT;
 					end
+					/*instrOneHotOut[`O_H_FLOAT_STW],*/
 					instrOneHotOut[`O_H_STORE]: begin
 						case (func3)
 							3'b000: begin // BYTE
@@ -276,7 +278,7 @@ always @(posedge aclk) begin
 								endcase
 							end
 							default: begin // DWORD
-								dout <= rval2;
+								dout <= /*instrOneHotOut[`O_H_FLOAT_STW] ? frval2 :*/ rval2;
 								wstrb <= 4'b1111;
 							end
 						endcase
@@ -326,6 +328,7 @@ always @(posedge aclk) begin
 
 			LOADWAIT: begin
 				// Read complete, handle register write-back
+				rwe <= rready;
 				case (func3)
 					3'b000: begin // BYTE with sign extension
 						case (rwaddress[1:0])
@@ -356,13 +359,17 @@ always @(posedge aclk) begin
 						endcase
 					end
 					default/*3'b010*/: begin // WORD
-						rdin <= din[31:0];
+						/*if (instrOneHotOut[`O_H_FLOAT_LDW]) begin
+							frdin <= din[31:0];
+							frwe <= rready;
+							rwe <= 1'b0; // Do not overwrite integer registers in this case
+						end else*/
+							rdin <= din[31:0];
 					end
 				endcase
-				rwe <= rready;
 				cpustate <= rready ? RETIRE : LOADWAIT;
 			end
-			
+
 			IMATHWAIT: begin
 				if (imathready) begin
 					rwe <= 1'b1;
