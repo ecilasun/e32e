@@ -61,6 +61,10 @@ axi_if A4CH2();
 axi_if A4UCH2();
 axi_if A4CH3();
 axi_if A4UCH3();
+axi_if A4CH4();
+axi_if A4UCH4();
+axi_if A4CH5();
+axi_if A4UCH5();
 
 axi_if A4CH();
 axi_if A4UCH();
@@ -95,6 +99,24 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.a4buscached(A4CH3),
 	.a4busuncached(A4UCH3) );
 
+rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.a4buscached(A4CH4),
+	.a4busuncached(A4UCH4) );
+
+rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.a4buscached(A4CH5),
+	.a4busuncached(A4UCH5) );
+
+/*rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.a4buscached(A4CH6),
+	.a4busuncached(A4UCH6) );*/
+
 // ----------------------------------------------------------------------------
 // HART arbiters for cached and uncached busses
 // ----------------------------------------------------------------------------
@@ -102,13 +124,13 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 arbiter CARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.M({A4CH3, A4CH2, A4CH1, A4CH0}),
+	.M({A4CH5, A4CH4, A4CH3, A4CH2, A4CH1, A4CH0}),
 	.S(A4CH) );
 
 arbiter UCARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.M({A4UCH3, A4UCH2, A4UCH1, A4UCH0}),
+	.M({A4UCH5, A4UCH4, A4UCH3, A4UCH2, A4UCH1, A4UCH0}),
 	.S(A4UCH) );
 
 // ----------------------------------------------------------------------------

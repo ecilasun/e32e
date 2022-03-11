@@ -1,6 +1,6 @@
 # E32E
 
-This system contains four RISC-V (rv32im) harts with the following features:
+This system contains six RISC-V (rv32im) harts with the following features:
 
 What's available
 - Each HART conforms to minimal feature set of rv32im (DIV/MUL and base integer instructions)
