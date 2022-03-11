@@ -45,7 +45,7 @@ a4bram BRAM64(
 	.aclk(aclk),
 	.bramclk(bramclk),
 	.aresetn(aresetn),
-	.m_axi(bramif) );
+	.s_axi(bramif) );
 
 // ------------------------------------------------------------------------------------
 // write router

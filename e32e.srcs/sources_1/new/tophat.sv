@@ -36,10 +36,9 @@ module tophat(
 // Clock / Reset generator
 // ----------------------------------------------------------------------------
 
-wire cpuclock, aclk, wallclock, uartbaseclock, pixelclock, videoclock, hidclock, clk_sys_i, clk_ref_i, aresetn;
+wire aclk, wallclock, uartbaseclock, pixelclock, videoclock, hidclock, clk_sys_i, clk_ref_i, aresetn;
 clockandreset ClockAndResetGen(
 	.sys_clock_i(sys_clock),
-	.cpuclock(cpuclock),
 	.busclock(aclk),
 	.wallclock(wallclock),
 	.uartbaseclock(uartbaseclock),

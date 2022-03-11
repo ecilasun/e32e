@@ -6,9 +6,9 @@ module a4bram(
 	input wire aclk,
 	input wire bramclk,
 	input wire aresetn,
-	axi_if.slave m_axi );
+	axi_if.slave s_axi );
 
-axi_if s_axi();
+/*axi_if s_axi();
 
 axi_clock_converter_0 AXI4ClkConvBRAM (
   .s_axi_aclk(aclk),          // input wire s_axi_aclk
@@ -86,7 +86,7 @@ axi_clock_converter_0 AXI4ClkConvBRAM (
   .m_axi_rlast(s_axi.rlast),        // input wire m_axi_rlast
   .m_axi_rvalid(s_axi.rvalid),      // input wire m_axi_rvalid
   .m_axi_rready(s_axi.rready)      // output wire m_axi_rready
-);
+);*/
 
 a4bram64k BRAM (
   .s_aclk(bramclk),
