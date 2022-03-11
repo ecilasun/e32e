@@ -8,26 +8,46 @@ module tophat(
 	// UART
 	output wire uart_rxd_out,
 	input wire uart_txd_in,
+    // HID
+    input wire ps2_clk,
+    input wire ps2_data,
 	// HDMI/DVI
 	output wire [2:0] hdmi_tx_p,
 	output wire [2:0] hdmi_tx_n,
 	output wire hdmi_tx_clk_p,
-	output wire hdmi_tx_clk_n );
+	output wire hdmi_tx_clk_n/*,
+	// DDR3
+    output wire ddr3_reset_n,
+    output wire [0:0] ddr3_cke,
+    output wire [0:0] ddr3_ck_p,
+    output wire [0:0] ddr3_ck_n,
+    output wire ddr3_ras_n,
+    output wire ddr3_cas_n,
+    output wire ddr3_we_n,
+    output wire [2:0] ddr3_ba,
+    output wire [14:0] ddr3_addr,
+    output wire [0:0] ddr3_odt,
+    output wire [1:0] ddr3_dm,
+    inout wire [1:0] ddr3_dqs_p,
+    inout wire [1:0] ddr3_dqs_n,
+    inout wire [15:0] ddr3_dq*/ );
 
 // ----------------------------------------------------------------------------
 // Clock / Reset generator
 // ----------------------------------------------------------------------------
 
-wire aclk, wallclock, uartbaseclock, pixelclock, videoclock, aresetn;
+wire cpuclock, aclk, wallclock, uartbaseclock, pixelclock, videoclock, hidclock, clk_sys_i, clk_ref_i, aresetn;
 clockandreset ClockAndResetGen(
 	.sys_clock_i(sys_clock),
+	.cpuclock(cpuclock),
 	.busclock(aclk),
 	.wallclock(wallclock),
 	.uartbaseclock(uartbaseclock),
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
-	//.clk_sys_i(clk_sys_i),
-	//.clk_ref_i(clk_ref_i),
+	.hidclock(hidclock),
+	.clk_sys_i(clk_sys_i),
+	.clk_ref_i(clk_ref_i),
 	.selfresetn(aresetn) );
 
 // ----------------------------------------------------------------------------
@@ -102,9 +122,33 @@ gpudataoutput gpudata(
 	.tmdsclkp(hdmi_tx_clk_p ),
 	.tmdsclkn(hdmi_tx_clk_n) );
 
+wire calib_done, ui_clk;
+/*ddr3devicewires ddr3wires(
+	.ddr3_reset_n(ddr3_reset_n),
+	.ddr3_cke(ddr3_cke),
+	.ddr3_ck_p(ddr3_ck_p), 
+	.ddr3_ck_n(ddr3_ck_n),
+	.ddr3_ras_n(ddr3_ras_n), 
+	.ddr3_cas_n(ddr3_cas_n), 
+	.ddr3_we_n(ddr3_we_n),
+	.ddr3_ba(ddr3_ba),
+	.ddr3_addr(ddr3_addr),
+	.ddr3_odt(ddr3_odt),
+	.ddr3_dm(ddr3_dm),
+	.ddr3_dqs_p(ddr3_dqs_p),
+	.ddr3_dqs_n(ddr3_dqs_n),
+	.ddr3_dq(ddr3_dq) );*/
+
+wire bramclk = aclk;
 cacheddevicechain CDEVICECHAIN(
 	.aclk(aclk),
+	.bramclk(bramclk),
 	.aresetn(aresetn),
+	.clk_sys_i(clk_sys_i),
+	.clk_ref_i(clk_ref_i),
+	.calib_done(calib_done),
+	.ui_clk(ui_clk),
+	//.ddr3wires(ddr3wires),
 	.axi4if(A4CH) );
 
 // ----------------------------------------------------------------------------
@@ -116,9 +160,12 @@ uncacheddevicechain UCDEVICECHAIN(
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
 	.uartbaseclock(uartbaseclock),
+	.hidclock(hidclock),
 	.aresetn(aresetn),
 	.uart_rxd_out(uart_rxd_out),
 	.uart_txd_in(uart_txd_in),
+    .ps2_clk(ps2_clk),
+    .ps2_data(ps2_data),
 	.axi4if(A4UCH),
 	.gpudata(gpudata),
 	.irq(irq) );

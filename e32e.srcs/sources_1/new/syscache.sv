@@ -19,8 +19,8 @@ module systemcache(
 	axi_if.master a4busuncached );
 
 logic [31:0] cacheaddress;
-data_t cachedin[0:1];
-data_t cachedout[0:1];
+data_t cachedin[0:3];
+data_t cachedout[0:3]; // x4 128 bits
 logic memwritestrobe = 1'b0;
 logic memreadstrobe = 1'b0;
 
@@ -225,7 +225,7 @@ always_ff @(posedge aclk) begin
 			CWBACK : begin
 				// Use old memory address with device selector, aligned to cache boundary, top bit ignored (cached address)
 				cacheaddress <= {1'b0, ptag, cline[7:0], 6'd0};
-				cachedout <= {cdout[255:0], cdout[511:256]};
+				cachedout <= {cdout[127:0], cdout[255:128], cdout[383:256], cdout[511:384]};
 				memwritestrobe <= 1'b1;
 				cachestate <= CWBACKWAIT;
 			end
@@ -247,7 +247,7 @@ always_ff @(posedge aclk) begin
 
 			CUPDATE: begin
 				cachewe <= 64'hFFFFFFFFFFFFFFFF; // All entries
-				cdin <= {cachedin[1], cachedin[0]}; // Data from memory
+				cdin <= {cachedin[3], cachedin[2], cachedin[1], cachedin[0]}; // Data from memory
 				cachestate <= CUPDATEDELAY;
 			end
 

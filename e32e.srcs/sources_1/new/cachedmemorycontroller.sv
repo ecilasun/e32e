@@ -8,8 +8,8 @@ module cachedmemorycontroller (
 	input wire areset_n,
 	// Custom bus from cache controller
 	input wire [31:0] addr,
-	output data_t dout[0:1],
-	input data_t din[0:1],
+	output data_t dout[0:3],
+	input data_t din[0:3], // x4 128 bits
 	input wire start_read,
 	input wire start_write,
 	output logic wdone,
@@ -17,18 +17,18 @@ module cachedmemorycontroller (
 	// Memory device bus
 	axi_if.master m_axi );
 
-	localparam burstlen = 2;
+	localparam burstlen = 4; // x4 128 bit reads or writes
 
-	typedef enum logic [2 : 0] {IDLE, RADDR, RDATA, WADDR, WDATA, WRESP} state_type;
+	typedef enum logic [2:0] {IDLE, RADDR, RDATA, WADDR, WDATA, WRESP} state_type;
 	state_type state = IDLE;
 
-	logic len_cnt;
-	logic rdata_cnt;
+	logic [1:0] len_cnt;
+	logic [1:0] rdata_cnt;
 	assign m_axi.arlen = burstlen - 1;
-	assign m_axi.arsize = SIZE_32_BYTE;
+	assign m_axi.arsize = SIZE_16_BYTE;
 	assign m_axi.arburst = BURST_INCR;
 	assign m_axi.awlen = burstlen - 1;
-	assign m_axi.awsize = SIZE_32_BYTE;
+	assign m_axi.awsize = SIZE_16_BYTE;
 	assign m_axi.awburst = BURST_INCR;
 
 	always_ff @(posedge aclk) begin
@@ -51,7 +51,7 @@ module cachedmemorycontroller (
 			m_axi.rready <= 0;
 			m_axi.wvalid <= 0;
 			m_axi.wdata <= 0;
-			m_axi.wstrb <= 32'h00000000;
+			m_axi.wstrb <= 16'h0000;
 			m_axi.wlast <= 0;
 			m_axi.bready <= 0;
 			len_cnt <= 0;
@@ -94,7 +94,7 @@ module cachedmemorycontroller (
 				end
 				WDATA : begin
 					m_axi.wdata <= din[len_cnt];
-					m_axi.wstrb <= 32'hFFFFFFFF;
+					m_axi.wstrb <= 16'hFFFF;
 					m_axi.wvalid <= 1;
 					m_axi.wlast <= (len_cnt == (burstlen-1)) ? 1 : 0;
 					if (/*m_axi.wvalid &&*/ m_axi.wready)
@@ -106,7 +106,7 @@ module cachedmemorycontroller (
 				end
 				default/*WRESP*/ : begin
 					m_axi.wvalid <= 0;
-					m_axi.wstrb <= 32'h00000000;
+					m_axi.wstrb <= 16'h0000;
 					m_axi.wlast <= 0;
 					if (m_axi.bvalid /*&& m_axi.bready*/) begin
 						m_axi.bready <= 0;
