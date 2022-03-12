@@ -7,6 +7,7 @@ module csrregisterfile #(
 ) (
 	input wire clock,
 	input wire [63:0] wallclocktime,
+	input wire [63:0] cpuclocktime,
 	input wire [63:0] retired,
 	input wire [4:0] csrindex,
 	input wire we,
@@ -55,8 +56,8 @@ always_comb begin
 		`CSR_TIMECMPLO,
 		`CSR_TIMECMPHI:	dout = csrreg[csrindex];
 		`CSR_MHARTID:	dout = HARTID; // Immutable
-		`CSR_CYCLELO:	dout = 0; // TODO
-		`CSR_CYCLEHI:	dout = 0;
+		`CSR_CYCLELO:	dout = cpuclocktime[31:0];
+		`CSR_CYCLEHI:	dout = cpuclocktime[63:32];
 		`CSR_TIMELO:	dout = wallclocktime[31:0];
 		`CSR_TIMEHI:	dout = wallclocktime[63:32];
 		`CSR_RETILO:	dout = retired[31:0];

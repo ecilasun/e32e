@@ -15,6 +15,7 @@ module rv32cpu #(
 	input wire aclk,
 	input wire aresetn,
 	input wire [63:0] wallclocktime,
+	input wire [63:0] cpuclocktime,
 	axi_if.master a4buscached,
 	axi_if.master a4busuncached );
 
@@ -119,6 +120,7 @@ wire [31:0] csrdout;
 csrregisterfile #(.HARTID(HARTID)) CSRREGS (
 	.clock(aclk),
 	.wallclocktime(wallclocktime),
+	.cpuclocktime(cpuclocktime),
 	.retired(retired),
 	.csrindex(csrindex),
 	.we(csrwe),

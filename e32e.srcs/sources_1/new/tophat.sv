@@ -53,8 +53,12 @@ clockandreset ClockAndResetGen(
 // Wallclock for timeh/l CSR
 // ----------------------------------------------------------------------------
 logic [63:0] wallclocktime = 'd0;
+logic [63:0] cpuclocktime = 'd0;
 always_ff @(posedge wallclock) begin
 	wallclocktime <= wallclocktime + 1;
+end
+always_ff @(posedge aclk) begin
+	cpuclocktime <= cpuclocktime + 1;
 end
 
 // ----------------------------------------------------------------------------
@@ -80,6 +84,7 @@ wire [3:0] irq;
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
+	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH0),
 	.a4busuncached(A4UCH0) );
@@ -87,6 +92,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
+	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH1),
 	.a4busuncached(A4UCH1) );
@@ -94,6 +100,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
+	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH2),
 	.a4busuncached(A4UCH2) );
@@ -101,6 +108,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
+	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH3),
 	.a4busuncached(A4UCH3) );
@@ -108,6 +116,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
+	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH4),
 	.a4busuncached(A4UCH4) );
@@ -115,6 +124,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
+	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH5),
 	.a4busuncached(A4UCH5) );
