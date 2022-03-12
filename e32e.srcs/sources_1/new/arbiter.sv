@@ -15,6 +15,7 @@ logic m2valid = 0;
 logic m3valid = 0;
 logic m4valid = 0;
 logic m5valid = 0;
+logic shuffle = 0;
 logic svalid = 0;
 
 always_comb begin
@@ -32,9 +33,16 @@ logic [5:0] grant = 6'b000000;
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
 		grant = 0;
+		shuffle = 0;
 	end else begin
-		if (arbiterstate == ARBITRATE) // Available next clock (in GRANT state)
-			grant <= m0valid ? 6'b100000 : (m1valid ? 6'b010000 : (m2valid ? 6'b001000 : (m3valid ? 6'b000100 : (m4valid ? 6'b000010 : (m5valid ? 6'b000001 : 6'b000000)))));
+		if (arbiterstate == ARBITRATE) begin // Available next clock (in GRANT state)
+			if (shuffle)
+				grant <= m5valid ? 6'b000001 : (m4valid ? 6'b000010 : (m3valid ? 6'b000100 : (m2valid ? 6'b001000 : (m1valid ? 6'b010000 : (m0valid ? 6'b100000 : 6'b000000)))));
+			else
+				grant <= m0valid ? 6'b100000 : (m1valid ? 6'b010000 : (m2valid ? 6'b001000 : (m3valid ? 6'b000100 : (m4valid ? 6'b000010 : (m5valid ? 6'b000001 : 6'b000000)))));
+		end else begin
+			shuffle <= svalid ? ~shuffle : shuffle;
+		end
 	end
 end
 

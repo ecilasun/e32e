@@ -72,8 +72,7 @@ axi_if A4CH3(), A4UCH3();
 axi_if A4CH4(), A4UCH4();
 axi_if A4CH5(), A4UCH5();
 
-axi_if A4CH();
-axi_if A4UCH();
+axi_if A4CH(), A4UCH();
 
 wire [3:0] irq;
 

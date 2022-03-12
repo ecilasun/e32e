@@ -13,15 +13,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="43.880001 us"></ZoomEndTime>
-      <Cursor1Time time="0.000000 us"></Cursor1Time>
+      <ZoomStartTime time="337.705555 us"></ZoomStartTime>
+      <ZoomEndTime time="447.705556 us"></ZoomEndTime>
+      <Cursor1Time time="384.405555 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="240"></NameColumnWidth>
-      <ValueColumnWidth column_width="102"></ValueColumnWidth>
+      <ValueColumnWidth column_width="96"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="149" />
+   <WVObjectSize size="141" />
    <wave_markers>
       <marker time="870120667" label="" />
       <marker time="1595588750" label="" />
@@ -226,36 +226,6 @@
       <obj_property name="ObjectShortName">[2][31:0]</obj_property>
       <obj_property name="label">SP</obj_property>
    </wvobject>
-   <wvobject type="divider" fp_name="divider213">
-      <obj_property name="label">HART6</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART6/PC" type="array">
-      <obj_property name="ElementShortName">PC[31:0]</obj_property>
-      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART6/cpustate" type="array">
-      <obj_property name="ElementShortName">cpustate[3:0]</obj_property>
-      <obj_property name="ObjectShortName">cpustate[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART6/addr" type="array">
-      <obj_property name="ElementShortName">addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART6/din" type="array">
-      <obj_property name="ElementShortName">din[31:0]</obj_property>
-      <obj_property name="ObjectShortName">din[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART6/dout" type="array">
-      <obj_property name="ElementShortName">dout[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART6/REGS/registers[2]" type="array">
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="ElementShortName">[2][31:0]</obj_property>
-      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
-      <obj_property name="label">SP</obj_property>
-   </wvobject>
    <wvobject type="divider" fp_name="divider115">
       <obj_property name="label">CARB</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -300,9 +270,9 @@
       <obj_property name="ElementShortName">m5valid</obj_property>
       <obj_property name="ObjectShortName">m5valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CARB/m6valid" type="logic">
-      <obj_property name="ElementShortName">m6valid</obj_property>
-      <obj_property name="ObjectShortName">m6valid</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/CARB/shuffle" type="logic">
+      <obj_property name="ElementShortName">shuffle</obj_property>
+      <obj_property name="ObjectShortName">shuffle</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CARB/svalid" type="logic">
       <obj_property name="ElementShortName">svalid</obj_property>
@@ -352,9 +322,9 @@
       <obj_property name="ElementShortName">m5valid</obj_property>
       <obj_property name="ObjectShortName">m5valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCARB/m6valid" type="logic">
-      <obj_property name="ElementShortName">m6valid</obj_property>
-      <obj_property name="ObjectShortName">m6valid</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCARB/shuffle" type="logic">
+      <obj_property name="ElementShortName">shuffle</obj_property>
+      <obj_property name="ObjectShortName">shuffle</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/svalid" type="logic">
       <obj_property name="ElementShortName">svalid</obj_property>
@@ -645,9 +615,5 @@
    <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_rready" type="logic">
       <obj_property name="ElementShortName">s_axi_rready</obj_property>
       <obj_property name="ObjectShortName">s_axi_rready</obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider264">
-      <obj_property name="label">clk</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
    </wvobject>
 </wave_config>
