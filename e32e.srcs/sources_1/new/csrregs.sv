@@ -6,9 +6,11 @@ module csrregisterfile #(
 	parameter int HARTID = 32'h00000000
 ) (
 	input wire clock,
+	input wire [63:0] wallclocktime,
+	input wire [63:0] retired,
 	input wire [4:0] csrindex,
 	input wire we,
-	output wire [31:0] dout,
+	output logic [31:0] dout,
 	input wire [31:0] din );
 
 logic [31:0] csrreg [0:`CSR_REGISTER_COUNT-1];
@@ -41,6 +43,26 @@ always @(posedge clock) begin
 		csrreg[csrindex] <= din;
 end
 
-assign dout = csrreg[csrindex];
+always_comb begin
+	case(csrindex)
+		`CSR_MCAUSE,
+		`CSR_MSTATUS,
+		`CSR_MIE,
+		`CSR_MTVEC,
+		`CSR_MEPC,
+		`CSR_MTVAL,
+		`CSR_MIP,
+		`CSR_TIMECMPLO,
+		`CSR_TIMECMPHI:	dout = csrreg[csrindex];
+		`CSR_MHARTID:	dout = HARTID; // Immutable
+		`CSR_CYCLELO:	dout = 0; // TODO
+		`CSR_CYCLEHI:	dout = 0;
+		`CSR_TIMELO:	dout = wallclocktime[31:0];
+		`CSR_TIMEHI:	dout = wallclocktime[63:32];
+		`CSR_RETILO:	dout = retired[31:0];
+		`CSR_RETIHI:	dout = retired[63:32];
+		default:		dout = 0;
+	endcase
+end
 
 endmodule

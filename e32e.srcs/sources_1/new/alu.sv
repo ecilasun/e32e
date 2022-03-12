@@ -6,7 +6,6 @@ module arithmeticlogicunit(
 	input wire enable,
 	input wire aclk,
 	output logic [31:0] aluout,
-	input wire [2:0] func3,
 	input wire [31:0] val1,
 	input wire [31:0] val2,
 	input wire [3:0] aluop );

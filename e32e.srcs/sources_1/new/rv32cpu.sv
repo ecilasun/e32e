@@ -14,6 +14,7 @@ module rv32cpu #(
 ) (
 	input wire aclk,
 	input wire aresetn,
+	input wire [63:0] wallclocktime,
 	axi_if.master a4buscached,
 	axi_if.master a4busuncached );
 
@@ -66,6 +67,7 @@ cpustatetype cpustate = INIT;
 
 logic [31:0] PC = RESETVECTOR;
 logic [31:0] nextPC = RESETVECTOR;
+logic [63:0] retired = 0;
 
 wire [17:0] instrOneHotOut;
 wire [3:0] aluop;
@@ -116,6 +118,8 @@ logic [31:0] csrprevval;
 wire [31:0] csrdout;
 csrregisterfile #(.HARTID(HARTID)) CSRREGS (
 	.clock(aclk),
+	.wallclocktime(wallclocktime),
+	.retired(retired),
 	.csrindex(csrindex),
 	.we(csrwe),
 	.dout(csrdout),
@@ -137,7 +141,6 @@ arithmeticlogicunit ALU (
 	.enable(rready & (cpustate == FETCH)),
 	.aclk(aclk),
 	.aluout(aluout),
-	.func3(func3),
 	.val1(rval1),
 	.val2(immsel ? immed : rval2),
 	.aluop(aluop) );
@@ -210,6 +213,7 @@ always @(posedge aclk) begin
 			end
 
 			RETIRE: begin
+				retired <= retired + 1;
 				PC <= nextPC;
 				addr <= nextPC;
 				ifetch <= 1'b1; // This read is to use I$, hold high until read is complete

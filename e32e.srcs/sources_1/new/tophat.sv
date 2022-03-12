@@ -50,21 +50,23 @@ clockandreset ClockAndResetGen(
 	.selfresetn(aresetn) );
 
 // ----------------------------------------------------------------------------
+// Wallclock for timeh/l CSR
+// ----------------------------------------------------------------------------
+logic [63:0] wallclocktime = 'd0;
+always_ff @(posedge wallclock) begin
+	wallclocktime <= wallclocktime + 1;
+end
+
+// ----------------------------------------------------------------------------
 // Cached / Uncached AXI connections
 // ----------------------------------------------------------------------------
 
-axi_if A4CH0();
-axi_if A4UCH0();
-axi_if A4CH1();
-axi_if A4UCH1();
-axi_if A4CH2();
-axi_if A4UCH2();
-axi_if A4CH3();
-axi_if A4UCH3();
-axi_if A4CH4();
-axi_if A4UCH4();
-axi_if A4CH5();
-axi_if A4UCH5();
+axi_if A4CH0(), A4UCH0();
+axi_if A4CH1(), A4UCH1();
+axi_if A4CH2(), A4UCH2();
+axi_if A4CH3(), A4UCH3();
+axi_if A4CH4(), A4UCH4();
+axi_if A4CH5(), A4UCH5();
 
 axi_if A4CH();
 axi_if A4UCH();
@@ -77,45 +79,45 @@ wire [3:0] irq;
 
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 	.aclk(aclk),
+	.wallclocktime(wallclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH0),
 	.a4busuncached(A4UCH0) );
 
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.aclk(aclk),
+	.wallclocktime(wallclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH1),
 	.a4busuncached(A4UCH1) );
 
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 	.aclk(aclk),
+	.wallclocktime(wallclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH2),
 	.a4busuncached(A4UCH2) );
 
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.aclk(aclk),
+	.wallclocktime(wallclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH3),
 	.a4busuncached(A4UCH3) );
 
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.aclk(aclk),
+	.wallclocktime(wallclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH4),
 	.a4busuncached(A4UCH4) );
 
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.aclk(aclk),
+	.wallclocktime(wallclocktime),
 	.aresetn(aresetn),
 	.a4buscached(A4CH5),
 	.a4busuncached(A4UCH5) );
-
-/*rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
-	.aclk(aclk),
-	.aresetn(aresetn),
-	.a4buscached(A4CH6),
-	.a4busuncached(A4UCH6) );*/
 
 // ----------------------------------------------------------------------------
 // HART arbiters for cached and uncached busses

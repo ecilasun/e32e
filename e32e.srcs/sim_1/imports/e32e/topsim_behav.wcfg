@@ -13,15 +13,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2,080.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="3,174.001 ns"></ZoomEndTime>
-      <Cursor1Time time="2,265.100 ns"></Cursor1Time>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="43.880001 us"></ZoomEndTime>
+      <Cursor1Time time="0.000000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="240"></NameColumnWidth>
-      <ValueColumnWidth column_width="108"></ValueColumnWidth>
+      <ValueColumnWidth column_width="102"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="196" />
+   <WVObjectSize size="149" />
    <wave_markers>
       <marker time="870120667" label="" />
       <marker time="1595588750" label="" />
@@ -166,6 +166,96 @@
       <obj_property name="ObjectShortName">[2][31:0]</obj_property>
       <obj_property name="label">SP</obj_property>
    </wvobject>
+   <wvobject type="divider" fp_name="divider211">
+      <obj_property name="label">HART4</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART4/PC" type="array">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART4/cpustate" type="array">
+      <obj_property name="ElementShortName">cpustate[3:0]</obj_property>
+      <obj_property name="ObjectShortName">cpustate[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART4/addr" type="array">
+      <obj_property name="ElementShortName">addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART4/din" type="array">
+      <obj_property name="ElementShortName">din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">din[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART4/dout" type="array">
+      <obj_property name="ElementShortName">dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART4/REGS/registers[2]" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[2][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      <obj_property name="label">SP</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider212">
+      <obj_property name="label">HART5</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART5/PC" type="array">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART5/cpustate" type="array">
+      <obj_property name="ElementShortName">cpustate[3:0]</obj_property>
+      <obj_property name="ObjectShortName">cpustate[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART5/addr" type="array">
+      <obj_property name="ElementShortName">addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART5/din" type="array">
+      <obj_property name="ElementShortName">din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">din[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART5/dout" type="array">
+      <obj_property name="ElementShortName">dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART5/REGS/registers[2]" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[2][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      <obj_property name="label">SP</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider213">
+      <obj_property name="label">HART6</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART6/PC" type="array">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART6/cpustate" type="array">
+      <obj_property name="ElementShortName">cpustate[3:0]</obj_property>
+      <obj_property name="ObjectShortName">cpustate[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART6/addr" type="array">
+      <obj_property name="ElementShortName">addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART6/din" type="array">
+      <obj_property name="ElementShortName">din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">din[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART6/dout" type="array">
+      <obj_property name="ElementShortName">dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/HART6/REGS/registers[2]" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[2][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[2][31:0]</obj_property>
+      <obj_property name="label">SP</obj_property>
+   </wvobject>
    <wvobject type="divider" fp_name="divider115">
       <obj_property name="label">CARB</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -201,6 +291,18 @@
    <wvobject fp_name="/topsim/tophatsiminst/CARB/m3valid" type="logic">
       <obj_property name="ElementShortName">m3valid</obj_property>
       <obj_property name="ObjectShortName">m3valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CARB/m4valid" type="logic">
+      <obj_property name="ElementShortName">m4valid</obj_property>
+      <obj_property name="ObjectShortName">m4valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CARB/m5valid" type="logic">
+      <obj_property name="ElementShortName">m5valid</obj_property>
+      <obj_property name="ObjectShortName">m5valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CARB/m6valid" type="logic">
+      <obj_property name="ElementShortName">m6valid</obj_property>
+      <obj_property name="ObjectShortName">m6valid</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CARB/svalid" type="logic">
       <obj_property name="ElementShortName">svalid</obj_property>
@@ -241,6 +343,18 @@
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/m3valid" type="logic">
       <obj_property name="ElementShortName">m3valid</obj_property>
       <obj_property name="ObjectShortName">m3valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCARB/m4valid" type="logic">
+      <obj_property name="ElementShortName">m4valid</obj_property>
+      <obj_property name="ObjectShortName">m4valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCARB/m5valid" type="logic">
+      <obj_property name="ElementShortName">m5valid</obj_property>
+      <obj_property name="ObjectShortName">m5valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCARB/m6valid" type="logic">
+      <obj_property name="ElementShortName">m6valid</obj_property>
+      <obj_property name="ObjectShortName">m6valid</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/svalid" type="logic">
       <obj_property name="ElementShortName">svalid</obj_property>
@@ -535,301 +649,5 @@
    <wvobject type="divider" fp_name="divider264">
       <obj_property name="label">clk</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_aclk" type="logic">
-      <obj_property name="ElementShortName">s_axi_aclk</obj_property>
-      <obj_property name="ObjectShortName">s_axi_aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_aclk" type="logic">
-      <obj_property name="ElementShortName">m_axi_aclk</obj_property>
-      <obj_property name="ObjectShortName">m_axi_aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_aresetn" type="logic">
-      <obj_property name="ElementShortName">s_axi_aresetn</obj_property>
-      <obj_property name="ObjectShortName">s_axi_aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_aresetn" type="logic">
-      <obj_property name="ElementShortName">m_axi_aresetn</obj_property>
-      <obj_property name="ObjectShortName">m_axi_aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awaddr" type="array">
-      <obj_property name="ElementShortName">s_axi_awaddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awaddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awlen" type="array">
-      <obj_property name="ElementShortName">s_axi_awlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awsize" type="array">
-      <obj_property name="ElementShortName">s_axi_awsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awburst" type="array">
-      <obj_property name="ElementShortName">s_axi_awburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awlock" type="array">
-      <obj_property name="ElementShortName">s_axi_awlock[0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awlock[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awcache" type="array">
-      <obj_property name="ElementShortName">s_axi_awcache[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awcache[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awprot" type="array">
-      <obj_property name="ElementShortName">s_axi_awprot[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awprot[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awregion" type="array">
-      <obj_property name="ElementShortName">s_axi_awregion[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awregion[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awqos" type="array">
-      <obj_property name="ElementShortName">s_axi_awqos[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awqos[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_awvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_awready" type="logic">
-      <obj_property name="ElementShortName">s_axi_awready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_wdata" type="array">
-      <obj_property name="ElementShortName">s_axi_wdata[127:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wdata[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_wstrb" type="array">
-      <obj_property name="ElementShortName">s_axi_wstrb[15:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wstrb[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_wlast" type="logic">
-      <obj_property name="ElementShortName">s_axi_wlast</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_wvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_wvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_wready" type="logic">
-      <obj_property name="ElementShortName">s_axi_wready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_bresp" type="array">
-      <obj_property name="ElementShortName">s_axi_bresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_bvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_bready" type="logic">
-      <obj_property name="ElementShortName">s_axi_bready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_araddr" type="array">
-      <obj_property name="ElementShortName">s_axi_araddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_araddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arlen" type="array">
-      <obj_property name="ElementShortName">s_axi_arlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arsize" type="array">
-      <obj_property name="ElementShortName">s_axi_arsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arburst" type="array">
-      <obj_property name="ElementShortName">s_axi_arburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arlock" type="array">
-      <obj_property name="ElementShortName">s_axi_arlock[0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arlock[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arcache" type="array">
-      <obj_property name="ElementShortName">s_axi_arcache[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arcache[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arprot" type="array">
-      <obj_property name="ElementShortName">s_axi_arprot[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arprot[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arregion" type="array">
-      <obj_property name="ElementShortName">s_axi_arregion[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arregion[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arqos" type="array">
-      <obj_property name="ElementShortName">s_axi_arqos[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arqos[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_arvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_arready" type="logic">
-      <obj_property name="ElementShortName">s_axi_arready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_rdata" type="array">
-      <obj_property name="ElementShortName">s_axi_rdata[127:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rdata[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_rresp" type="array">
-      <obj_property name="ElementShortName">s_axi_rresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_rlast" type="logic">
-      <obj_property name="ElementShortName">s_axi_rlast</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_rvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_rvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/s_axi_rready" type="logic">
-      <obj_property name="ElementShortName">s_axi_rready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awaddr" type="array">
-      <obj_property name="ElementShortName">m_axi_awaddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awaddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awlen" type="array">
-      <obj_property name="ElementShortName">m_axi_awlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awsize" type="array">
-      <obj_property name="ElementShortName">m_axi_awsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awburst" type="array">
-      <obj_property name="ElementShortName">m_axi_awburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awlock" type="array">
-      <obj_property name="ElementShortName">m_axi_awlock[0:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awlock[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awcache" type="array">
-      <obj_property name="ElementShortName">m_axi_awcache[3:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awcache[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awprot" type="array">
-      <obj_property name="ElementShortName">m_axi_awprot[2:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awprot[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awregion" type="array">
-      <obj_property name="ElementShortName">m_axi_awregion[3:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awregion[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awqos" type="array">
-      <obj_property name="ElementShortName">m_axi_awqos[3:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awqos[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awvalid" type="logic">
-      <obj_property name="ElementShortName">m_axi_awvalid</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_awready" type="logic">
-      <obj_property name="ElementShortName">m_axi_awready</obj_property>
-      <obj_property name="ObjectShortName">m_axi_awready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_wdata" type="array">
-      <obj_property name="ElementShortName">m_axi_wdata[127:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_wdata[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_wstrb" type="array">
-      <obj_property name="ElementShortName">m_axi_wstrb[15:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_wstrb[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_wlast" type="logic">
-      <obj_property name="ElementShortName">m_axi_wlast</obj_property>
-      <obj_property name="ObjectShortName">m_axi_wlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_wvalid" type="logic">
-      <obj_property name="ElementShortName">m_axi_wvalid</obj_property>
-      <obj_property name="ObjectShortName">m_axi_wvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_wready" type="logic">
-      <obj_property name="ElementShortName">m_axi_wready</obj_property>
-      <obj_property name="ObjectShortName">m_axi_wready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_bresp" type="array">
-      <obj_property name="ElementShortName">m_axi_bresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_bresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_bvalid" type="logic">
-      <obj_property name="ElementShortName">m_axi_bvalid</obj_property>
-      <obj_property name="ObjectShortName">m_axi_bvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_bready" type="logic">
-      <obj_property name="ElementShortName">m_axi_bready</obj_property>
-      <obj_property name="ObjectShortName">m_axi_bready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_araddr" type="array">
-      <obj_property name="ElementShortName">m_axi_araddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_araddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arlen" type="array">
-      <obj_property name="ElementShortName">m_axi_arlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arsize" type="array">
-      <obj_property name="ElementShortName">m_axi_arsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arburst" type="array">
-      <obj_property name="ElementShortName">m_axi_arburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arlock" type="array">
-      <obj_property name="ElementShortName">m_axi_arlock[0:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arlock[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arcache" type="array">
-      <obj_property name="ElementShortName">m_axi_arcache[3:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arcache[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arprot" type="array">
-      <obj_property name="ElementShortName">m_axi_arprot[2:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arprot[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arregion" type="array">
-      <obj_property name="ElementShortName">m_axi_arregion[3:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arregion[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arqos" type="array">
-      <obj_property name="ElementShortName">m_axi_arqos[3:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arqos[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arvalid" type="logic">
-      <obj_property name="ElementShortName">m_axi_arvalid</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_arready" type="logic">
-      <obj_property name="ElementShortName">m_axi_arready</obj_property>
-      <obj_property name="ObjectShortName">m_axi_arready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_rdata" type="array">
-      <obj_property name="ElementShortName">m_axi_rdata[127:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_rdata[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_rresp" type="array">
-      <obj_property name="ElementShortName">m_axi_rresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_rresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_rlast" type="logic">
-      <obj_property name="ElementShortName">m_axi_rlast</obj_property>
-      <obj_property name="ObjectShortName">m_axi_rlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_rvalid" type="logic">
-      <obj_property name="ElementShortName">m_axi_rvalid</obj_property>
-      <obj_property name="ObjectShortName">m_axi_rvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64/AXI4ClkConv/m_axi_rready" type="logic">
-      <obj_property name="ElementShortName">m_axi_rready</obj_property>
-      <obj_property name="ObjectShortName">m_axi_rready</obj_property>
    </wvobject>
 </wave_config>
