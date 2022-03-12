@@ -83,23 +83,23 @@ module uncachedmemorycontroller (
 				WADDR : begin
 					if (/*m_axi.awvalid &&*/ m_axi.awready) begin
 						m_axi.awvalid <= 0;
+						m_axi.wdata[31:0] <= din;
+						m_axi.wstrb[3:0] <= wbsel;
+						m_axi.wvalid <= 1;
+						m_axi.wlast <= 1;
 						state <= WDATA;
 					end
 				end
 				WDATA : begin
-					m_axi.wdata[31:0] <= din;
-					m_axi.wstrb[3:0] <= wbsel;
-					m_axi.wvalid <= 1;
-					m_axi.wlast <= 1;
 					if (/*m_axi.wvalid &&*/ m_axi.wready) begin
 						m_axi.bready <= 1;
+						m_axi.wvalid <= 0;
+						m_axi.wstrb[3:0] <= 4'h0;
+						m_axi.wlast <= 0;
 						state <= WRESP;
 					end
 				end
 				default/*WRESP*/ : begin
-					m_axi.wvalid <= 0;
-					m_axi.wstrb[3:0] <= 4'h0;
-					m_axi.wlast <= 0;
 					if (m_axi.bvalid /*&& m_axi.bready*/) begin
 						m_axi.bready <= 0;
 						wdone <= 1'b1;
