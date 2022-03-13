@@ -9,7 +9,7 @@ logic board_clock = 0;
 always #5 board_clock = ~board_clock;
 
 // DDR3 simulation model
-/*wire ddr3_reset_n;
+wire ddr3_reset_n;
 wire [0:0]   ddr3_cke;
 wire [0:0]   ddr3_ck_p; 
 wire [0:0]   ddr3_ck_n;
@@ -22,9 +22,9 @@ wire [0:0]   ddr3_odt;
 wire [1:0]   ddr3_dm;
 wire [1:0]   ddr3_dqs_p;
 wire [1:0]   ddr3_dqs_n;
-wire [15:0]  ddr3_dq;*/
+wire [15:0]  ddr3_dq;
 
-/*ddr3_model ddr3simmod(
+ddr3_model ddr3simmod(
     .rst_n(ddr3_reset_n),
     .ck(ddr3_ck_p),
     .ck_n(ddr3_ck_n),
@@ -40,7 +40,7 @@ wire [15:0]  ddr3_dq;*/
     .dqs(ddr3_dqs_p),
     .dqs_n(ddr3_dqs_n),
     .tdqs_n(), // out
-    .odt(ddr3_odt) );*/
+    .odt(ddr3_odt) );
 
 wire ps2_clk, ps2_data;
 assign ps2_clk = 1'b1;
@@ -50,7 +50,7 @@ tophat tophatsiminst(
 	.uart_rxd_out(/*uart_rxd_out*/),
 	.uart_txd_in(uart_txd_in),
     .ps2_clk(ps2_clk),
-    .ps2_data(ps2_data)/*,
+    .ps2_data(ps2_data),
     .ddr3_reset_n(ddr3_reset_n),
     .ddr3_cke(ddr3_cke),
     .ddr3_ck_p(ddr3_ck_p),
@@ -64,6 +64,6 @@ tophat tophatsiminst(
     .ddr3_dm(ddr3_dm),
     .ddr3_dqs_p(ddr3_dqs_p),
     .ddr3_dqs_n(ddr3_dqs_n),
-    .ddr3_dq(ddr3_dq)*/ );
+    .ddr3_dq(ddr3_dq) );
 
 endmodule

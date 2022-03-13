@@ -7,8 +7,7 @@ module axi4ddr3(
 	input wire clk_ref_i,
 	axi_if.slave m_axi,
 	ddr3devicewires.def ddr3wires,
-	output wire calib_done,
-	output wire ui_clk );
+	output wire calib_done );
 
 ddr3drv ddr3driver(
 	.aclk(aclk),
@@ -17,7 +16,6 @@ ddr3drv ddr3driver(
 	.clk_ref_i(clk_ref_i),
 	.m_axi(m_axi),
 	.ddr3wires(ddr3wires),
-	.calib_done(calib_done),
-	.ui_clk(ui_clk) );
+	.calib_done(calib_done) );
 
 endmodule

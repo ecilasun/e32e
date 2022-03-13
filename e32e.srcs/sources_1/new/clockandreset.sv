@@ -19,6 +19,7 @@ centralclockgen centralclock(
 	.busclock(busclock),
 	.wallclock(wallclock),
 	.uartbaseclock(uartbaseclock),
+	.hidclock(hidclock),
 	.locked(centralclocklocked) );
 
 ddr3clk ddr3memoryclock(
@@ -31,7 +32,6 @@ videoclockgen graphicsclock(
 	.clk_in1(sys_clock_i),
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
-	.hidclock(hidclock),
 	.locked(videoclklocked) );
 
 // Hold reset until clocks are locked

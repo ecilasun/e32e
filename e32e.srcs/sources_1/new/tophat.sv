@@ -15,7 +15,7 @@ module tophat(
 	output wire [2:0] hdmi_tx_p,
 	output wire [2:0] hdmi_tx_n,
 	output wire hdmi_tx_clk_p,
-	output wire hdmi_tx_clk_n/*,
+	output wire hdmi_tx_clk_n,
 	// DDR3
     output wire ddr3_reset_n,
     output wire [0:0] ddr3_cke,
@@ -30,7 +30,28 @@ module tophat(
     output wire [1:0] ddr3_dm,
     inout wire [1:0] ddr3_dqs_p,
     inout wire [1:0] ddr3_dqs_n,
-    inout wire [15:0] ddr3_dq*/ );
+    inout wire [15:0] ddr3_dq );
+
+// ----------------------------------------------------------------------------
+// Device address map
+// ----------------------------------------------------------------------------
+
+// Address space is arranged so that device addresses below 0x80000000 are cached
+// DDR3: 00000000..20000000 : [ ] cached r/w
+// BRAM: 20000000..2000FFFF : [+] cached r/w
+// ... : 20001000..7FFFFFFF : [-] unused
+// MAIL: 80000000..80000FFF : [+] uncached r/w
+// UART: 80001000..8000100F : [+] uncached r/w
+//  SPI: 80001010..8000101F : [ ] uncached r/w
+// PS/2: 80001020..8000102F : [ ] uncached r/w
+//  BTN: 80001030..8000103F : [ ] uncached r/w
+//  LED: 80001040..8000104F : [ ] uncached r/w
+// ... : 80001050..80FFFFFF : [-] unused
+//  FB0: 81000000..8101FFFF : [+] uncached w
+//  FB1: 81020000..8103FFFF : [ ] uncached w
+//  PAL: 81040000..810400FF : [+] uncached w
+//  GPU: 81040100..8104FFFF : [ ] uncached w
+// ... : 81050000..FFFFFFFF : [-] unused
 
 // ----------------------------------------------------------------------------
 // Clock / Reset generator
@@ -154,8 +175,8 @@ gpudataoutput gpudata(
 	.tmdsclkp(hdmi_tx_clk_p ),
 	.tmdsclkn(hdmi_tx_clk_n) );
 
-wire calib_done, ui_clk;
-/*ddr3devicewires ddr3wires(
+wire calib_done;
+ddr3devicewires ddr3wires(
 	.ddr3_reset_n(ddr3_reset_n),
 	.ddr3_cke(ddr3_cke),
 	.ddr3_ck_p(ddr3_ck_p), 
@@ -169,7 +190,7 @@ wire calib_done, ui_clk;
 	.ddr3_dm(ddr3_dm),
 	.ddr3_dqs_p(ddr3_dqs_p),
 	.ddr3_dqs_n(ddr3_dqs_n),
-	.ddr3_dq(ddr3_dq) );*/
+	.ddr3_dq(ddr3_dq) );
 
 wire bramclk = aclk;
 cacheddevicechain CDEVICECHAIN(
@@ -179,8 +200,7 @@ cacheddevicechain CDEVICECHAIN(
 	.clk_sys_i(clk_sys_i),
 	.clk_ref_i(clk_ref_i),
 	.calib_done(calib_done),
-	.ui_clk(ui_clk),
-	//.ddr3wires(ddr3wires),
+	.ddr3wires(ddr3wires),
 	.axi4if(A4CH) );
 
 // ----------------------------------------------------------------------------
