@@ -4,7 +4,6 @@ import axi_pkg::*;
 
 module cacheddevicechain(
 	input wire aclk,
-	input wire bramclk,
 	input wire aresetn,
 	input wire selfresetn,
 	input wire clk_sys_i,
@@ -42,7 +41,6 @@ axi4ddr3 DDR3512M(
 axi_if bramif();
 a4bram BRAM64(
 	.aclk(aclk),
-	.bramclk(bramclk),
 	.aresetn(aresetn),
 	.s_axi(bramif) );
 

@@ -13,15 +13,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="58.555000000 us"></ZoomStartTime>
-      <ZoomEndTime time="277.155000001 us"></ZoomEndTime>
-      <Cursor1Time time="163.505000000 us"></Cursor1Time>
+      <ZoomStartTime time="101.995000000 us"></ZoomStartTime>
+      <ZoomEndTime time="145.835000001 us"></ZoomEndTime>
+      <Cursor1Time time="111.615000000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="237"></NameColumnWidth>
-      <ValueColumnWidth column_width="113"></ValueColumnWidth>
+      <ValueColumnWidth column_width="107"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="265" />
+   <WVObjectSize size="269" />
    <wave_markers>
       <marker time="108375000000" label="" />
    </wave_markers>
@@ -249,6 +249,14 @@
       <obj_property name="ElementShortName">aresetn</obj_property>
       <obj_property name="ObjectShortName">aresetn</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CARB/S/araddr" type="array">
+      <obj_property name="ElementShortName">araddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">araddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CARB/S/awaddr" type="array">
+      <obj_property name="ElementShortName">awaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">awaddr[31:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CARB/arbiterstate" type="array">
       <obj_property name="ElementShortName">arbiterstate[3:0]</obj_property>
       <obj_property name="ObjectShortName">arbiterstate[3:0]</obj_property>
@@ -296,6 +304,14 @@
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/aresetn" type="logic">
       <obj_property name="ElementShortName">aresetn</obj_property>
       <obj_property name="ObjectShortName">aresetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCARB/S/araddr" type="array">
+      <obj_property name="ElementShortName">araddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">araddr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCARB/S/awaddr" type="array">
+      <obj_property name="ElementShortName">awaddr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">awaddr[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/arbiterstate" type="array">
       <obj_property name="ElementShortName">arbiterstate[3:0]</obj_property>

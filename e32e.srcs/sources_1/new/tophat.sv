@@ -194,10 +194,8 @@ ddr3devicewires ddr3wires(
 	.ddr3_dqs_n(ddr3_dqs_n),
 	.ddr3_dq(ddr3_dq) );
 
-wire bramclk = aclk;
 cacheddevicechain CDEVICECHAIN(
 	.aclk(aclk),
-	.bramclk(bramclk),
 	.aresetn(aresetn),
 	.selfresetn(selfresetn), // FOR DDR3
 	.clk_sys_i(clk_sys_i),
