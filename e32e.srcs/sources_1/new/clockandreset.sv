@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
 
 module clockandreset(
+	input wire calib_done,
 	input wire sys_clock_i,
 	output wire busclock,
 	output wire wallclock,
@@ -10,16 +11,15 @@ module clockandreset(
 	output wire hidclock,
 	output wire clk_sys_i,
 	output wire clk_ref_i,
-	output logic selfresetn );
+	output logic selfresetn,
+	output wire aresetn );
 
-wire centralclocklocked, videoclklocked, ddr3clklocked;
+wire centralclocklocked, peripheralclklocked, ddr3clklocked;
 
 centralclockgen centralclock(
 	.clk_in1(sys_clock_i),
 	.busclock(busclock),
 	.wallclock(wallclock),
-	.uartbaseclock(uartbaseclock),
-	.hidclock(hidclock),
 	.locked(centralclocklocked) );
 
 ddr3clk ddr3memoryclock(
@@ -28,14 +28,16 @@ ddr3clk ddr3memoryclock(
 	.clk_ref_i(clk_ref_i),
 	.locked(ddr3clklocked) );
 
-videoclockgen graphicsclock(
+videoclockgen peripheralclock(
 	.clk_in1(sys_clock_i),
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
-	.locked(videoclklocked) );
+	.uartbaseclock(uartbaseclock),
+	.hidclock(hidclock),
+	.locked(peripheralclklocked) );
 
 // Hold reset until clocks are locked
-wire internalreset = ~(centralclocklocked & videoclklocked & ddr3clklocked);
+wire internalreset = ~(centralclocklocked & peripheralclklocked & ddr3clklocked);
 
 // delayed reset post-clock-lock
 logic [3:0] resetcountdown = 4'hf;
@@ -50,5 +52,7 @@ always @(posedge wallclock) begin // using slowest clock
 			resetcountdown <= resetcountdown - 4'h1;
 	end
 end
+
+assign aresetn = selfresetn ? calib_done : 1'b0;
 
 endmodule

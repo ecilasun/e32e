@@ -143,6 +143,7 @@ always @(posedge aclk) begin
 			2'b00: begin
 				if (axi4if.awvalid) begin
 					fbwa <= axi4if.awaddr[16:2];
+					palettewa <= axi4if.awaddr[9:2];
 					axi4if.awready <= 1'b1;
 					waddrstate <= 2'b01;
 				end
@@ -176,7 +177,6 @@ always @(posedge aclk) begin
 							fbwe <= axi4if.wstrb[3:0];
 						end
 						4'h4: begin // pal
-							palettewa <= axi4if.awaddr[9:2]; // word aligned
 							palettedin <= axi4if.wdata[23:0];
 							palettewe <= 1'b1;
 						end
@@ -224,7 +224,6 @@ always @(posedge aclk) begin
 				if (axi4if.rready ) begin
 					axi4if.rdata[31:0] <= 32'd0; // Nothing to read here
 					axi4if.rvalid <= 1'b1;
-					//axi4if.rlast <= 1'b1; // last in burst
 					raddrstate <= 2'b10; // delay one clock for master to pull down arvalid
 				end
 			end

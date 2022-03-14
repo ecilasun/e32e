@@ -41,6 +41,8 @@ always_ff @(posedge aclk) begin
 			else
 				grant <= m0valid ? 6'b100000 : (m1valid ? 6'b010000 : (m2valid ? 6'b001000 : (m3valid ? 6'b000100 : (m4valid ? 6'b000010 : (m5valid ? 6'b000001 : 6'b000000)))));
 		end else begin
+			// Shuffle the priority between two ends of the request line,
+			// effectively reversing the order in which units are granted bus access.
 			shuffle <= svalid ? ~shuffle : shuffle;
 		end
 	end
@@ -49,7 +51,7 @@ end
 always_comb begin
 	if(arbiterstate == GRANTED) begin
 		M[0].arready = grant == 6'b100000 ? S.arready : 0;
-		M[0].rdata   = grant == 6'b100000 ? S.rdata : 0;
+		M[0].rdata   = grant == 6'b100000 ? S.rdata : 'dz;
 		M[0].rresp   = grant == 6'b100000 ? S.rresp : 0;
 		M[0].rvalid  = grant == 6'b100000 ? S.rvalid : 0;
 		M[0].rlast   = grant == 6'b100000 ? S.rlast : 0;
@@ -58,7 +60,7 @@ always_comb begin
 		M[0].bresp   = grant == 6'b100000 ? S.bresp : 0;
 		M[0].bvalid  = grant == 6'b100000 ? S.bvalid : 0;
 		M[1].arready = grant == 6'b010000 ? S.arready : 0;
-		M[1].rdata   = grant == 6'b010000 ? S.rdata : 0;
+		M[1].rdata   = grant == 6'b010000 ? S.rdata : 'dz;
 		M[1].rresp   = grant == 6'b010000 ? S.rresp : 0;
 		M[1].rvalid  = grant == 6'b010000 ? S.rvalid : 0;
 		M[1].rlast   = grant == 6'b010000 ? S.rlast : 0;
@@ -67,7 +69,7 @@ always_comb begin
 		M[1].bresp   = grant == 6'b010000 ? S.bresp : 0;
 		M[1].bvalid  = grant == 6'b010000 ? S.bvalid : 0;
 		M[2].arready = grant == 6'b001000 ? S.arready : 0;
-		M[2].rdata   = grant == 6'b001000 ? S.rdata : 0;
+		M[2].rdata   = grant == 6'b001000 ? S.rdata : 'dz;
 		M[2].rresp   = grant == 6'b001000 ? S.rresp : 0;
 		M[2].rvalid  = grant == 6'b001000 ? S.rvalid : 0;
 		M[2].rlast   = grant == 6'b001000 ? S.rlast : 0;
@@ -76,7 +78,7 @@ always_comb begin
 		M[2].bresp   = grant == 6'b001000 ? S.bresp : 0;
 		M[2].bvalid  = grant == 6'b001000 ? S.bvalid : 0;
 		M[3].arready = grant == 6'b000100 ? S.arready : 0;
-		M[3].rdata   = grant == 6'b000100 ? S.rdata : 0;
+		M[3].rdata   = grant == 6'b000100 ? S.rdata : 'dz;
 		M[3].rresp   = grant == 6'b000100 ? S.rresp : 0;
 		M[3].rvalid  = grant == 6'b000100 ? S.rvalid : 0;
 		M[3].rlast   = grant == 6'b000100 ? S.rlast : 0;
@@ -85,7 +87,7 @@ always_comb begin
 		M[3].bresp   = grant == 6'b000100 ? S.bresp : 0;
 		M[3].bvalid  = grant == 6'b000100 ? S.bvalid : 0;
 		M[4].arready = grant == 6'b000010 ? S.arready : 0;
-		M[4].rdata   = grant == 6'b000010 ? S.rdata : 0;
+		M[4].rdata   = grant == 6'b000010 ? S.rdata : 'dz;
 		M[4].rresp   = grant == 6'b000010 ? S.rresp : 0;
 		M[4].rvalid  = grant == 6'b000010 ? S.rvalid : 0;
 		M[4].rlast   = grant == 6'b000010 ? S.rlast : 0;
@@ -94,7 +96,7 @@ always_comb begin
 		M[4].bresp   = grant == 6'b000010 ? S.bresp : 0;
 		M[4].bvalid  = grant == 6'b000010 ? S.bvalid : 0;
 		M[5].arready = grant == 6'b000001 ? S.arready : 0;
-		M[5].rdata   = grant == 6'b000001 ? S.rdata : 0;
+		M[5].rdata   = grant == 6'b000001 ? S.rdata : 'dz;
 		M[5].rresp   = grant == 6'b000001 ? S.rresp : 0;
 		M[5].rvalid  = grant == 6'b000001 ? S.rvalid : 0;
 		M[5].rlast   = grant == 6'b000001 ? S.rlast : 0;
@@ -104,7 +106,7 @@ always_comb begin
 		M[5].bvalid  = grant == 6'b000001 ? S.bvalid : 0;
 	end else begin
 		M[0].arready = 0;
-		M[0].rdata = 0;
+		M[0].rdata = 'dz;
 		M[0].rresp = 0;
 		M[0].rvalid = 0;
 		M[0].rlast = 0;
@@ -113,7 +115,7 @@ always_comb begin
 		M[0].bresp = 0;
 		M[0].bvalid = 0;
 		M[1].arready = 0;
-		M[1].rdata = 0;
+		M[1].rdata = 'dz;
 		M[1].rresp = 0;
 		M[1].rvalid = 0;
 		M[1].rlast = 0;
@@ -122,7 +124,7 @@ always_comb begin
 		M[1].bresp = 0;
 		M[1].bvalid = 0;
 		M[2].arready = 0;
-		M[2].rdata = 0;
+		M[2].rdata = 'dz;
 		M[2].rresp = 0;
 		M[2].rvalid = 0;
 		M[2].rlast = 0;
@@ -131,7 +133,7 @@ always_comb begin
 		M[2].bresp = 0;
 		M[2].bvalid = 0;
 		M[3].arready = 0;
-		M[3].rdata = 0;
+		M[3].rdata = 'dz;
 		M[3].rresp = 0;
 		M[3].rvalid = 0;
 		M[3].rlast = 0;
@@ -140,7 +142,7 @@ always_comb begin
 		M[3].bresp = 0;
 		M[3].bvalid = 0;
 		M[4].arready = 0;
-		M[4].rdata = 0;
+		M[4].rdata = 'dz;
 		M[4].rresp = 0;
 		M[4].rvalid = 0;
 		M[4].rlast = 0;
@@ -149,7 +151,7 @@ always_comb begin
 		M[4].bresp = 0;
 		M[4].bvalid = 0;
 		M[5].arready = 0;
-		M[5].rdata = 0;
+		M[5].rdata = 'dz;
 		M[5].rresp = 0;
 		M[5].rvalid = 0;
 		M[5].rlast = 0;
@@ -276,7 +278,7 @@ always_comb begin
 			S.awlen		= 0;
 			S.awsize	= 0;
 			S.awburst	= 0;
-			S.wdata		= 0;
+			S.wdata		= 'dz;
 			S.wstrb		= 0;
 			S.wvalid	= 0;
 			S.wlast		= 0;
@@ -294,7 +296,7 @@ always_comb begin
 		S.awlen		= 0;
 		S.awsize	= 0;
 		S.awburst	= 0;
-		S.wdata		= 0;
+		S.wdata		= 'dz;
 		S.wstrb		= 0;
 		S.wvalid	= 0;
 		S.wlast		= 0;

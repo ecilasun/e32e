@@ -35,8 +35,8 @@ always_comb begin
 	validraddr_uart		= (axi4if.araddr>=32'h80001000) && (axi4if.araddr<32'h80001010);
 	// spimaster @80001010
 	// ps2 keyboard @80001020
-	validwaddr_ps2		= (axi4if.awaddr>=32'h80001020) && axi4if.awaddr<32'h80001030;
-	validraddr_ps2		= (axi4if.araddr>=32'h80001020) && axi4if.araddr<32'h80001030;
+	validwaddr_ps2		= (axi4if.awaddr>=32'h80001020) && (axi4if.awaddr<32'h80001030);
+	validraddr_ps2		= (axi4if.araddr>=32'h80001020) && (axi4if.araddr<32'h80001030);
 	// buttons @80001040
 	// LEDs @80001040-80001050
 	// unused space for other devices @80001060-80FFFFFF
@@ -56,7 +56,7 @@ wire uartrcvempty;
 axi4uart UART(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.m_axi(uartif),
+	.s_axi(uartif),
 	.uartbaseclock(uartbaseclock),
 	.uart_rxd_out(uart_rxd_out),
 	.uart_txd_in(uart_txd_in),
@@ -119,77 +119,77 @@ assign irq = {1'b0, ~ps2fifoempty, 1'b0, ~uartrcvempty};
 wire [31:0] waddr = {3'b000, axi4if.awaddr[28:0]};
 
 always_comb begin
-	uartif.awaddr = validwaddr_uart ? waddr : 'dz;
+	uartif.awaddr = validwaddr_uart ? waddr : 32'd0;
 	uartif.awvalid = validwaddr_uart ? axi4if.awvalid : 1'b0;
 	uartif.awlen = validwaddr_uart ? axi4if.awlen : 0;
 	uartif.awsize = validwaddr_uart ? axi4if.awsize : 0;
 	uartif.awburst = validwaddr_uart ? axi4if.awburst : 0;
-	uartif.wdata = validwaddr_uart ? axi4if.wdata : 'dz;
+	uartif.wdata = validwaddr_uart ? axi4if.wdata : 0;
 	uartif.wstrb = validwaddr_uart ? axi4if.wstrb : 'd0;
 	uartif.wvalid = validwaddr_uart ? axi4if.wvalid : 1'b0;
 	uartif.bready = validwaddr_uart ? axi4if.bready : 1'b0;
 	uartif.wlast = validwaddr_uart ? axi4if.wlast : 1'b0;
 
-	mailboxif.awaddr = validwaddr_mailbox ? waddr : 'dz;
+	mailboxif.awaddr = validwaddr_mailbox ? waddr : 32'd0;
 	mailboxif.awvalid = validwaddr_mailbox ? axi4if.awvalid : 1'b0;
 	mailboxif.awlen = validwaddr_mailbox ? axi4if.awlen : 0;
 	mailboxif.awsize = validwaddr_mailbox ? axi4if.awsize : 0;
 	mailboxif.awburst = validwaddr_mailbox ? axi4if.awburst : 0;
-	mailboxif.wdata = validwaddr_mailbox ? axi4if.wdata : 'dz;
+	mailboxif.wdata = validwaddr_mailbox ? axi4if.wdata : 0;
 	mailboxif.wstrb = validwaddr_mailbox ? axi4if.wstrb : 'd0;
 	mailboxif.wvalid = validwaddr_mailbox ? axi4if.wvalid : 1'b0;
 	mailboxif.bready = validwaddr_mailbox ? axi4if.bready : 1'b0;
 	mailboxif.wlast = validwaddr_mailbox ? axi4if.wlast : 1'b0;
 
-	/*spiif.awaddr = validwaddr_spi ? waddr : 32'dz;
+	/*spiif.awaddr = validwaddr_spi ? waddr : 32'd0;
 	spiif.awvalid = validwaddr_spi ? axi4if.awvalid : 1'b0;
-	spiif.wdata = validwaddr_spi ? axi4if.wdata : 32'dz;
+	spiif.wdata = validwaddr_spi ? axi4if.wdata : 0;
 	spiif.wstrb = validwaddr_spi ? axi4if.wstrb : 4'h0;
 	spiif.wvalid = validwaddr_spi ? axi4if.wvalid : 1'b0;
 	spiif.bready = validwaddr_spi ? axi4if.bready : 1'b0;
 	spiif.wlast = validwaddr_spi ? axi4if.wlast : 1'b0;*/
 
-	ps2if.awaddr = validwaddr_ps2 ? waddr : 'dz;
+	ps2if.awaddr = validwaddr_ps2 ? waddr : 32'd0;
 	ps2if.awvalid = validwaddr_ps2 ? axi4if.awvalid : 1'b0;
 	ps2if.awlen = validwaddr_ps2 ? axi4if.awlen : 0;
 	ps2if.awsize = validwaddr_ps2 ? axi4if.awsize : 0;
 	ps2if.awburst = validwaddr_ps2 ? axi4if.awburst : 0;
-	ps2if.wdata = validwaddr_ps2 ? axi4if.wdata : 'dz;
+	ps2if.wdata = validwaddr_ps2 ? axi4if.wdata : 0;
 	ps2if.wstrb = validwaddr_ps2 ? axi4if.wstrb : 'd0;
 	ps2if.wvalid = validwaddr_ps2 ? axi4if.wvalid : 1'b0;
 	ps2if.bready = validwaddr_ps2 ? axi4if.bready : 1'b0;
 	ps2if.wlast = validwaddr_ps2 ? axi4if.wlast : 1'b0;
 
-	/*ledif.awaddr = validwaddr_led ? waddr : 32'dz;
+	/*ledif.awaddr = validwaddr_led ? waddr : 32'd0;
 	ledif.awvalid = validwaddr_led ? axi4if.awvalid : 1'b0;
-	ledif.wdata = validwaddr_led ? axi4if.wdata : 32'dz;
+	ledif.wdata = validwaddr_led ? axi4if.wdata : 0;
 	ledif.wstrb = validwaddr_led ? axi4if.wstrb : 4'h0;
 	ledif.wvalid = validwaddr_led ? axi4if.wvalid : 1'b0;
 	ledif.bready = validwaddr_led ? axi4if.bready : 1'b0;
 	ledif.wlast = validwaddr_led ? axi4if.wlast : 1'b0;*/
 
-	/*ddr3if.awaddr = validwaddr_ddr3 ? waddr : 32'dz;
+	/*ddr3if.awaddr = validwaddr_ddr3 ? waddr : 32'd0;
 	ddr3if.awvalid = validwaddr_ddr3 ? axi4if.awvalid : 1'b0;
-	ddr3if.wdata = validwaddr_ddr3 ? axi4if.wdata : 32'dz;
+	ddr3if.wdata = validwaddr_ddr3 ? axi4if.wdata : 0;
 	ddr3if.wstrb = validwaddr_ddr3 ? axi4if.wstrb : 4'h0;
 	ddr3if.wvalid = validwaddr_ddr3 ? axi4if.wvalid : 1'b0;
 	ddr3if.bready = validwaddr_ddr3 ? axi4if.bready : 1'b0;
 	ddr3if.wlast = validwaddr_ddr3 ? axi4if.wlast : 1'b0;*/
 
-	gpuif.awaddr = validwaddr_gpu ? waddr : 'dz;
+	gpuif.awaddr = validwaddr_gpu ? waddr : 32'd0;
 	gpuif.awvalid = validwaddr_gpu ? axi4if.awvalid : 1'b0;
 	gpuif.awlen = validwaddr_gpu ? axi4if.awlen : 0;
 	gpuif.awsize = validwaddr_gpu ? axi4if.awsize : 0;
 	gpuif.awburst = validwaddr_gpu ? axi4if.awburst : 0;
-	gpuif.wdata = validwaddr_gpu ? axi4if.wdata : 'dz;
+	gpuif.wdata = validwaddr_gpu ? axi4if.wdata : 0;
 	gpuif.wstrb = validwaddr_gpu ? axi4if.wstrb : 'd0;
 	gpuif.wvalid = validwaddr_gpu ? axi4if.wvalid : 1'b0;
 	gpuif.bready = validwaddr_gpu ? axi4if.bready : 1'b0;
 	gpuif.wlast = validwaddr_gpu ? axi4if.wlast : 1'b0;
 
-	/*buttonif.awaddr = validwaddr_button ? waddr : 32'dz;
+	/*buttonif.awaddr = validwaddr_button ? waddr : 32'd0;
 	buttonif.awvalid = validwaddr_button ? axi4if.awvalid : 1'b0;
-	buttonif.wdata = validwaddr_button ? axi4if.wdata : 32'dz;
+	buttonif.wdata = validwaddr_button ? axi4if.wdata : 0;
 	buttonif.wstrb = validwaddr_button ? axi4if.wstrb : 4'h0;
 	buttonif.wvalid = validwaddr_button ? axi4if.wvalid : 1'b0;
 	buttonif.bready = validwaddr_button ? axi4if.bready : 1'b0;
@@ -256,47 +256,47 @@ wire [31:0] raddr = {3'b000, axi4if.araddr[28:0]};
 
 always_comb begin
 
-	uartif.araddr = validraddr_uart ? raddr : 'dz;
+	uartif.araddr = validraddr_uart ? raddr : 32'd0;
 	uartif.arlen = validraddr_uart ? axi4if.arlen : 0;
 	uartif.arsize = validraddr_uart ? axi4if.arsize : 0;
 	uartif.arburst = validraddr_uart ? axi4if.arburst : 0;
 	uartif.arvalid = validraddr_uart ? axi4if.arvalid : 1'b0;
 	uartif.rready = validraddr_uart ? axi4if.rready : 1'b0;
 
-	mailboxif.araddr = validraddr_mailbox ? raddr : 'dz;
+	mailboxif.araddr = validraddr_mailbox ? raddr : 32'd0;
 	mailboxif.arlen = validraddr_mailbox ? axi4if.arlen : 0;
 	mailboxif.arsize = validraddr_mailbox ? axi4if.arsize : 0;
 	mailboxif.arburst = validraddr_mailbox ? axi4if.arburst : 0;
 	mailboxif.arvalid = validraddr_mailbox ? axi4if.arvalid : 1'b0;
 	mailboxif.rready = validraddr_mailbox ? axi4if.rready : 1'b0;
 
-	/*spiif.araddr = validraddr_spi ? raddr : 32'dz;
+	/*spiif.araddr = validraddr_spi ? raddr : 32'd0;
 	spiif.arvalid = validraddr_spi ? axi4if.arvalid : 1'b0;
 	spiif.rready = validraddr_spi ? axi4if.rready : 1'b0;*/
 
-	ps2if.araddr = validraddr_ps2 ? raddr : 'dz;
+	ps2if.araddr = validraddr_ps2 ? raddr : 32'd0;
 	ps2if.arlen = validraddr_ps2 ? axi4if.arlen : 0;
 	ps2if.arsize = validraddr_ps2 ? axi4if.arsize : 0;
 	ps2if.arburst = validraddr_ps2 ? axi4if.arburst : 0;
 	ps2if.arvalid = validraddr_ps2 ? axi4if.arvalid : 1'b0;
 	ps2if.rready = validraddr_ps2 ? axi4if.rready : 1'b0;
 
-	/*ledif.araddr = validraddr_led ? raddr : 32'dz;
+	/*ledif.araddr = validraddr_led ? raddr : 32'd0;
 	ledif.arvalid = validraddr_led ? axi4if.arvalid : 1'b0;
 	ledif.rready = validraddr_led ? axi4if.rready : 1'b0;*/
 
-	/*ddr3if.araddr = validraddr_ddr3 ? raddr : 32'dz;
+	/*ddr3if.araddr = validraddr_ddr3 ? raddr : 32'd0;
 	ddr3if.arvalid = validraddr_ddr3 ? axi4if.arvalid : 1'b0;
 	ddr3if.rready = validraddr_ddr3 ? axi4if.rready : 1'b0;*/
 
-	gpuif.araddr = validraddr_gpu ? raddr : 'dz;
+	gpuif.araddr = validraddr_gpu ? raddr : 32'd0;
 	gpuif.arlen = validraddr_gpu ? axi4if.arlen : 0;
 	gpuif.arsize = validraddr_gpu ? axi4if.arsize : 0;
 	gpuif.arburst = validraddr_gpu ? axi4if.arburst : 0;
 	gpuif.arvalid = validraddr_gpu ? axi4if.arvalid : 1'b0;
 	gpuif.rready = validraddr_gpu ? axi4if.rready : 1'b0;
 
-	/*buttonif.araddr = validraddr_button ? raddr : 32'dz;
+	/*buttonif.araddr = validraddr_button ? raddr : 32'd0;
 	buttonif.arvalid = validraddr_button ? axi4if.arvalid : 1'b0;
 	buttonif.rready = validraddr_button ? axi4if.rready : 1'b0;*/
 

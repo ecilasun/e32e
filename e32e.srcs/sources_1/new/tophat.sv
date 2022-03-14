@@ -57,8 +57,10 @@ module tophat(
 // Clock / Reset generator
 // ----------------------------------------------------------------------------
 
+wire calib_done;
 wire aclk, wallclock, uartbaseclock, pixelclock, videoclock, hidclock, clk_sys_i, clk_ref_i, aresetn;
 clockandreset ClockAndResetGen(
+	.calib_done(calib_done),
 	.sys_clock_i(sys_clock),
 	.busclock(aclk),
 	.wallclock(wallclock),
@@ -68,7 +70,8 @@ clockandreset ClockAndResetGen(
 	.hidclock(hidclock),
 	.clk_sys_i(clk_sys_i),
 	.clk_ref_i(clk_ref_i),
-	.selfresetn(aresetn) );
+	.selfresetn(selfresetn),
+	.aresetn(aresetn) );
 
 // ----------------------------------------------------------------------------
 // Wallclock for timeh/l CSR
@@ -175,7 +178,6 @@ gpudataoutput gpudata(
 	.tmdsclkp(hdmi_tx_clk_p ),
 	.tmdsclkn(hdmi_tx_clk_n) );
 
-wire calib_done;
 ddr3devicewires ddr3wires(
 	.ddr3_reset_n(ddr3_reset_n),
 	.ddr3_cke(ddr3_cke),
@@ -197,6 +199,7 @@ cacheddevicechain CDEVICECHAIN(
 	.aclk(aclk),
 	.bramclk(bramclk),
 	.aresetn(aresetn),
+	.selfresetn(selfresetn), // FOR DDR3
 	.clk_sys_i(clk_sys_i),
 	.clk_ref_i(clk_ref_i),
 	.calib_done(calib_done),

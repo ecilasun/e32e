@@ -6,6 +6,7 @@ module cacheddevicechain(
 	input wire aclk,
 	input wire bramclk,
 	input wire aresetn,
+	input wire selfresetn,
 	input wire clk_sys_i,
 	input wire clk_ref_i,
 	output wire calib_done,
@@ -31,7 +32,7 @@ end
 axi_if ddr3if();
 axi4ddr3 DDR3512M(
 	.aclk(aclk),
-	.aresetn(aresetn),
+	.aresetn(selfresetn), // WARNING: DDR3 has to receive a reset signal & finish calibration, after which all other devices can start working
 	.clk_sys_i(clk_sys_i),
 	.clk_ref_i(clk_ref_i),
 	.m_axi(ddr3if),
@@ -52,23 +53,23 @@ a4bram BRAM64(
 wire [31:0] waddr = {3'b000, axi4if.awaddr[28:0]};
 
 always_comb begin
-	bramif.awaddr = validwaddr_bram ? waddr : 'dz;
+	bramif.awaddr = validwaddr_bram ? waddr : 32'd0;
 	bramif.awvalid = validwaddr_bram ? axi4if.awvalid : 1'b0;
 	bramif.awlen = validwaddr_bram ? axi4if.awlen : 0;
 	bramif.awsize = validwaddr_bram ? axi4if.awsize : 0;
 	bramif.awburst = validwaddr_bram ? axi4if.awburst : 0;
-	bramif.wdata = validwaddr_bram ? axi4if.wdata : 'dz;
+	bramif.wdata = validwaddr_bram ? axi4if.wdata : 0;
 	bramif.wstrb = validwaddr_bram ? axi4if.wstrb : 'd0;
 	bramif.wvalid = validwaddr_bram ? axi4if.wvalid : 1'b0;
 	bramif.bready = validwaddr_bram ? axi4if.bready : 1'b0;
 	bramif.wlast = validwaddr_bram ? axi4if.wlast : 1'b0;
 
-	ddr3if.awaddr = validwaddr_ddr3 ? waddr : 'dz;
+	ddr3if.awaddr = validwaddr_ddr3 ? waddr : 32'd0;
 	ddr3if.awvalid = validwaddr_ddr3 ? axi4if.awvalid : 1'b0;
 	ddr3if.awlen = validwaddr_ddr3 ? axi4if.awlen : 0;
 	ddr3if.awsize = validwaddr_ddr3 ? axi4if.awsize : 0;
 	ddr3if.awburst = validwaddr_ddr3 ? axi4if.awburst : 0;
-	ddr3if.wdata = validwaddr_ddr3 ? axi4if.wdata : 'dz;
+	ddr3if.wdata = validwaddr_ddr3 ? axi4if.wdata : 0;
 	ddr3if.wstrb = validwaddr_ddr3 ? axi4if.wstrb : 'd0;
 	ddr3if.wvalid = validwaddr_ddr3 ? axi4if.wvalid : 1'b0;
 	ddr3if.bready = validwaddr_ddr3 ? axi4if.bready : 1'b0;
@@ -99,14 +100,14 @@ end
 wire [31:0] raddr = {3'b000, axi4if.araddr[28:0]};
 
 always_comb begin
-	bramif.araddr = validraddr_bram ? raddr : 'dz;
+	bramif.araddr = validraddr_bram ? raddr : 32'd0;
 	bramif.arlen = validraddr_bram ? axi4if.arlen : 0;
 	bramif.arsize = validraddr_bram ? axi4if.arsize : 0;
 	bramif.arburst = validraddr_bram ? axi4if.arburst : 0;
 	bramif.arvalid = validraddr_bram ? axi4if.arvalid : 1'b0;
 	bramif.rready = validraddr_bram ? axi4if.rready : 1'b0;
 
-	ddr3if.araddr = validraddr_ddr3 ? raddr : 'dz;
+	ddr3if.araddr = validraddr_ddr3 ? raddr : 32'd0;
 	ddr3if.arlen = validraddr_ddr3 ? axi4if.arlen : 0;
 	ddr3if.arsize = validraddr_ddr3 ? axi4if.arsize : 0;
 	ddr3if.arburst = validraddr_ddr3 ? axi4if.arburst : 0;
