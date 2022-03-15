@@ -179,6 +179,11 @@ logic illegalinstruction = 1'b0;
 logic [31:0] rwaddress = 32'd0;
 logic [31:0] adjacentPC = 32'd0;
 
+// Retired instruction counter
+always @(posedge aclk) begin
+	retired <= retired + (cpustate==RETIRE ? 64'd1 : 64'd0);
+end
+
 always @(posedge aclk) begin
 	if (~aresetn) begin
 		cpustate <= INIT;
@@ -198,7 +203,9 @@ always @(posedge aclk) begin
 			end
 
 			RETIRE: begin
-				retired <= retired + 1;
+				// NOTE: Interrupt handling might fit here
+				// where we can save the intended nextPC but branch to
+				// the mtvec instead.
 				PC <= nextPC;
 				addr <= nextPC;
 				ifetch <= 1'b1; // This read is to use I$, hold high until read is complete
@@ -275,6 +282,8 @@ always @(posedge aclk) begin
 						cpustate <= STOREWAIT;
 					end
 					/*instrOneHotOut[`O_H_FENCE]: begin
+						// 0000_pred_succ_00000_000_00000_0001111 -> FENCE
+						// 0000_0000_0000_00000_001_00000_0001111 -> FENCE.I (flush I$)
 					end*/
 					instrOneHotOut[`O_H_SYSTEM]: begin
 						rdin <= csrprevval;

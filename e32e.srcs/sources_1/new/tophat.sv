@@ -39,7 +39,7 @@ module tophat(
 // Address space is arranged so that device addresses below 0x80000000 are cached
 // DDR3: 00000000..20000000 : [ ] cached r/w
 // BRAM: 20000000..2000FFFF : [+] cached r/w
-// ... : 20001000..7FFFFFFF : [-] unused
+// ... : 20010000..7FFFFFFF : [-] unused
 // MAIL: 80000000..80000FFF : [+] uncached r/w
 // UART: 80001000..8000100F : [+] uncached r/w
 //  SPI: 80001010..8000101F : [ ] uncached r/w

@@ -39,7 +39,7 @@ axi4ddr3 DDR3512M(
 	.calib_done(calib_done) );
 
 axi_if bramif();
-a4bram BRAM64(
+a4bram BRAM64K(
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.s_axi(bramif) );
