@@ -209,6 +209,8 @@ always @(posedge aclk) begin
 	end else begin
 		// read address
 		uartrcvre <= 1'b0;
+		s_axi.rvalid <= 1'b0;
+		s_axi.arready <= 1'b0;
 		case (raddrstate)
 			2'b00: begin
 				if (s_axi.arvalid) begin
@@ -217,7 +219,6 @@ always @(posedge aclk) begin
 				end
 			end
 			2'b01: begin
-				s_axi.arready <= 1'b0;
 				case (s_axi.araddr[3:0])
 					4'h0: begin // rx data
 						uartrcvre <= 1'b1;
@@ -252,7 +253,6 @@ always @(posedge aclk) begin
 			end
 			default/*2'b11*/: begin
 				// at this point master should have responded properly with arvalid=0
-				s_axi.rvalid <= 1'b0;
 				raddrstate <= 2'b00;
 			end
 		endcase

@@ -203,13 +203,13 @@ end
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
+		axi4if.rlast <= 1'b1;
 		axi4if.arready <= 1'b0;
 		axi4if.rvalid <= 1'b0;
 		axi4if.rresp <= 2'b00;
-		axi4if.rlast <= 1'b1;
 	end else begin
-		// read address
-		//re <= 1'b0;
+		axi4if.rvalid <= 1'b0;
+		axi4if.arready <= 1'b0;
 		case (raddrstate)
 			2'b00: begin
 				if (axi4if.arvalid) begin
@@ -219,17 +219,13 @@ always @(posedge aclk) begin
 				end
 			end
 			2'b01: begin
-				axi4if.arready <= 1'b0;
-				// master ready to accept
-				if (axi4if.rready ) begin
+				if (axi4if.rready) begin
 					axi4if.rdata[31:0] <= 32'd0; // Nothing to read here
 					axi4if.rvalid <= 1'b1;
 					raddrstate <= 2'b10; // delay one clock for master to pull down arvalid
 				end
 			end
 			default/*2'b10*/: begin
-				// at this point master should have responded properly with arvalid=0
-				axi4if.rvalid <= 1'b0;
 				raddrstate <= 2'b00;
 			end
 		endcase

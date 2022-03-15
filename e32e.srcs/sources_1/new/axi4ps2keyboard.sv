@@ -72,28 +72,29 @@ end
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
-		s_axi.arready <= 1'b1;
+		s_axi.rlast <= 1'b1;
+		s_axi.arready <= 1'b0;
 		s_axi.rvalid <= 1'b0;
 		s_axi.rresp <= 2'b00;
 	end else begin
 
 		fifore <= 1'b0;
+		s_axi.arready <= 1'b0;
+		s_axi.rvalid <= 1'b0;
 
-		// read address
 		case (raddrstate)
 			2'b00: begin
 				if (s_axi.arvalid) begin
-					s_axi.arready <= 1'b0;
+					s_axi.arready <= 1'b1;
 					raddrstate <= 2'b01;
 				end
 			end
 			2'b01: begin
-				// master ready to accept and fifo has incoming data
 				if (s_axi.rready) begin
 					if (s_axi.araddr[3:0] == 4'h8) begin // incoming data available?
 						s_axi.rdata <= {31'd0, ~ps2fifoempty};
 						s_axi.rvalid <= 1'b1;
-						raddrstate <= 2'b11; // delay one clock for master to pull down arvalid
+						raddrstate <= 2'b11;
 					end else if (~ps2fifoempty) begin
 						fifore <= 1'b1;
 						raddrstate <= 2'b10;
@@ -104,12 +105,10 @@ always @(posedge aclk) begin
 				if (fifovalid) begin
 					s_axi.rdata <= {16'd0, fifodout}; // key scan code
 					s_axi.rvalid <= 1'b1;
-					raddrstate <= 2'b11; // delay one clock for master to pull down arvalid
+					raddrstate <= 2'b11;
 				end
 			end
 			default/*2'b11*/: begin
-				s_axi.rvalid <= 1'b0;
-				s_axi.arready <= 1'b1;
 				raddrstate <= 2'b00;
 			end
 		endcase
