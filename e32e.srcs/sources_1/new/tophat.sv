@@ -30,7 +30,16 @@ module tophat(
     output wire [1:0] ddr3_dm,
     inout wire [1:0] ddr3_dqs_p,
     inout wire [1:0] ddr3_dqs_n,
-    inout wire [15:0] ddr3_dq );
+    inout wire [15:0] ddr3_dq,
+    // SPI
+	output wire spi_cs_n,
+	output wire spi_mosi,
+	input wire spi_miso,
+	output wire spi_sck,
+	input wire spi_cd,
+	output wire sd_poweron_n );
+
+assign sd_poweron_n = 1'b0; // always grounded to keep sdcard powered
 
 // ----------------------------------------------------------------------------
 // Device address map
@@ -58,13 +67,14 @@ module tophat(
 // ----------------------------------------------------------------------------
 
 wire calib_done;
-wire aclk, wallclock, uartbaseclock, pixelclock, videoclock, hidclock, clk_sys_i, clk_ref_i, aresetn;
+wire aclk, wallclock, uartbaseclock, spibaseclock, pixelclock, videoclock, hidclock, clk_sys_i, clk_ref_i, aresetn;
 clockandreset ClockAndResetGen(
 	.calib_done(calib_done),
 	.sys_clock_i(sys_clock),
 	.busclock(aclk),
 	.wallclock(wallclock),
 	.uartbaseclock(uartbaseclock),
+	.spibaseclock(spibaseclock),
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
 	.hidclock(hidclock),
@@ -231,12 +241,18 @@ uncacheddevicechain UCDEVICECHAIN(
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
 	.uartbaseclock(uartbaseclock),
+	.spibaseclock(spibaseclock),
 	.hidclock(hidclock),
 	.aresetn(aresetn),
 	.uart_rxd_out(uart_rxd_out),
 	.uart_txd_in(uart_txd_in),
     .ps2_clk(ps2_clk),
     .ps2_data(ps2_data),
+	.spi_cs_n(spi_cs_n),
+	.spi_mosi(spi_mosi),
+	.spi_miso(spi_miso),
+	.spi_sck(spi_sck),
+	.spi_cd(spi_cd),
 	.axi4if(A4UCH),
 	.gpudata(gpudata),
 	.irq(irq) );

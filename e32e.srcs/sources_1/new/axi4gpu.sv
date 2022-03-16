@@ -130,7 +130,6 @@ OBUFDS OBUFDS_blue   (.I(out_tmds_blue),   .O(gpudata.tmdsp[0]), .OB(gpudata.tmd
 // GPU state machine
 // ----------------------------------------------------------------------------
 
-logic [1:0] waddrstate = 2'b00;
 logic [1:0] writestate = 2'b00;
 logic [1:0] raddrstate = 2'b00;
 
@@ -138,21 +137,12 @@ always @(posedge aclk) begin
 	if (~aresetn) begin
 		axi4if.awready <= 1'b0;
 	end else begin
-		// write address
-		case (waddrstate)
-			2'b00: begin
-				if (axi4if.awvalid) begin
-					fbwa <= axi4if.awaddr[16:2];
-					palettewa <= axi4if.awaddr[9:2];
-					axi4if.awready <= 1'b1;
-					waddrstate <= 2'b01;
-				end
-			end
-			default/*2'b01*/: begin
-				axi4if.awready <= 1'b0;
-				waddrstate <= 2'b00;
-			end
-		endcase
+		axi4if.awready <= 1'b0;
+		if (axi4if.awvalid) begin
+			fbwa <= axi4if.awaddr[16:2];
+			palettewa <= axi4if.awaddr[9:2];
+			axi4if.awready <= 1'b1;
+		end
 	end
 end
 
@@ -164,6 +154,8 @@ always @(posedge aclk) begin
 		// write data
 		fbwe <= 4'h0;
 		palettewe <= 1'b0;
+		axi4if.wready <= 1'b0;
+		axi4if.bvalid <= 1'b0;
 		case (writestate)
 			2'b00: begin
 				if (axi4if.wvalid) begin
@@ -185,17 +177,12 @@ always @(posedge aclk) begin
 					writestate <= 2'b01;
 				end
 			end
-			2'b01: begin
-				axi4if.wready <= 1'b0;
+			default/*2'b01*/: begin
 				if(axi4if.bready) begin
 					axi4if.bvalid <= 1'b1;
 					axi4if.bresp = 2'b00; // okay
-					writestate <= 2'b10;
+					writestate <= 2'b00;
 				end
-			end
-			default/*2'b10*/: begin
-				axi4if.bvalid <= 1'b0;
-				writestate <= 2'b00;
 			end
 		endcase
 	end
@@ -218,15 +205,12 @@ always @(posedge aclk) begin
 					raddrstate <= 2'b01;
 				end
 			end
-			2'b01: begin
+			default/*2'b01*/: begin
 				if (axi4if.rready) begin
 					axi4if.rdata[31:0] <= 32'd0; // Nothing to read here
 					axi4if.rvalid <= 1'b1;
-					raddrstate <= 2'b10; // delay one clock for master to pull down arvalid
+					raddrstate <= 2'b00;
 				end
-			end
-			default/*2'b10*/: begin
-				raddrstate <= 2'b00;
 			end
 		endcase
 	end

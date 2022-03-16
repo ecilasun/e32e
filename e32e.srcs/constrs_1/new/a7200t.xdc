@@ -210,12 +210,12 @@ set_property -dict { PACKAGE_PIN N13   IOSTANDARD LVCMOS33 PULLUP true } [get_po
 #set_property -dict { PACKAGE_PIN R21   IOSTANDARD LVCMOS33 } [get_ports { qspi_dq[3] }]; #IO_L2N_T0_D03_14 Sch=qspi_dq[3]
 
 # SD card - SPI style
-# set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { spi_sck }]; #IO_L12P_T1_MRCC_14 Sch=spi_sck
-# set_property -dict { PACKAGE_PIN T18   IOSTANDARD LVCMOS33 } [get_ports { spi_cd }]; #IO_L20N_T3_A07_D23_14 Sch=spi_cd
-# set_property -dict { PACKAGE_PIN W20   IOSTANDARD LVCMOS33 } [get_ports { spi_mosi }]; #IO_L12N_T1_MRCC_14 Sch=spi_mosi
-# set_property -dict { PACKAGE_PIN V19   IOSTANDARD LVCMOS33 } [get_ports { spi_miso }]; #IO_L14N_T2_SRCC_14 Sch=spi_miso
-# set_property -dict { PACKAGE_PIN U18   IOSTANDARD LVCMOS33 } [get_ports { spi_cs_n }]; #IO_L18N_T2_A11_D27_14 Sch=spi_cs_n
-# set_property -dict { PACKAGE_PIN V20   IOSTANDARD LVCMOS33 } [get_ports { sd_poweron_n }]; #IO_L11N_T1_SRCC_14 Sch=sd_poweron_n
+set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { spi_sck }]; #IO_L12P_T1_MRCC_14 Sch=spi_sck
+set_property -dict { PACKAGE_PIN T18   IOSTANDARD LVCMOS33 } [get_ports { spi_cd }]; #IO_L20N_T3_A07_D23_14 Sch=spi_cd
+set_property -dict { PACKAGE_PIN W20   IOSTANDARD LVCMOS33 } [get_ports { spi_mosi }]; #IO_L12N_T1_MRCC_14 Sch=spi_mosi
+set_property -dict { PACKAGE_PIN V19   IOSTANDARD LVCMOS33 } [get_ports { spi_miso }]; #IO_L14N_T2_SRCC_14 Sch=spi_miso
+set_property -dict { PACKAGE_PIN U18   IOSTANDARD LVCMOS33 } [get_ports { spi_cs_n }]; #IO_L18N_T2_A11_D27_14 Sch=spi_cs_n
+set_property -dict { PACKAGE_PIN V20   IOSTANDARD LVCMOS33 } [get_ports { sd_poweron_n }]; #IO_L11N_T1_SRCC_14 Sch=sd_poweron_n
 
 ## SD card
 #set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { sd_cclk }]; #IO_L12P_T1_MRCC_14 Sch=sd_cclk >spi_sck

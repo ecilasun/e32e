@@ -6,6 +6,7 @@ module clockandreset(
 	output wire busclock,
 	output wire wallclock,
 	output wire uartbaseclock,
+	output wire spibaseclock,
 	output wire pixelclock,
 	output wire videoclock,
 	output wire hidclock,
@@ -20,6 +21,7 @@ centralclockgen centralclock(
 	.clk_in1(sys_clock_i),
 	.busclock(busclock),
 	.wallclock(wallclock),
+	.spibaseclock(spibaseclock),
 	.locked(centralclocklocked) );
 
 ddr3clk ddr3memoryclock(

@@ -9,10 +9,16 @@ module uncacheddevicechain(
 	input wire hidclock,
 	input wire aresetn,
 	input wire uartbaseclock,
+	input wire spibaseclock,
 	output wire uart_rxd_out,
 	input wire uart_txd_in,
     input wire ps2_clk,
     input wire ps2_data,
+	output wire spi_cs_n,
+	output wire spi_mosi,
+	input wire spi_miso,
+	output wire spi_sck,
+	input wire spi_cd, // TODO: Wire this to IRQ line
     axi_if.slave axi4if,
 	gpudataoutput.def gpudata,
 	output wire [3:0] irq);
@@ -23,6 +29,7 @@ module uncacheddevicechain(
 
 logic validwaddr_mailbox = 1'b0, validraddr_mailbox = 1'b0;
 logic validwaddr_uart = 1'b0, validraddr_uart = 1'b0;
+logic validwaddr_spi = 1'b0, validraddr_spi = 1'b0;
 logic validwaddr_ps2 = 1'b0, validraddr_ps2 = 1'b0;
 logic validwaddr_gpu = 1'b0, validraddr_gpu = 1'b0;
 
@@ -34,6 +41,8 @@ always_comb begin
 	validwaddr_uart		= (axi4if.awaddr>=32'h80001000) && (axi4if.awaddr<32'h80001010);
 	validraddr_uart		= (axi4if.araddr>=32'h80001000) && (axi4if.araddr<32'h80001010);
 	// spimaster @80001010
+	validwaddr_spi		= (axi4if.awaddr>=32'h80001010) && (axi4if.awaddr<32'h80001020);
+	validraddr_spi		= (axi4if.araddr>=32'h80001010) && (axi4if.araddr<32'h80001020);
 	// ps2 keyboard @80001020
 	validwaddr_ps2		= (axi4if.awaddr>=32'h80001020) && (axi4if.awaddr<32'h80001030);
 	validraddr_ps2		= (axi4if.araddr>=32'h80001020) && (axi4if.araddr<32'h80001030);
@@ -62,15 +71,16 @@ axi4uart UART(
 	.uart_txd_in(uart_txd_in),
 	.uartrcvempty(uartrcvempty) );
 
-/*wire validwaddr_spi = axi4if.awaddr>=32'h80001010 && axi4if.awaddr<32'h80001020;
-wire validraddr_spi = axi4if.araddr>=32'h80001010 && axi4if.araddr<32'h80001020;
 axi_if spiif();
 axi4spi spimaster(
 	.aclk(aclk),
+	.spibaseclock(spibaseclock),
 	.aresetn(aresetn),
-	.axi4if(spiif),
-	.clocks(clocks),
-	.wires(wires) );*/
+	.spi_cs_n(spi_cs_n),
+	.spi_mosi(spi_mosi),
+	.spi_miso(spi_miso),
+	.spi_sck(spi_sck),
+	.s_axi(spiif) );
 
 axi_if ps2if();
 wire ps2fifoempty;
@@ -141,13 +151,16 @@ always_comb begin
 	mailboxif.bready = validwaddr_mailbox ? axi4if.bready : 1'b0;
 	mailboxif.wlast = validwaddr_mailbox ? axi4if.wlast : 1'b0;
 
-	/*spiif.awaddr = validwaddr_spi ? waddr : 32'd0;
+	spiif.awaddr = validwaddr_spi ? waddr : 32'd0;
 	spiif.awvalid = validwaddr_spi ? axi4if.awvalid : 1'b0;
+	spiif.awlen = validwaddr_spi ? axi4if.awlen : 0;
+	spiif.awsize = validwaddr_spi ? axi4if.awsize : 0;
+	spiif.awburst = validwaddr_spi ? axi4if.awburst : 0;
 	spiif.wdata = validwaddr_spi ? axi4if.wdata : 0;
 	spiif.wstrb = validwaddr_spi ? axi4if.wstrb : 4'h0;
 	spiif.wvalid = validwaddr_spi ? axi4if.wvalid : 1'b0;
 	spiif.bready = validwaddr_spi ? axi4if.bready : 1'b0;
-	spiif.wlast = validwaddr_spi ? axi4if.wlast : 1'b0;*/
+	spiif.wlast = validwaddr_spi ? axi4if.wlast : 1'b0;
 
 	ps2if.awaddr = validwaddr_ps2 ? waddr : 32'd0;
 	ps2if.awvalid = validwaddr_ps2 ? axi4if.awvalid : 1'b0;
@@ -205,11 +218,11 @@ always_comb begin
 		axi4if.bresp = mailboxif.bresp;
 		axi4if.bvalid = mailboxif.bvalid;
 		axi4if.wready = mailboxif.wready;
-	/*end else if (validwaddr_spi) begin
+	end else if (validwaddr_spi) begin
 		axi4if.awready = spiif.awready;
 		axi4if.bresp = spiif.bresp;
 		axi4if.bvalid = spiif.bvalid;
-		axi4if.wready = spiif.wready;*/
+		axi4if.wready = spiif.wready;
 	end else if (validwaddr_ps2) begin
 		axi4if.awready = ps2if.awready;
 		axi4if.bresp = ps2if.bresp;
@@ -270,9 +283,12 @@ always_comb begin
 	mailboxif.arvalid = validraddr_mailbox ? axi4if.arvalid : 1'b0;
 	mailboxif.rready = validraddr_mailbox ? axi4if.rready : 1'b0;
 
-	/*spiif.araddr = validraddr_spi ? raddr : 32'd0;
+	spiif.araddr = validraddr_spi ? raddr : 32'd0;
+	spiif.arlen = validraddr_spi ? axi4if.arlen : 0;
+	spiif.arsize = validraddr_spi ? axi4if.arsize : 0;
+	spiif.arburst = validraddr_spi ? axi4if.arburst : 0;
 	spiif.arvalid = validraddr_spi ? axi4if.arvalid : 1'b0;
-	spiif.rready = validraddr_spi ? axi4if.rready : 1'b0;*/
+	spiif.rready = validraddr_spi ? axi4if.rready : 1'b0;
 
 	ps2if.araddr = validraddr_ps2 ? raddr : 32'd0;
 	ps2if.arlen = validraddr_ps2 ? axi4if.arlen : 0;
@@ -312,12 +328,12 @@ always_comb begin
 		axi4if.rresp = mailboxif.rresp;
 		axi4if.rvalid = mailboxif.rvalid;
 		axi4if.rlast = mailboxif.rlast;
-	/*end else if (validraddr_spi) begin
+	end else if (validraddr_spi) begin
 		axi4if.arready = spiif.arready;
 		axi4if.rdata = spiif.rdata;
 		axi4if.rresp = spiif.rresp;
 		axi4if.rvalid = spiif.rvalid;
-		axi4if.rlast = spiif.rlast;*/
+		axi4if.rlast = spiif.rlast;
 	end else if (validraddr_ps2) begin
 		axi4if.arready = ps2if.arready;
 		axi4if.rdata = ps2if.rdata;

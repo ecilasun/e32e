@@ -26,7 +26,7 @@ axi_interconnect_0 AXI4DDRInterconnect(
 
   .S00_AXI_ARESET_OUT_N(saresetn),
   .S00_AXI_ACLK(aclk),
-  .S00_AXI_AWID(    0/*m_axi.awid*/),
+  .S00_AXI_AWID(    1'b0/*m_axi.awid*/),
   .S00_AXI_AWADDR(  m_axi.awaddr),
   .S00_AXI_AWLEN(   m_axi.awlen),
   .S00_AXI_AWSIZE(  m_axi.awsize),
@@ -46,7 +46,7 @@ axi_interconnect_0 AXI4DDRInterconnect(
   .S00_AXI_BRESP(   m_axi.bresp),
   .S00_AXI_BVALID(  m_axi.bvalid),
   .S00_AXI_BREADY(  m_axi.bready),
-  .S00_AXI_ARID(    0/*m_axi.arid*/),
+  .S00_AXI_ARID(    1'b0/*m_axi.arid*/),
   .S00_AXI_ARADDR(  m_axi.araddr),
   .S00_AXI_ARLEN(   m_axi.arlen),
   .S00_AXI_ARSIZE(  m_axi.arsize),
