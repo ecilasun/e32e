@@ -13,13 +13,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="101.413486258 us"></ZoomStartTime>
-      <ZoomEndTime time="179.613486259 us"></ZoomEndTime>
-      <Cursor1Time time="143.876582267 us"></Cursor1Time>
+      <ZoomStartTime time="446,215.000000 ns"></ZoomStartTime>
+      <ZoomEndTime time="448,419.000001 ns"></ZoomEndTime>
+      <Cursor1Time time="446,745.000000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="237"></NameColumnWidth>
-      <ValueColumnWidth column_width="101"></ValueColumnWidth>
+      <ValueColumnWidth column_width="95"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="268" />
    <wave_markers>
@@ -455,6 +455,7 @@
    <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/datatotransmit" type="array">
       <obj_property name="ElementShortName">datatotransmit[7:0]</obj_property>
       <obj_property name="ObjectShortName">datatotransmit[7:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uarttxbusy" type="logic">
       <obj_property name="ElementShortName">uarttxbusy</obj_property>
