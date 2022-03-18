@@ -25,10 +25,10 @@ module cachedmemorycontroller (
 	logic [1:0] len_cnt;
 	logic [1:0] rdata_cnt;
 	assign m_axi.arlen = burstlen - 1;
-	assign m_axi.arsize = SIZE_16_BYTE;
+	assign m_axi.arsize = SIZE_16_BYTE; // 128bit read bus
 	assign m_axi.arburst = BURST_INCR;
 	assign m_axi.awlen = burstlen - 1;
-	assign m_axi.awsize = SIZE_16_BYTE;
+	assign m_axi.awsize = SIZE_16_BYTE; // 128bit write bus
 	assign m_axi.awburst = BURST_INCR;
 
 	always_ff @(posedge aclk) begin
@@ -45,12 +45,9 @@ module cachedmemorycontroller (
 	always_ff @(posedge aclk) begin
 		if (~areset_n) begin
 			m_axi.arvalid <= 0;
-			m_axi.araddr <= 0;
 			m_axi.awvalid <= 0;
-			m_axi.awaddr <= 0;
 			m_axi.rready <= 0;
 			m_axi.wvalid <= 0;
-			m_axi.wdata <= 0;
 			m_axi.wstrb <= 16'h0000;
 			m_axi.wlast <= 0;
 			m_axi.bready <= 0;
@@ -72,26 +69,36 @@ module cachedmemorycontroller (
 					end
 					state <= (start_read) ? RADDR : ((start_write) ? WADDR : IDLE);
 				end
+
 				RADDR : begin
 					if (/*m_axi.arvalid && */m_axi.arready) begin
 						m_axi.arvalid <= 0;
 						m_axi.rready <= 1;
 						state <= RDATA;
+					end else begin
+						state <= RADDR;
 					end
 				end
+
 				RDATA : begin
 					if (m_axi.rvalid  /*&& m_axi.rready*/ && m_axi.rlast) begin
 						m_axi.rready <= 0;
 						rdone <= 1'b1;
 						state <= IDLE;
+					end else begin
+						state <= RDATA;
 					end
 				end
+
 				WADDR : begin
 					if (/*m_axi.awvalid &&*/ m_axi.awready) begin
 						m_axi.awvalid <= 0;
 						state <= WDATA;
+					end else begin
+						state <= WADDR;
 					end
 				end
+
 				WDATA : begin
 					m_axi.wdata <= din[len_cnt];
 					m_axi.wstrb <= 16'hFFFF;
@@ -102,8 +109,11 @@ module cachedmemorycontroller (
 					if (/*m_axi.wvalid &&*/ m_axi.wready && (len_cnt == (burstlen-1))/*m_axi.wlast*/) begin
 						m_axi.bready <= 1;
 						state <= WRESP;
+					end else begin
+						state <= WDATA;
 					end
 				end
+
 				default/*WRESP*/ : begin
 					m_axi.wvalid <= 0;
 					m_axi.wstrb <= 16'h0000;
@@ -112,6 +122,8 @@ module cachedmemorycontroller (
 						m_axi.bready <= 0;
 						wdone <= 1'b1;
 						state <= IDLE;
+					end else begin
+						state <= WRESP;
 					end
 				end
 			endcase

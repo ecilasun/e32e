@@ -39,13 +39,10 @@ module uncachedmemorycontroller (
 	always_ff @(posedge aclk) begin
 		if (~areset_n) begin
 			m_axi.arvalid <= 0;
-			m_axi.araddr <= 0;
 			m_axi.awvalid <= 0;
-			m_axi.awaddr <= 0;
 			m_axi.rready <= 0;
 			m_axi.wvalid <= 0;
-			m_axi.wdata <= 0;
-			m_axi.wstrb <= 4'h0;
+			m_axi.wstrb <= 16'h0000;
 			m_axi.wlast <= 0;
 			m_axi.bready <= 0;
 			state <= IDLE;
@@ -66,44 +63,59 @@ module uncachedmemorycontroller (
 					end
 					state <= (re) ? RADDR : ((|wstrb) ? WADDR : IDLE);
 				end
+
 				RADDR : begin
 					if (/*m_axi.arvalid && */m_axi.arready) begin
 						m_axi.arvalid <= 0;
 						m_axi.rready <= 1;
 						state <= RDATA;
+					end else begin
+						state <= RADDR;
 					end
 				end
+
 				RDATA : begin
 					if (m_axi.rvalid  /*&& m_axi.rready*/ && m_axi.rlast) begin
 						m_axi.rready <= 0;
 						rdone <= 1'b1;
 						state <= IDLE;
+					end else begin
+						state <= RDATA;
 					end
 				end
+
 				WADDR : begin
 					if (/*m_axi.awvalid &&*/ m_axi.awready) begin
 						m_axi.awvalid <= 0;
-						m_axi.wdata[31:0] <= din;
-						m_axi.wstrb[3:0] <= wbsel;
+						m_axi.wdata <= {96'd0, din};
+						m_axi.wstrb <= {12'd0, wbsel};
 						m_axi.wvalid <= 1;
 						m_axi.wlast <= 1;
 						state <= WDATA;
+					end else begin
+						state <= WADDR;
 					end
 				end
+
 				WDATA : begin
 					if (/*m_axi.wvalid &&*/ m_axi.wready) begin
 						m_axi.bready <= 1;
 						m_axi.wvalid <= 0;
-						m_axi.wstrb[3:0] <= 4'h0;
+						m_axi.wstrb <= 16'h0000;
 						m_axi.wlast <= 0;
 						state <= WRESP;
+					end else begin
+						state <= WDATA;
 					end
 				end
+
 				default/*WRESP*/ : begin
 					if (m_axi.bvalid /*&& m_axi.bready*/) begin
 						m_axi.bready <= 0;
 						wdone <= 1'b1;
 						state <= IDLE;
+					end else begin
+						state <= WRESP;
 					end
 				end
 			endcase
