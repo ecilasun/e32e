@@ -9,6 +9,11 @@ module csrregisterfile #(
 	input wire [63:0] wallclocktime,
 	input wire [63:0] cpuclocktime,
 	input wire [63:0] retired,
+	output logic [63:0] tcmp = 64'hFFFFFFFFFFFFFFFF,
+	output logic [31:0] mie = 0,
+	output logic [31:0] mip = 0,
+	output logic [31:0] mtvec = 0,
+	output logic [31:0] mepc = 0,
 	input wire [4:0] csrindex,
 	input wire we,
 	output logic [31:0] dout,
@@ -40,21 +45,36 @@ initial begin
 end
 
 always @(posedge clock) begin
-	if (we)
+	// Writes always go to internal registers
+	// TODO: Ignore ones that don't make sense to store
+	if (we) begin
 		csrreg[csrindex] <= din;
+		// Reflect to shadow copy
+		case(csrindex)
+			`CSR_MIE:		mie <= din;
+			`CSR_MIP:		mip <= din;
+			`CSR_MTVEC:		mtvec <= din;
+			`CSR_TIMECMPLO:	tcmp[31:0] <= din;
+			`CSR_TIMECMPHI:	tcmp[63:32] <= din;
+			`CSR_MEPC:		mepc <= din;
+			default:	;
+		endcase
+	end
 end
 
 always_comb begin
 	case(csrindex)
-		`CSR_MCAUSE,
-		`CSR_MSTATUS,
-		`CSR_MIE,
-		`CSR_MTVEC,
-		`CSR_MEPC,
+		// Reads from internal register file
 		`CSR_MTVAL,
-		`CSR_MIP,
-		`CSR_TIMECMPLO,
-		`CSR_TIMECMPHI:	dout = csrreg[csrindex];
+		`CSR_MCAUSE,
+		`CSR_MSTATUS:	dout = csrreg[csrindex];
+		// Reads routed to external wires
+		`CSR_MEPC:		dout = mepc;
+		`CSR_TIMECMPLO:	dout = tcmp[31:0];
+		`CSR_TIMECMPHI:	dout = tcmp[63:32];
+		`CSR_MIE:		dout = mie;
+		`CSR_MIP:		dout = mip;
+		`CSR_MTVEC:		dout = mtvec;
 		`CSR_MHARTID:	dout = HARTID; // Immutable
 		`CSR_CYCLELO:	dout = cpuclocktime[31:0];
 		`CSR_CYCLEHI:	dout = cpuclocktime[63:32];
@@ -62,6 +82,7 @@ always_comb begin
 		`CSR_TIMEHI:	dout = wallclocktime[63:32];
 		`CSR_RETILO:	dout = retired[31:0];
 		`CSR_RETIHI:	dout = retired[63:32];
+		// Unknown register reads return zero (TODO: Also cause an exception?)
 		default:		dout = 0;
 	endcase
 end

@@ -110,7 +110,12 @@ axi_if A4CH7(), A4UCH7();
 
 axi_if A4CH(), A4UCH();
 
-wire [3:0] irq;
+// IRQs in descending bit order: [H7 H6 H5 H4 H3 H2 H1 H0 unused PS2 unused UART]
+// Top 8 bits are used to talk to HART7..HART0
+// Each HART will have a memory mapped address that will wake them from WFI to respond
+// Other bits simply interrupt execution and branch to a service handler
+// In effect, all IRQ bits invoke the same kind of processing in the HART (branch to mtvec)
+wire [11:0] irq;
 
 // ----------------------------------------------------------------------------
 // HARTs
@@ -121,6 +126,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
+	.irq(irq),
 	.a4buscached(A4CH0),
 	.a4busuncached(A4UCH0) );
 
@@ -129,6 +135,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
+	.irq(irq),
 	.a4buscached(A4CH1),
 	.a4busuncached(A4UCH1) );
 
@@ -137,6 +144,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
+	.irq(irq),
 	.a4buscached(A4CH2),
 	.a4busuncached(A4UCH2) );
 
@@ -145,6 +153,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
+	.irq(irq),
 	.a4buscached(A4CH3),
 	.a4busuncached(A4UCH3) );
 
@@ -153,6 +162,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
+	.irq(irq),
 	.a4buscached(A4CH4),
 	.a4busuncached(A4UCH4) );
 
@@ -161,6 +171,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
+	.irq(irq),
 	.a4buscached(A4CH5),
 	.a4busuncached(A4UCH5) );
 
@@ -169,6 +180,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
+	.irq(irq),
 	.a4buscached(A4CH6),
 	.a4busuncached(A4UCH6) );
 
@@ -177,6 +189,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
+	.irq(irq),
 	.a4buscached(A4CH7),
 	.a4busuncached(A4UCH7) );
 

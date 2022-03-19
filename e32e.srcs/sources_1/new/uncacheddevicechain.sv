@@ -21,7 +21,7 @@ module uncacheddevicechain(
 	input wire spi_cd, // TODO: Wire this to IRQ line
     axi_if.slave axi4if,
 	gpudataoutput.def gpudata,
-	output wire [3:0] irq);
+	output wire [11:0] irq);
 
 // ------------------------------------------------------------------------------------
 // Memory mapped hardware
@@ -120,7 +120,8 @@ axi4gpu GPU(
 
 // TODO: Also add wires.spi_cd != oldcd as an interrupt trigger here, preferably debounced
 //assign irq = {1'b0, ~ps2fifoempty, ~buttonfifoempty, ~uartrcvempty};
-assign irq = {1'b0, ~ps2fifoempty, 1'b0, ~uartrcvempty};
+// TODO: Writing to top 8 bits will wake up HARTs from WFI in descending order (top bit:H7 and so on)
+assign irq = {8'h00, 1'b0, ~ps2fifoempty, 1'b0, ~uartrcvempty};
 
 // ------------------------------------------------------------------------------------
 // write router

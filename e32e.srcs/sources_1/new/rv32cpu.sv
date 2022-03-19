@@ -14,6 +14,7 @@ module rv32cpu #(
 ) (
 	input wire aclk,
 	input wire aresetn,
+	wire [11:0] irq,
 	input wire [63:0] wallclocktime,
 	input wire [63:0] cpuclocktime,
 	axi_if.master a4buscached,
@@ -46,7 +47,7 @@ systemcache CACHE(
 	.a4buscached(a4buscached),
 	.a4busuncached(a4busuncached) );
 
-typedef enum logic [3:0] {INIT, RETIRE, FETCH, EXECUTE, STOREWAIT, LOADWAIT, IMATHWAIT} cpustatetype;
+typedef enum logic [3:0] {INIT, RETIRE, FETCH, EXECUTE, STOREWAIT, LOADWAIT, IMATHWAIT, INTERRUPTSETUP, INTERRUPTVALUE, INTERRUPTCAUSE, WFI} cpustatetype;
 cpustatetype cpustate = INIT;
 
 logic [31:0] PC = RESETVECTOR;
@@ -96,20 +97,39 @@ registerfile REGS(
 	.rval1(rval1),
 	.rval2(rval2) );
 
+// CSR shadows
+wire [31:0] mip;	// Interrupt pending
+wire [31:0] mie;	// Interrupt enable
+wire [31:0] mtvec;	// Interrupt handler vector
+wire [31:0] mepc;	// Interrupt return address
+wire [31:0] mtval;	// Interrupt time value
+wire [31:0] mcause;	// Interrupt cause bits
+wire [63:0] tcmp;	// Time compare
+
+// CSR access
 logic csrwe = 1'b0;
 logic [31:0] csrdin = 0;
 logic [31:0] csrprevval;
+logic csrwenforce = 1'b0;
+logic [4:0] csrenforceindex = 0;
 wire [31:0] csrdout;
+
 csrregisterfile #(.HARTID(HARTID)) CSRREGS (
 	.clock(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.retired(retired),
-	.csrindex(csrindex),
+	.tcmp(tcmp),
+	.mie(mie),
+	.mip(mip),
+	.mtvec(mtvec),
+	.mepc(mepc),
+	.csrindex(csrwenforce ? csrenforceindex : csrindex),
 	.we(csrwe),
 	.dout(csrdout),
 	.din(csrdin) );
 
+// BLU
 wire branchout;
 
 branchdecision BLU(
@@ -120,6 +140,7 @@ branchdecision BLU(
 	.val2(rval2),
 	.bluop(bluop) );
 
+// ALU
 wire [31:0] aluout;
 
 arithmeticlogicunit ALU (
@@ -130,6 +151,7 @@ arithmeticlogicunit ALU (
 	.val2(immsel ? immed : rval2),
 	.aluop(aluop) );
 
+// MUL/DIV/REM
 wire isexecuting = (cpustate==EXECUTE);
 wire isexecutingop = isexecuting & instrOneHotOut[`O_H_OP];
 
@@ -175,6 +197,7 @@ integerdividersigned IDIVS (
 wire imathstart = divstart | divustart | mulstart;
 wire imathready = divready | divuready | mulready;
 
+// Interrupt logic
 logic illegalinstruction = 1'b0;
 logic [31:0] rwaddress = 32'd0;
 logic [31:0] adjacentPC = 32'd0;
@@ -183,6 +206,16 @@ logic [31:0] adjacentPC = 32'd0;
 always @(posedge aclk) begin
 	retired <= retired + (cpustate==RETIRE ? 64'd1 : 64'd0);
 end
+
+// Timer trigger
+wire trq = (wallclocktime >= tcmp) ? 1'b1 : 1'b0;
+
+// Any external wire event triggers our interrupt service if corresponding enable bit is high
+wire hwint = (|irq) && mie[11]; // MEIE - machine external interrupt enable
+// TODO: No timer interrupts yet (also, check corresponding enable bit)
+wire timerint = trq && mie[7]; // MTIE - timer interrupt enable
+// TODO: for later
+//wire swint = sint && mie[3] // MSIE - machine software interrupt enable
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
@@ -203,12 +236,65 @@ always @(posedge aclk) begin
 			end
 
 			RETIRE: begin
-				// NOTE: Interrupt handling might fit here
-				// where we can save the intended nextPC but branch to
-				// the mtvec instead.
-				PC <= nextPC;
-				addr <= nextPC;
-				ifetch <= 1'b1; // This read is to use I$, hold high until read is complete
+				if ( (illegalinstruction || hwint || timerint) && ~(|mip) ) begin
+					csrwe <= 1'b1;
+					csrwenforce <= 1'b1;
+					csrdin <= nextPC;
+					csrenforceindex <= `CSR_MEPC;
+					PC <= mtvec;
+					cpustate <= INTERRUPTSETUP;
+				end else begin
+					// Regular instruction fetch
+					PC <= nextPC;
+					addr <= nextPC;
+					cpustate <= FETCH;
+					ifetch <= 1'b1; // This read is to use I$, hold high until read is complete
+					ren <= 1'b1;
+				end
+			end
+			
+			INTERRUPTSETUP: begin
+				csrwe <= 1'b1;
+				csrwenforce <= 1'b1;
+				csrenforceindex <= `CSR_MIP;
+				// NOTE: Interrupt service ordering according to privileged isa is: mei/msi/mti/sei/ssi/sti
+				if (hwint) begin // mei, external hardware interrupt
+					csrdin <= {mip[31:12], 1'b1, mip[10:0]};
+				end else if (illegalinstruction /*|| ecall*/) begin // msi, exception
+					csrdin <= {mip[31:4], 1'b1, mip[2:0]};
+				end else if (timerint) begin // mti, timer interrupt
+					csrdin <= {mip[31:8], 1'b1, mip[6:0]};
+				end
+				cpustate <= INTERRUPTVALUE;
+			end
+			
+			INTERRUPTVALUE: begin
+				csrwe <= 1'b1;
+				csrwenforce <= 1'b1;
+				csrenforceindex <= `CSR_MTVAL;
+				if (hwint) begin // mei, external hardware interrupt
+					csrdin  <= {20'd0, irq};
+				end else if (illegalinstruction /*|| ecall*/) begin // msi, exception
+					csrdin <= 32'd0;// TODO: write offending instruction here
+				end else if (timerint) begin // mti, timer interrupt
+					csrdin  <= 32'd0;
+				end
+				cpustate <= INTERRUPTCAUSE;
+			end
+
+			INTERRUPTCAUSE: begin
+				csrwe <= 1'b1;
+				csrwenforce <= 1'b1;
+				csrenforceindex <= `CSR_MCAUSE;
+				if (hwint) begin // mei, external hardware interrupt
+					csrdin  <= 32'h8000000b; // [31]=1'b1(interrupt), 11->h/w
+				end else if (illegalinstruction /*|| ecall*/) begin // msi, exception
+					csrdin  <= /*ecall ? 32'h0000000b :*/ 32'h00000002; // [31]=1'b0(exception), 0xb->ecall, 0x2->illegal instruction
+				end else if (timerint) begin // mti, timer interrupt
+					csrdin  <= 32'h80000007; // [31]=1'b1(interrupt), 7->timer
+				end
+				addr <= mtvec;
+				ifetch <= 1'b1; // We can now resume reading the first trap handler instruction
 				ren <= 1'b1;
 				cpustate <= FETCH;
 			end
@@ -291,8 +377,33 @@ always @(posedge aclk) begin
 						csrwe <= 1'b1;
 						case (func3)
 							default/*3'b000*/: begin
-								csrdin <= csrprevval;
 								csrwe <= 1'b0;
+								case (func12)
+									/*12'b0000000_00000: begin	// sys call
+										ecall <= msena;
+									end
+									12'b0000000_00001: begin	// software breakpoint
+										ebreak <= msena;
+									end*/
+									12'b0001000_00101: begin	// wait for interrupt
+										cpustate <= WFI;
+									end
+									12'b0011000_00010: begin	// return from interrupt
+										// Return to interrupt point
+										nextPC <= mepc;
+										// Clear interrupt pending bit with correct priority
+										if (mip[11])
+											csrdin <= {mip[31:12], 1'b0, mip[10:0]};
+										else if (mip[3])
+											csrdin <= {mip[31:4], 1'b0, mip[2:0]};
+										else if (mip[7])
+											csrdin <= {mip[31:8], 1'b0, mip[6:0]};
+										csrwe <= 1'b0;
+									end
+									default: begin
+										// 
+									end
+								endcase
 							end
 							3'b001: begin
 								csrdin <= rval1;
@@ -388,6 +499,15 @@ always @(posedge aclk) begin
 					cpustate <= RETIRE;
 				end else begin
 					cpustate <= IMATHWAIT;
+				end
+			end
+			
+			WFI: begin
+				// Everything except illegalinstruction wakes us up
+				if ( (hwint || timerint) && ~(|mip) ) begin
+					cpustate <= RETIRE;
+				end else begin
+					cpustate <= WFI;
 				end
 			end
 
