@@ -226,6 +226,7 @@ always @(posedge aclk) begin
 	 	ren <= 1'b0;
 	 	rwe <= 1'b0;
 	 	csrwe <= 1'b0;
+	 	csrwenforce <= 1'b0;
 
 		case (cpustate)
 			INIT: begin
@@ -252,7 +253,7 @@ always @(posedge aclk) begin
 					ren <= 1'b1;
 				end
 			end
-			
+
 			INTERRUPTSETUP: begin
 				csrwe <= 1'b1;
 				csrwenforce <= 1'b1;
@@ -372,23 +373,32 @@ always @(posedge aclk) begin
 						// 0000_0000_0000_00000_001_00000_0001111 -> FENCE.I (flush I$)
 					end*/
 					instrOneHotOut[`O_H_SYSTEM]: begin
+						// Store previous value of CSR in target register
 						rdin <= csrprevval;
-						rwe <= 1'b1;
+						rwe <= (func3 == 3'b000) ? 1'b0 : 1'b1; // No register write back for non-CSR sys ops
 						csrwe <= 1'b1;
 						case (func3)
 							default/*3'b000*/: begin
-								csrwe <= 1'b0;
 								case (func12)
-									/*12'b0000000_00000: begin	// sys call
-										ecall <= msena;
+									default/*12'b0000000_00000*/: begin	// ECALL - sys call
+										//ecall <= msena;
+										// Ignore store
+										csrwe <= 1'b0;
 									end
-									12'b0000000_00001: begin	// software breakpoint
-										ebreak <= msena;
-									end*/
-									12'b0001000_00101: begin	// wait for interrupt
+									12'b0000000_00001: begin			// EBREAK - software breakpoint
+										//ebreak <= msena;
+										// Ignore store
+										csrwe <= 1'b0;
+									end
+									12'b0001000_00101: begin			// WFI - wait for interrupt
 										cpustate <= WFI;
+										// Ignore store
+										csrwe <= 1'b0;
 									end
-									12'b0011000_00010: begin	// return from interrupt
+									12'b0011000_00010: begin			// MRET - return from interrupt
+										// Ignore whatever random CSR might be selected, and use ours
+										csrwenforce <= 1'b1;
+										csrenforceindex <= `CSR_MIP;
 										// Return to interrupt point
 										nextPC <= mepc;
 										// Clear interrupt pending bit with correct priority
@@ -398,10 +408,6 @@ always @(posedge aclk) begin
 											csrdin <= {mip[31:4], 1'b0, mip[2:0]};
 										else if (mip[7])
 											csrdin <= {mip[31:8], 1'b0, mip[6:0]};
-										csrwe <= 1'b0;
-									end
-									default: begin
-										// 
 									end
 								endcase
 							end

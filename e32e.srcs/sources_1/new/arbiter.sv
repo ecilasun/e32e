@@ -17,7 +17,7 @@ logic m4valid = 0;
 logic m5valid = 0;
 logic m6valid = 0;
 logic m7valid = 0;
-//logic shuffle = 0;
+logic shuffle = 0;
 logic svalid = 0;
 
 always_comb begin
@@ -37,18 +37,18 @@ logic [7:0] grant = 8'b00000000;
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
 		grant = 0;
-		//shuffle = 0;
+		shuffle = 0;
 	end else begin
 		if (arbiterstate == ARBITRATE) begin // Available next clock (in GRANT state)
-			/*if (shuffle)
-				grant <= m6valid ? 7'b0000001 : (m5valid ? 7'b0000010 : (m4valid ? 7'b0000100 : (m3valid ? 7'b0001000 : (m2valid ? 7'b0010000 : (m1valid ? 7'b0100000 : (m0valid ? 7'b1000000 : 7'b0000000))))));
-			else*/
+			if (shuffle)
+				grant <= m7valid ? 8'b00000001 : (m6valid ? 8'b00000010 : (m5valid ? 8'b00000100 : (m4valid ? 8'b00001000 : (m3valid ? 8'b00010000 : (m2valid ? 8'b00100000 : (m1valid ? 8'b01000000 : (m0valid ? 8'b10000000 : 8'b00000000)))))));
+			else
 				grant <= m0valid ? 8'b10000000 : (m1valid ? 8'b01000000 : (m2valid ? 8'b00100000 : (m3valid ? 8'b00010000 : (m4valid ? 8'b00001000 : (m5valid ? 8'b00000100 : (m6valid ? 8'b00000010 : (m7valid ? 8'b00000001 : 8'b00000000)))))));
-		end/* else begin
+		end else begin
 			// Shuffle the priority between two ends of the request line,
 			// effectively reversing the order in which units are granted bus access.
 			shuffle <= svalid ? ~shuffle : shuffle;
-		end*/
+		end
 	end
 end
 
