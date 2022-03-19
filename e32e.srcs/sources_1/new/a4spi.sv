@@ -171,7 +171,6 @@ always @(posedge aclk) begin
 			2'b00: begin
 				if (s_axi.arvalid) begin
 					s_axi.arready <= 1'b1;
-					// s_axi.araddr; unused, device has single mapped address
 					raddrstate <= 2'b01;
 				end
 			end

@@ -238,11 +238,15 @@ always @(posedge aclk) begin
 
 			RETIRE: begin
 				if ( (illegalinstruction || hwint || timerint) && ~(|mip) ) begin
+					// Handle pending interrupts if we're not handling one already
 					csrwe <= 1'b1;
 					csrwenforce <= 1'b1;
+					// Save PC of next instruction that would have executed before IRQ
 					csrdin <= nextPC;
 					csrenforceindex <= `CSR_MEPC;
+					// Branch to the ISR instead
 					PC <= mtvec;
+					// Need to set up a few CSRs before we can actually trigger the FETCH
 					cpustate <= INTERRUPTSETUP;
 				end else begin
 					// Regular instruction fetch
@@ -255,6 +259,7 @@ always @(posedge aclk) begin
 			end
 
 			INTERRUPTSETUP: begin
+				// Write machine interrupt pending bits
 				csrwe <= 1'b1;
 				csrwenforce <= 1'b1;
 				csrenforceindex <= `CSR_MIP;
@@ -270,6 +275,7 @@ always @(posedge aclk) begin
 			end
 			
 			INTERRUPTVALUE: begin
+				// Write the interrupt value bits
 				csrwe <= 1'b1;
 				csrwenforce <= 1'b1;
 				csrenforceindex <= `CSR_MTVAL;
@@ -284,6 +290,7 @@ always @(posedge aclk) begin
 			end
 
 			INTERRUPTCAUSE: begin
+				// Write the interrupt/exception cause
 				csrwe <= 1'b1;
 				csrwenforce <= 1'b1;
 				csrenforceindex <= `CSR_MCAUSE;
@@ -294,8 +301,10 @@ always @(posedge aclk) begin
 				end else if (timerint) begin // mti, timer interrupt
 					csrdin  <= 32'h80000007; // [31]=1'b1(interrupt), 7->timer
 				end
+				// We can now resume reading the first instruction of the ISR
+				// Return address is saved in MEPC, so we can go back once done
 				addr <= mtvec;
-				ifetch <= 1'b1; // We can now resume reading the first trap handler instruction
+				ifetch <= 1'b1;
 				ren <= 1'b1;
 				cpustate <= FETCH;
 			end
@@ -381,12 +390,12 @@ always @(posedge aclk) begin
 							default/*3'b000*/: begin
 								case (func12)
 									default/*12'b0000000_00000*/: begin	// ECALL - sys call
-										//ecall <= msena;
+										//ecall <= mie[3]; // MSIE
 										// Ignore store
 										csrwe <= 1'b0;
 									end
 									12'b0000000_00001: begin			// EBREAK - software breakpoint
-										//ebreak <= msena;
+										//ebreak <= mie[3]; // MSIE
 										// Ignore store
 										csrwe <= 1'b0;
 									end
