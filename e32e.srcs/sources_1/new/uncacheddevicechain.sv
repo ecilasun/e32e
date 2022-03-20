@@ -50,8 +50,8 @@ always_comb begin
 	// LEDs @80001040-80001050
 	// unused space for other devices @80001060-80FFFFFF
 	// GPU @81000000
-	validwaddr_gpu		= (axi4if.awaddr>=32'h81000000) && (axi4if.awaddr<32'h81050000);
-	validraddr_gpu		= (axi4if.araddr>=32'h81000000) && (axi4if.araddr<32'h81050000);
+	validwaddr_gpu		= (axi4if.awaddr>=32'h81000000) && (axi4if.awaddr<32'h81080000);
+	validraddr_gpu		= (axi4if.araddr>=32'h81000000) && (axi4if.araddr<32'h81080000);
 end
 
 axi_if mailboxif();

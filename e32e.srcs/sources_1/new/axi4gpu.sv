@@ -18,7 +18,11 @@ wire [10:0] video_y;
 
 logic [14:0] fbwa;
 logic [31:0] fbdin;
-logic [3:0] fbwe = 4'h0;
+logic [3:0] fbwe0 = 4'h0;
+logic [3:0] fbwe1 = 4'h0;
+
+// Framebuffer select
+logic writepage = 1'b0;
 
 wire out_tmds_red;
 wire out_tmds_green;
@@ -31,7 +35,10 @@ wire [9:0] pix_y = video_y[10:1];
 
 // Byte address of current pixel
 wire [16:0] fbra = pix_y[7:0]*320 + pix_x[8:0]; // y*320 + x
-wire [7:0] fbdout;
+
+// Scan-out from the page we're not writing to
+wire [7:0] fbdout0;
+wire [7:0] fbdout1;
 
 // ----------------------------------------------------------------------------
 // Framebuffer
@@ -42,13 +49,26 @@ framebuffer FB0(
 	.addra(fbwa),
 	.clka(aclk),
 	.dina(fbdin),
-	.wea(fbwe),
-	.ena( (|fbwe) ),
+	.wea(fbwe0),
+	.ena( (|fbwe0) ),
 	// Output to scanline fifo
 	.addrb(fbra),
 	.clkb(pixelclock),
-	.doutb(fbdout),
-	.enb(~blank) );
+	.doutb(fbdout0),
+	.enb((~blank) & writepage) );
+
+framebuffer FB1(
+	// Input from uncached bus
+	.addra(fbwa),
+	.clka(aclk),
+	.dina(fbdin),
+	.wea(fbwe1),
+	.ena( (|fbwe1) ),
+	// Output to scanline fifo
+	.addrb(fbra),
+	.clkb(pixelclock),
+	.doutb(fbdout1),
+	.enb((~blank) & (~writepage)) );
 
 // ----------------------------------------------------------------------------
 // Color palette
@@ -91,8 +111,8 @@ end
 // HDMI output
 // ----------------------------------------------------------------------------
 
-// Byte select from current word
-assign palettera = fbdout[7:0];
+// Look up the palette data with based on which framebuffer has scanout
+assign palettera = writepage ? fbdout0 : fbdout1;
 
 my_vga_clk_generator VGAClkGen(
    .pclk(pixelclock),
@@ -152,25 +172,31 @@ always @(posedge aclk) begin
 		axi4if.bvalid <= 1'b0;
 	end else begin
 		// write data
-		fbwe <= 4'h0;
+		fbwe0 <= 4'h0;
+		fbwe1 <= 4'h0;
 		palettewe <= 1'b0;
 		axi4if.wready <= 1'b0;
 		axi4if.bvalid <= 1'b0;
 		case (writestate)
 			2'b00: begin
 				if (axi4if.wvalid) begin
-					// fb0: @81000000 // axi4if.awaddr[19:16] == 0 [+]
-					// fb1: @81020000 // axi4if.awaddr[19:16] == 2 [ ]
-					// pal: @81040000 // axi4if.awaddr[19:16] == 4 [+]
-					// ctl: @81080000 // axi4if.awaddr[19:16] == 8 [ ]
+					// fb0/1: @81000000 // axi4if.awaddr[19:16] == 0 [+]
+					// pal:   @81020000 // axi4if.awaddr[19:16] == 2 [+]
+					// ctl:   @81040000 // axi4if.awaddr[19:16] == 4 [+]
 					case (axi4if.awaddr[19:16])
-						default/*4'h0*/: begin // fb0
+						default/*4'h0*/: begin // fb0 / fb1 depending on writepage
 							fbdin <= axi4if.wdata[31:0];
-							fbwe <= axi4if.wstrb[3:0];
+							if (writepage) // Write to FB1
+								fbwe1 <= axi4if.wstrb[3:0];
+							else // Write to FB0
+								fbwe0 <= axi4if.wstrb[3:0];
 						end
-						4'h4: begin // pal
+						4'h2: begin // pal
 							palettedin <= axi4if.wdata[23:0];
 							palettewe <= 1'b1;
+						end
+						4'h4: begin // ctl
+							writepage <= axi4if.wdata[0];
 						end
 					endcase
 					axi4if.wready <= 1'b1;
@@ -201,7 +227,6 @@ always @(posedge aclk) begin
 			2'b00: begin
 				if (axi4if.arvalid) begin
 					axi4if.arready <= 1'b1;
-					//re <= 1'b1;
 					raddrstate <= 2'b01;
 				end
 			end
