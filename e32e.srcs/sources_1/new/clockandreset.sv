@@ -34,8 +34,8 @@ videoclockgen peripheralclock(
 	.clk_in1(sys_clock_i),
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
-	.uartbaseclock(uartbaseclock),
 	.hidclock(hidclock),
+	.uartbaseclock(uartbaseclock),
 	.locked(peripheralclklocked) );
 
 // Hold reset until clocks are locked

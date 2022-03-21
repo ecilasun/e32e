@@ -28,8 +28,10 @@ logic [3:0] wstrb = 4'h0;		// Write strobe
 wire [31:0] din;				// Input to CPU
 logic [31:0] dout;				// Output from CPU
 wire wready, rready;			// Cache r/w state
+logic ecall = 1'b0;				// SYSCALL
+logic ebreak = 1'b0;			// BREAKPOINT
 
-wire isuncached = addr[31]; // NOTE: anything at and above 0x80000000 is uncached memory
+wire isuncached = addr[31];		// NOTE: anything at and above 0x80000000 is uncached memory
 
 systemcache CACHE(
 	.aclk(aclk),
@@ -211,11 +213,12 @@ end
 wire trq = (wallclocktime >= tcmp) ? 1'b1 : 1'b0;
 
 // Any external wire event triggers our interrupt service if corresponding enable bit is high
-wire hwint = (|irq) && mie[11]; // MEIE - machine external interrupt enable
-// TODO: No timer interrupts yet (also, check corresponding enable bit)
-wire timerint = trq && mie[7]; // MTIE - timer interrupt enable
-// TODO: for later
-//wire swint = sint && mie[3] // MSIE - machine software interrupt enable
+wire hwint = (|irq) && mie[11];	// MEIE - machine external interrupt enable
+// Timer interrupts
+wire timerint = trq && mie[7];	// MTIE - timer interrupt enable
+// Software interrupts
+//logic sint = 1'b0;
+//wire swint = sint && mie[3];	// MSIE - machine software interrupt enable
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
@@ -225,6 +228,7 @@ always @(posedge aclk) begin
 		wstrb <= 4'h0;
 	 	ren <= 1'b0;
 	 	rwe <= 1'b0;
+	 	//frwe <= 1'b0;
 	 	csrwe <= 1'b0;
 	 	csrwenforce <= 1'b0;
 
@@ -237,14 +241,16 @@ always @(posedge aclk) begin
 			end
 
 			RETIRE: begin
-				if ( (illegalinstruction || hwint || timerint) && ~(|mip) ) begin
-					// Handle pending interrupts if we're not handling one already
+				// Handle a pending interrupt if we're not already handling ANY interrupt (i.e. can't interrupt out of an interrupt)
+				if ( (illegalinstruction || ecall || ebreak || hwint || timerint) && ~(|mip)) begin
 					csrwe <= 1'b1;
 					csrwenforce <= 1'b1;
 					// Save PC of next instruction that would have executed before IRQ
-					csrdin <= nextPC;
+					// For EBREAK, use current PC so that debugger can stop where it wants to
+					csrdin <= ebreak ? PC : nextPC;
 					csrenforceindex <= `CSR_MEPC;
 					// Branch to the ISR instead
+					// For EBREAK, we have to do special debugger processing in the ISR
 					PC <= mtvec;
 					// Need to set up a few CSRs before we can actually trigger the FETCH
 					cpustate <= INTERRUPTSETUP;
@@ -264,11 +270,14 @@ always @(posedge aclk) begin
 				csrwenforce <= 1'b1;
 				csrenforceindex <= `CSR_MIP;
 				// NOTE: Interrupt service ordering according to privileged isa is: mei/msi/mti/sei/ssi/sti
-				if (hwint) begin // mei, external hardware interrupt
+				if (hwint) begin
+					// MEI, external hardware interrupt
 					csrdin <= {mip[31:12], 1'b1, mip[10:0]};
-				end else if (illegalinstruction /*|| ecall*/) begin // msi, exception
+				end else if (illegalinstruction || ecall || ebreak) begin
+					// MSI, exception
 					csrdin <= {mip[31:4], 1'b1, mip[2:0]};
-				end else if (timerint) begin // mti, timer interrupt
+				end else if (timerint) begin
+					// MTI, timer interrupt
 					csrdin <= {mip[31:8], 1'b1, mip[6:0]};
 				end
 				cpustate <= INTERRUPTVALUE;
@@ -279,12 +288,15 @@ always @(posedge aclk) begin
 				csrwe <= 1'b1;
 				csrwenforce <= 1'b1;
 				csrenforceindex <= `CSR_MTVAL;
-				if (hwint) begin // mei, external hardware interrupt
-					csrdin  <= {20'd0, irq};
-				end else if (illegalinstruction /*|| ecall*/) begin // msi, exception
-					csrdin <= 32'd0;// TODO: write offending instruction here
-				end else if (timerint) begin // mti, timer interrupt
-					csrdin  <= 32'd0;
+				if (hwint) begin
+					// MEI, external hardware interrupt
+					csrdin  <= {20'd0, irq};	// Device IRQ bits, all those are pending
+				end else if (illegalinstruction || ecall || ebreak) begin
+					// MSI, exception
+					csrdin <= 32'd0;			// TODO: write offending instruction here for illlegalinstruction
+				end else if (timerint) begin
+					// MTI, timer interrupt
+					csrdin  <= 32'd0;			// TODO: timer interrupt doesn't need much data, but we reserve it for future
 				end
 				cpustate <= INTERRUPTCAUSE;
 			end
@@ -294,11 +306,19 @@ always @(posedge aclk) begin
 				csrwe <= 1'b1;
 				csrwenforce <= 1'b1;
 				csrenforceindex <= `CSR_MCAUSE;
-				if (hwint) begin // mei, external hardware interrupt
+				if (hwint) begin
+					// MEI, external hardware interrupt
 					csrdin  <= 32'h8000000b; // [31]=1'b1(interrupt), 11->h/w
-				end else if (illegalinstruction /*|| ecall*/) begin // msi, exception
-					csrdin  <= /*ecall ? 32'h0000000b :*/ 32'h00000002; // [31]=1'b0(exception), 0xb->ecall, 0x2->illegal instruction
-				end else if (timerint) begin // mti, timer interrupt
+				end else if (illegalinstruction || ecall || ebreak) begin
+					// MSI, exception
+					// See: https://www.five-embeddev.com/riscv-isa-manual/latest/machine.html#sec:mcause
+					// [31]=1'b0(exception)
+					// 0xb->ecall
+					// 0x3->ebreak
+					// 0x2->illegal instruction
+					csrdin  <= ecall ? 32'h0000000b : (ebreak ? 32'h00000003 : 32'h00000002);
+				end else if (timerint) begin
+					// MTI, timer interrupt
 					csrdin  <= 32'h80000007; // [31]=1'b1(interrupt), 7->timer
 				end
 				// We can now resume reading the first instruction of the ISR
@@ -320,7 +340,8 @@ always @(posedge aclk) begin
 			EXECUTE: begin
 				cpustate <= RETIRE;
 				rwe <= imathstart ? 1'b0 : isrecordingform;
-				illegalinstruction <= 1'b0;
+				illegalinstruction <= 1'b0; // No longer an illegal instruction
+				ecall <= 1'b0; // No longer in ECALL
 				nextPC <= adjacentPC;
 				case (1'b1)
 					instrOneHotOut[`O_H_AUIPC]: begin
@@ -389,22 +410,22 @@ always @(posedge aclk) begin
 						case (func3)
 							default/*3'b000*/: begin
 								case (func12)
-									default/*12'b0000000_00000*/: begin	// ECALL - sys call
-										//ecall <= mie[3]; // MSIE
+									12'b0000000_00000: begin	// ECALL - sys call
+										ecall <= mie[3]; // MSIE
 										// Ignore store
 										csrwe <= 1'b0;
 									end
-									12'b0000000_00001: begin			// EBREAK - software breakpoint
-										//ebreak <= mie[3]; // MSIE
+									12'b0000000_00001: begin	// EBREAK - software breakpoint
+										ebreak <= mie[3];		// MSIE but jump into debugger environment TODO: Could this be a hardcoded trap address, i.e. 0x0... or 0x2... ?
 										// Ignore store
 										csrwe <= 1'b0;
 									end
-									12'b0001000_00101: begin			// WFI - wait for interrupt
+									12'b0001000_00101: begin	// WFI - wait for interrupt
 										cpustate <= WFI;
 										// Ignore store
 										csrwe <= 1'b0;
 									end
-									12'b0011000_00010: begin			// MRET - return from interrupt
+									default/*12'b0011000_00010*/: begin	// MRET - return from interrupt
 										// Ignore whatever random CSR might be selected, and use ours
 										csrwenforce <= 1'b1;
 										csrenforceindex <= `CSR_MIP;
@@ -419,6 +440,9 @@ always @(posedge aclk) begin
 											csrdin <= {mip[31:8], 1'b0, mip[6:0]};
 									end
 								endcase
+							end
+							3'b100: begin // Unknown
+								csrdin <= csrprevval;
 							end
 							3'b001: begin
 								csrdin <= rval1;
@@ -441,7 +465,9 @@ always @(posedge aclk) begin
 						endcase
 					end
 					default: begin
-						illegalinstruction <= 1'b1;
+						// Illegal instruction triggers only
+						// if machine software interrupts are enabled
+						illegalinstruction <= mie[3];
 					end
 				endcase
 			end
@@ -518,8 +544,8 @@ always @(posedge aclk) begin
 			end
 			
 			WFI: begin
-				// Everything except illegalinstruction wakes us up
-				if ( (hwint || timerint) && ~(|mip) ) begin
+				// Everything except illegalinstruction and swint wakes up this HART
+				if ( hwint || timerint ) begin
 					cpustate <= RETIRE;
 				end else begin
 					cpustate <= WFI;

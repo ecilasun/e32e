@@ -5,7 +5,7 @@ module axi4gpu(
 	input wire aresetn,
 	input wire pixelclock,
 	input wire videoclock,
-	axi_if.slave axi4if,
+	axi_if.slave s_axi,
 	gpudataoutput.def gpudata );
 
 // ----------------------------------------------------------------------------
@@ -78,7 +78,9 @@ logic palettewe = 1'b0;
 logic [7:0] palettewa = 8'h00;
 logic [23:0] palettedin = 24'h000000;
 
-wire [7:0] palettera;
+// Look up the palette data with based on which framebuffer has scanout
+wire [7:0] palettera = writepage ? fbdout0 : fbdout1;
+
 logic [23:0] paletteentries[0:255];
 
 // Set up with VGA color palette on startup
@@ -110,9 +112,6 @@ end
 // ----------------------------------------------------------------------------
 // HDMI output
 // ----------------------------------------------------------------------------
-
-// Look up the palette data with based on which framebuffer has scanout
-assign palettera = writepage ? fbdout0 : fbdout1;
 
 my_vga_clk_generator VGAClkGen(
    .pclk(pixelclock),
@@ -155,58 +154,58 @@ logic [1:0] raddrstate = 2'b00;
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
-		axi4if.awready <= 1'b0;
+		s_axi.awready <= 1'b0;
 	end else begin
-		axi4if.awready <= 1'b0;
-		if (axi4if.awvalid) begin
-			fbwa <= axi4if.awaddr[16:2];
-			palettewa <= axi4if.awaddr[9:2];
-			axi4if.awready <= 1'b1;
+		s_axi.awready <= 1'b0;
+		if (s_axi.awvalid) begin
+			fbwa <= s_axi.awaddr[16:2];
+			palettewa <= s_axi.awaddr[9:2];
+			s_axi.awready <= 1'b1;
 		end
 	end
 end
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
-		axi4if.wready <= 1'b0;
-		axi4if.bvalid <= 1'b0;
+		s_axi.wready <= 1'b0;
+		s_axi.bvalid <= 1'b0;
 	end else begin
 		// write data
 		fbwe0 <= 4'h0;
 		fbwe1 <= 4'h0;
 		palettewe <= 1'b0;
-		axi4if.wready <= 1'b0;
-		axi4if.bvalid <= 1'b0;
+		s_axi.wready <= 1'b0;
+		s_axi.bvalid <= 1'b0;
 		case (writestate)
 			2'b00: begin
-				if (axi4if.wvalid) begin
-					// fb0/1: @81000000 // axi4if.awaddr[19:16] == 0 [+]
-					// pal:   @81020000 // axi4if.awaddr[19:16] == 2 [+]
-					// ctl:   @81040000 // axi4if.awaddr[19:16] == 4 [+]
-					case (axi4if.awaddr[19:16])
+				if (s_axi.wvalid) begin
+					// fb0/1: @81000000 // s_axi.awaddr[19:16] == 0 [+]
+					// pal:   @81020000 // s_axi.awaddr[19:16] == 2 [+]
+					// ctl:   @81040000 // s_axi.awaddr[19:16] == 4 [+]
+					case (s_axi.awaddr[19:16])
 						default/*4'h0*/: begin // fb0 / fb1 depending on writepage
-							fbdin <= axi4if.wdata[31:0];
+							fbdin <= s_axi.wdata[31:0];
 							if (writepage) // Write to FB1
-								fbwe1 <= axi4if.wstrb[3:0];
+								fbwe1 <= s_axi.wstrb[3:0];
 							else // Write to FB0
-								fbwe0 <= axi4if.wstrb[3:0];
+								fbwe0 <= s_axi.wstrb[3:0];
 						end
 						4'h2: begin // pal
-							palettedin <= axi4if.wdata[23:0];
+							palettedin <= s_axi.wdata[23:0];
 							palettewe <= 1'b1;
 						end
 						4'h4: begin // ctl
-							writepage <= axi4if.wdata[0];
+							writepage <= s_axi.wdata[0];
 						end
 					endcase
-					axi4if.wready <= 1'b1;
+					s_axi.wready <= 1'b1;
 					writestate <= 2'b01;
 				end
 			end
 			default/*2'b01*/: begin
-				if(axi4if.bready) begin
-					axi4if.bvalid <= 1'b1;
-					axi4if.bresp = 2'b00; // okay
+				if(s_axi.bready) begin
+					s_axi.bvalid <= 1'b1;
+					s_axi.bresp = 2'b00; // okay
 					writestate <= 2'b00;
 				end
 			end
@@ -216,24 +215,24 @@ end
 
 always @(posedge aclk) begin
 	if (~aresetn) begin
-		axi4if.rlast <= 1'b1;
-		axi4if.arready <= 1'b0;
-		axi4if.rvalid <= 1'b0;
-		axi4if.rresp <= 2'b00;
+		s_axi.rlast <= 1'b1;
+		s_axi.arready <= 1'b0;
+		s_axi.rvalid <= 1'b0;
+		s_axi.rresp <= 2'b00;
 	end else begin
-		axi4if.rvalid <= 1'b0;
-		axi4if.arready <= 1'b0;
+		s_axi.rvalid <= 1'b0;
+		s_axi.arready <= 1'b0;
 		case (raddrstate)
 			2'b00: begin
-				if (axi4if.arvalid) begin
-					axi4if.arready <= 1'b1;
+				if (s_axi.arvalid) begin
+					s_axi.arready <= 1'b1;
 					raddrstate <= 2'b01;
 				end
 			end
 			default/*2'b01*/: begin
-				if (axi4if.rready) begin
-					axi4if.rdata[31:0] <= 32'd0; // Nothing to read here
-					axi4if.rvalid <= 1'b1;
+				if (s_axi.rready) begin
+					s_axi.rdata[31:0] <= 32'd0; // Nothing to read here
+					s_axi.rvalid <= 1'b1;
 					raddrstate <= 2'b00;
 				end
 			end

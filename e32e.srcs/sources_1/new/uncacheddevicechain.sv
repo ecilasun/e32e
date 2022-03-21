@@ -93,14 +93,13 @@ axi4ps2keyboard ps2keyboard(
 	.ps2fifoempty(ps2fifoempty),
 	.s_axi(ps2if) );
 
-/*wire validwaddr_button = axi4if.awaddr>=32'h80001030 && axi4if.awaddr<32'h80001040;
-wire validraddr_button = axi4if.araddr>=32'h80001030 && axi4if.araddr<32'h80001040;
+/*
 axi_if buttonif();
 wire buttonfifoempty;
 axi4buttons devicebuttons(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.axi4if(buttonif),
+	.s_axi(buttonif),
 	.clocks(clocks),
 	.wires(wires),
 	.buttonfifoempty(buttonfifoempty) );*/
@@ -111,7 +110,7 @@ axi4gpu GPU(
 	.aresetn(aresetn),
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
-	.axi4if(gpuif),
+	.s_axi(gpuif),
 	.gpudata(gpudata) );
 
 // ------------------------------------------------------------------------------------
