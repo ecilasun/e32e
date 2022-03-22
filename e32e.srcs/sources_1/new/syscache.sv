@@ -7,7 +7,7 @@ module systemcache(
 	input wire aresetn,
 	// custom bus to cpu
 	input wire uncached,
-	input wire [1:0] dcacheop,
+	input wire [2:0] dcacheop,
 	input wire [31:0] addr,
 	input wire [31:0] din,
 	output logic [31:0] dout,
@@ -48,6 +48,8 @@ logic [511:0] cdin;					// input data to write to cache
 wire [511:0] cdout;					// output data read from cache
 
 logic flushing = 1'b0;				// High during cache flush operation
+logic writeback = 1'b0;				// High if writeback is requested during flush
+logic cacheid = 1'b0;				// 0: D$ 1: I$
 logic [7:0] dccount = 8'h00;		// Line counter for cache flush
 
 cachemem CacheMemory512(
@@ -129,7 +131,9 @@ always_ff @(posedge aclk) begin
 				ctag <= addr[30:14];						// Cache tag 00000..1ffff
 				ptag <= cachelinetags[{ifetch,addr[13:6]}];	// Previous cache tag
 
-				flushing <= (|dcacheop);
+				flushing <= dcacheop[0];
+				writeback <= dcacheop[1];
+				cacheid <= dcacheop[2];
 				dccount <= 8'h00;
 
 				case ({ren, |wstrb})
@@ -150,16 +154,16 @@ always_ff @(posedge aclk) begin
 
 			CDATAFLUSH: begin
 				// Nothing to write from cache for next time around
-				cachelinevalid[dccount] <= 1'b1;
+				cachelinevalid[{cacheid, dccount}] <= 1'b1;
 				// Change tag to cause a cache miss for next time around
-				cachelinetags[{1'b0, dccount}] <= 17'h1ffff;
+				cachelinetags[{cacheid, dccount}] <= 17'h1ffff;
 				// Determine flush state
-				if (cachelinevalid[dccount]) begin // TODO: || (~dcacheop[1]) (do not write back)
+				if (cachelinevalid[{cacheid, dccount}] || (~writeback)) begin // In 2'b01 case we're forced to skip writeback, just invalidate
 					// Skip this line if it doesn't need a write back operation
 					cachestate <= CDATAFLUSHSKIP;
 				end else begin
 					// Write current line back to RAM
-					cacheaddress <= {1'b0, cachelinetags[{1'b0,dccount}], dccount, 6'd0};
+					cacheaddress <= {1'b0, cachelinetags[{cacheid, dccount}], dccount, 6'd0};
 					cachedout <= {cdout[127:0], cdout[255:128], cdout[383:256], cdout[511:384]};
 					memwritestrobe <= 1'b1;
 					// We're done if this Was the last write
