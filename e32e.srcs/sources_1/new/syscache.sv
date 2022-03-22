@@ -7,6 +7,7 @@ module systemcache(
 	input wire aresetn,
 	// custom bus to cpu
 	input wire uncached,
+	input wire [1:0] dcacheop,
 	input wire [31:0] addr,
 	input wire [31:0] din,
 	output logic [31:0] dout,
@@ -46,12 +47,15 @@ logic [63:0] cachewe = 64'd0;		// byte select for 64 byte cache line
 logic [511:0] cdin;					// input data to write to cache
 wire [511:0] cdout;					// output data read from cache
 
+logic flushing = 1'b0;				// High during cache flush operation
+logic [7:0] dccount = 8'h00;		// Line counter for cache flush
+
 cachemem CacheMemory512(
-	.addra({ifetch,addr[13:6]}/*cline*/),	// current cache line
-	.clka(aclk),					// cache clock
-	.dina(cdin),					// updated cache data to write
-	.wea(cachewe),					// write strobe for current cache line
-	.douta(cdout) );				// output of currently selected cache line
+	.addra(flushing ? {1'b0, dccount} : {ifetch,addr[13:6]}),	// current cache line (cline)
+	.clka(aclk),												// cache clock
+	.dina(cdin),												// updated cache data to write
+	.wea(cachewe),												// write strobe for current cache line
+	.douta(cdout) );											// output of currently selected cache line
 
 initial begin
 	integer i;
@@ -96,7 +100,7 @@ uncachedmemorycontroller UCMEMCTL(
 	// To memory mapped devices
 	.m_axi(a4busuncached) );
 
-typedef enum logic [3:0] {IDLE, CWRITE, CREAD, UCWRITE, UCWRITEDELAY, UCREAD, UCREADDELAY, CWBACK, CWBACKWAIT, CPOPULATE, CPOPULATEWAIT, CUPDATE, CUPDATEDELAY} cachestatetype;
+typedef enum logic [4:0] {IDLE, CWRITE, CREAD, UCWRITE, UCWRITEDELAY, UCREAD, UCREADDELAY, CWBACK, CWBACKWAIT, CPOPULATE, CPOPULATEWAIT, CUPDATE, CUPDATEDELAY, CDATAFLUSHBEGIN, CDATAFLUSH, CDATAFLUSHSKIP, CDATAFLUSHWAIT, CDATAFLUSHWAITCREAD} cachestatetype;
 cachestatetype cachestate = IDLE;
 
 wire cachehit = ctag == ptag ? 1'b1 : 1'b0;
@@ -125,11 +129,69 @@ always_ff @(posedge aclk) begin
 				ctag <= addr[30:14];						// Cache tag 00000..1ffff
 				ptag <= cachelinetags[{ifetch,addr[13:6]}];	// Previous cache tag
 
+				flushing <= (|dcacheop);
+				dccount <= 8'h00;
+
 				case ({ren, |wstrb})
 					2'b01: cachestate <= uncached ? UCWRITE : CWRITE;
-					2'b10: cachestate <= uncached ? UCREAD : CREAD;
+					2'b10: cachestate <= uncached ? UCREAD : (dcacheop==2'b00 ? CREAD : CDATAFLUSHBEGIN);
 					default: cachestate <= IDLE;
 				endcase
+			end
+			
+			CDATAFLUSHBEGIN: begin
+				// Initial delay state to settle dccount
+				cachestate <= CDATAFLUSHWAITCREAD;
+			end
+
+			CDATAFLUSHWAITCREAD: begin
+				cachestate <= CDATAFLUSH;
+			end
+
+			CDATAFLUSH: begin
+				// Nothing to write from cache for next time around
+				cachelinevalid[dccount] <= 1'b1;
+				// Change tag to cause a cache miss for next time around
+				cachelinetags[{1'b0, dccount}] <= 17'h1ffff;
+				// Determine flush state
+				if (cachelinevalid[dccount]) begin // TODO: || (~dcacheop[1]) (do not write back)
+					// Skip this line if it doesn't need a write back operation
+					cachestate <= CDATAFLUSHSKIP;
+				end else begin
+					// Write current line back to RAM
+					cacheaddress <= {1'b0, cachelinetags[{1'b0,dccount}], dccount, 6'd0};
+					cachedout <= {cdout[127:0], cdout[255:128], cdout[383:256], cdout[511:384]};
+					memwritestrobe <= 1'b1;
+					// We're done if this Was the last write
+					cachestate <= CDATAFLUSHWAIT;
+				end
+			end
+
+			CDATAFLUSHSKIP: begin
+				// Go to next line
+				dccount <= dccount + 8'd1;
+				// Stop 'flushing' mode if we're done
+				flushing <= dccount != 8'hFF;
+				// Finish our mock 'read' operation
+				rready <= dccount == 8'hFF;
+				// Repeat until we process line 0xFF and go back to idle state
+				cachestate <= dccount == 8'hFF ? IDLE : CDATAFLUSHWAITCREAD;
+			end
+
+			CDATAFLUSHWAIT: begin
+				if (~wdone) begin
+					// Memory write didn't complete yet
+					cachestate <= CDATAFLUSHWAIT;
+				end else begin
+					// Go to next line
+					dccount <= dccount + 8'd1;
+					// Stop 'flushing' mode if we're done
+					flushing <= dccount != 8'hFF;
+					// Finish our mock 'read' operation
+					rready <= dccount == 8'hFF;
+					// Repeat until we process line 0xFF and go back to idle state
+					cachestate <= dccount == 8'hFF ? IDLE : CDATAFLUSHWAITCREAD;
+				end
 			end
 
 			UCWRITE: begin

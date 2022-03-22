@@ -30,6 +30,7 @@ logic [31:0] dout;				// Output from CPU
 wire wready, rready;			// Cache r/w state
 logic ecall = 1'b0;				// SYSCALL
 logic ebreak = 1'b0;			// BREAKPOINT
+logic [1:0] dcacheop = 2'b00;	// Cache command for D$ portion
 
 wire isuncached = addr[31];		// NOTE: anything at and above 0x80000000 is uncached memory
 
@@ -38,6 +39,7 @@ systemcache CACHE(
 	.aresetn(aresetn),
 	.uncached(isuncached),
 	// From CPU
+	.dcacheop(dcacheop),
 	.ifetch(ifetch),
 	.addr(addr),
 	.din(dout),
@@ -231,6 +233,7 @@ always @(posedge aclk) begin
 	 	//frwe <= 1'b0;
 	 	csrwe <= 1'b0;
 	 	csrwenforce <= 1'b0;
+	 	dcacheop <= 2'b00;
 
 		case (cpustate)
 			INIT: begin
@@ -398,11 +401,17 @@ always @(posedge aclk) begin
 						addr <= rwaddress;
 						cpustate <= STOREWAIT;
 					end
-					/*instrOneHotOut[`O_H_FENCE]: begin
+					instrOneHotOut[`O_H_FENCE]: begin
 						// 0000_pred_succ_00000_000_00000_0001111 -> FENCE
-						// 0000_0000_0000_00000_001_00000_0001111 -> FENCE.I (flush I$)
-					end*/
+						//if (instruction == 32'h0ff0000f) // FENCE
+						//	fence <= 1'b1;
+						//if (instruction == 32'h0000100F)
+						//	fencei <= 1'b1;
+						//0000_0000_0000_00000_001_00000_0001111 -> FENCE.I (32'h0000100F) Flush I$
+					end
 					instrOneHotOut[`O_H_SYSTEM]: begin
+						// Rocket D$ custom instuction (machine mode)
+
 						// Store previous value of CSR in target register
 						rdin <= csrprevval;
 						rwe <= (func3 == 3'b000) ? 1'b0 : 1'b1; // No register write back for non-CSR sys ops
@@ -410,6 +419,24 @@ always @(posedge aclk) begin
 						case (func3)
 							default/*3'b000*/: begin
 								case (func12)
+									12'b1111110_00000: begin	// CFLUSH.D.L1 (32'hFC000073) Writeback dirty D$ lines and invalidate tags
+										dcacheop <= 2'b11;		// write back, mark not dirty
+										ren <= 1'b1;
+										addr <= rval1;
+										cpustate <= LOADWAIT; // HINT: Since rd==0, nothing will actually happen to register file
+										// f7      rs2   rs1   f3  rd    SYSTEM
+										// 1111110 00000 00000 000 00000 1110011
+										// rs1 == zero: write back&invalidate all D$ lines, else write back&invalidate line containing address in rs1
+									end
+									/*12'b1111110_00010: begin	// CDISCARD.D.L1 (32'hFC200073) Invalidate D$
+										dcacheop <= 2'b01;		// do not write back, mark not dirty
+										ren <= 1'b1;
+										addr <= rval1;
+										cpustate <= LOADWAIT; // HINT: Since rd==0, nothing will actually happen to register file
+										// f7      rs2   rs1   f3  rd    SYSTEM
+										// 1111110 00010 00000 000 00000 1110011
+										// rs1 == zero: only invalidate all D$ (dirty data lost), else same for line containing the address in rs1
+									end*/
 									12'b0000000_00000: begin	// ECALL - sys call
 										ecall <= mie[3]; // MSIE
 										// Ignore store
