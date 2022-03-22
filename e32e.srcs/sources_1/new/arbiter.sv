@@ -299,7 +299,7 @@ always_comb begin
 		end
 
 		ARBITRATE: begin
-			nextarbiterstate = (m0valid || m1valid || m2valid || m3valid || m4valid || m5valid || m6valid || m7valid) ? GRANTED : ARBITRATE;
+			nextarbiterstate = |{m0valid, m1valid, m2valid, m3valid, m4valid, m5valid, m6valid, m7valid} ? GRANTED : ARBITRATE;
 		end
 
 		default/*GRANTED*/: begin
