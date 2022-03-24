@@ -37,8 +37,20 @@ module tophat(
 	input wire spi_miso,
 	output wire spi_sck,
 	input wire spi_cd,
-	output wire sd_poweron_n );
+	output wire sd_poweron_n,
+	// I2C bus
+    inout scl,
+    inout sda,
+	// I2S
+    output wire ac_mclk,
+    input wire ac_adc_sdata,
+    output wire ac_dac_sdata,
+    output wire ac_bclk,
+    output wire ac_lrclk,
+    // Debug LEDs
+    output wire [7:0] led );
 
+wire audioInitDone;
 assign sd_poweron_n = 1'b0; // always grounded to keep sdcard powered
 
 // ----------------------------------------------------------------------------
@@ -60,7 +72,9 @@ assign sd_poweron_n = 1'b0; // always grounded to keep sdcard powered
 //  FB1: 81020000..8103FFFF : [ ] uncached w
 //  PAL: 81040000..810400FF : [+] uncached w
 //  GPU: 81040100..8104FFFF : [ ] uncached w
-// ... : 81050000..FFFFFFFF : [-] unused
+// ... : 81050000..81FFFFFF : [-] unused
+//  APU: 82000000..8200000F : [+] uncached w
+// ... : 82000010..FFFFFFFF : [-] unused
 
 // ----------------------------------------------------------------------------
 // Clock / Reset generator
@@ -80,6 +94,7 @@ clockandreset ClockAndResetGen(
 	.hidclock(hidclock),
 	.clk_sys_i(clk_sys_i),
 	.clk_ref_i(clk_ref_i),
+	.audioclock(ac_mclk),
 	.selfresetn(selfresetn),
 	.aresetn(aresetn) );
 
@@ -268,6 +283,19 @@ uncacheddevicechain UCDEVICECHAIN(
 	.spi_cd(spi_cd),
 	.axi4if(A4UCH),
 	.gpudata(gpudata),
-	.irq(irq) );
+	.irq(irq),
+	.initDone(audioInitDone),
+	.scl(scl),
+	.sda(sda),
+    .ac_bclk(ac_bclk),
+    .ac_lrclk(ac_lrclk),
+    .ac_dac_sdata(ac_dac_sdata),
+    .ac_adc_sdata(ac_adc_sdata) );
+
+// ----------------------------------------------------------------------------
+// Debug out
+// ----------------------------------------------------------------------------
+
+assign led = {4'b0, ac_lrclk, ac_bclk, ac_dac_sdata, audioInitDone};
 
 endmodule

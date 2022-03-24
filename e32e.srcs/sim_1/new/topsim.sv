@@ -64,6 +64,22 @@ tophat tophatsiminst(
     .ddr3_dm(ddr3_dm),
     .ddr3_dqs_p(ddr3_dqs_p),
     .ddr3_dqs_n(ddr3_dqs_n),
-    .ddr3_dq(ddr3_dq) );
+    .ddr3_dq(ddr3_dq),
+    // SPI
+	.spi_cs_n(),
+	.spi_mosi(),
+	.spi_miso(),
+	.spi_sck(),
+	.spi_cd(),
+	.sd_poweron_n(),
+	// I2C bus
+    .scl(),
+    .sda(),
+	// I2S
+    .ac_mclk(),
+    .ac_adc_sdata(),
+    .ac_dac_sdata(),
+    .ac_bclk(),
+    .ac_lrclk() );
 
 endmodule

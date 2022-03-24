@@ -13,19 +13,19 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="124,346.000000 ns"></ZoomStartTime>
-      <ZoomEndTime time="125,433.000001 ns"></ZoomEndTime>
-      <Cursor1Time time="124,655.000000 ns"></Cursor1Time>
+      <ZoomStartTime time="108,292.833334 ns"></ZoomStartTime>
+      <ZoomEndTime time="109,385.833335 ns"></ZoomEndTime>
+      <Cursor1Time time="108,475.000000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="261"></NameColumnWidth>
-      <ValueColumnWidth column_width="101"></ValueColumnWidth>
+      <ValueColumnWidth column_width="89"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="293" />
+   <WVObjectSize size="123" />
    <wave_markers>
-      <marker time="108375000000" label="" />
       <marker time="163675000000" label="" />
       <marker time="119445000000" label="" />
+      <marker time="108375000000" label="" />
    </wave_markers>
    <wvobject fp_name="/topsim/tophatsiminst/aclk" type="logic">
       <obj_property name="ElementShortName">aclk</obj_property>
@@ -76,170 +76,6 @@
       <obj_property name="ElementShortName">[2][31:0]</obj_property>
       <obj_property name="ObjectShortName">[2][31:0]</obj_property>
       <obj_property name="label">SP</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/aclk" type="logic">
-      <obj_property name="ElementShortName">aclk</obj_property>
-      <obj_property name="ObjectShortName">aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/aresetn" type="logic">
-      <obj_property name="ElementShortName">aresetn</obj_property>
-      <obj_property name="ObjectShortName">aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/uncached" type="logic">
-      <obj_property name="ElementShortName">uncached</obj_property>
-      <obj_property name="ObjectShortName">uncached</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/dcacheop" type="array">
-      <obj_property name="ElementShortName">dcacheop[1:0]</obj_property>
-      <obj_property name="ObjectShortName">dcacheop[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/addr" type="array">
-      <obj_property name="ElementShortName">addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/din" type="array">
-      <obj_property name="ElementShortName">din[31:0]</obj_property>
-      <obj_property name="ObjectShortName">din[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/dout" type="array">
-      <obj_property name="ElementShortName">dout[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/wstrb" type="array">
-      <obj_property name="ElementShortName">wstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">wstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ren" type="logic">
-      <obj_property name="ElementShortName">ren</obj_property>
-      <obj_property name="ObjectShortName">ren</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ifetch" type="logic">
-      <obj_property name="ElementShortName">ifetch</obj_property>
-      <obj_property name="ObjectShortName">ifetch</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/rready" type="logic">
-      <obj_property name="ElementShortName">rready</obj_property>
-      <obj_property name="ObjectShortName">rready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/wready" type="logic">
-      <obj_property name="ElementShortName">wready</obj_property>
-      <obj_property name="ObjectShortName">wready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachedin" type="array">
-      <obj_property name="ElementShortName">cachedin[0:3][127:0]</obj_property>
-      <obj_property name="ObjectShortName">cachedin[0:3][127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/memwritestrobe" type="logic">
-      <obj_property name="ElementShortName">memwritestrobe</obj_property>
-      <obj_property name="ObjectShortName">memwritestrobe</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/memreadstrobe" type="logic">
-      <obj_property name="ElementShortName">memreadstrobe</obj_property>
-      <obj_property name="ObjectShortName">memreadstrobe</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucaddrs" type="array">
-      <obj_property name="ElementShortName">ucaddrs[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucaddrs[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucdout" type="array">
-      <obj_property name="ElementShortName">ucdout[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucdout[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucdin" type="array">
-      <obj_property name="ElementShortName">ucdin[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ucdin[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucwstrb" type="array">
-      <obj_property name="ElementShortName">ucwstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">ucwstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucre" type="logic">
-      <obj_property name="ElementShortName">ucre</obj_property>
-      <obj_property name="ObjectShortName">ucre</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucwritedone" type="logic">
-      <obj_property name="ElementShortName">ucwritedone</obj_property>
-      <obj_property name="ObjectShortName">ucwritedone</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ucreaddone" type="logic">
-      <obj_property name="ElementShortName">ucreaddone</obj_property>
-      <obj_property name="ObjectShortName">ucreaddone</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/bsel" type="array">
-      <obj_property name="ElementShortName">bsel[3:0]</obj_property>
-      <obj_property name="ObjectShortName">bsel[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/rwmode" type="array">
-      <obj_property name="ElementShortName">rwmode[1:0]</obj_property>
-      <obj_property name="ObjectShortName">rwmode[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ptag" type="array">
-      <obj_property name="ElementShortName">ptag[16:0]</obj_property>
-      <obj_property name="ObjectShortName">ptag[16:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/ctag" type="array">
-      <obj_property name="ElementShortName">ctag[16:0]</obj_property>
-      <obj_property name="ObjectShortName">ctag[16:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/coffset" type="array">
-      <obj_property name="ElementShortName">coffset[3:0]</obj_property>
-      <obj_property name="ObjectShortName">coffset[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cline" type="array">
-      <obj_property name="ElementShortName">cline[8:0]</obj_property>
-      <obj_property name="ObjectShortName">cline[8:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachelinevalid" type="array">
-      <obj_property name="ElementShortName">cachelinevalid[0:511]</obj_property>
-      <obj_property name="ObjectShortName">cachelinevalid[0:511]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachelinetags" type="array">
-      <obj_property name="ElementShortName">cachelinetags[0:511][16:0]</obj_property>
-      <obj_property name="ObjectShortName">cachelinetags[0:511][16:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachewe" type="array">
-      <obj_property name="ElementShortName">cachewe[63:0]</obj_property>
-      <obj_property name="ObjectShortName">cachewe[63:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cdin" type="array">
-      <obj_property name="ElementShortName">cdin[511:0]</obj_property>
-      <obj_property name="ObjectShortName">cdin[511:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachedout" type="array">
-      <obj_property name="ElementShortName">cachedout[0:3][127:0]</obj_property>
-      <obj_property name="ObjectShortName">cachedout[0:3][127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cdout" type="array">
-      <obj_property name="ElementShortName">cdout[511:0]</obj_property>
-      <obj_property name="ObjectShortName">cdout[511:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cacheaddress" type="array">
-      <obj_property name="ElementShortName">cacheaddress[31:0]</obj_property>
-      <obj_property name="ObjectShortName">cacheaddress[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/flushing" type="logic">
-      <obj_property name="ElementShortName">flushing</obj_property>
-      <obj_property name="ObjectShortName">flushing</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/dccount" type="array">
-      <obj_property name="ElementShortName">dccount[7:0]</obj_property>
-      <obj_property name="ObjectShortName">dccount[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/rdone" type="logic">
-      <obj_property name="ElementShortName">rdone</obj_property>
-      <obj_property name="ObjectShortName">rdone</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/wdone" type="logic">
-      <obj_property name="ElementShortName">wdone</obj_property>
-      <obj_property name="ObjectShortName">wdone</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachestate" type="array">
-      <obj_property name="ElementShortName">cachestate[4:0]</obj_property>
-      <obj_property name="ObjectShortName">cachestate[4:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/HART0/CACHE/cachehit" type="logic">
-      <obj_property name="ElementShortName">cachehit</obj_property>
-      <obj_property name="ObjectShortName">cachehit</obj_property>
    </wvobject>
    <wvobject type="divider" fp_name="divider73">
       <obj_property name="label">HART1</obj_property>
@@ -491,734 +327,216 @@
       <obj_property name="ElementShortName">validraddr_bram</obj_property>
       <obj_property name="ObjectShortName">validraddr_bram</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validwaddr_audio" type="logic">
+      <obj_property name="ElementShortName">validwaddr_audio</obj_property>
+      <obj_property name="ObjectShortName">validwaddr_audio</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/validraddr_audio" type="logic">
+      <obj_property name="ElementShortName">validraddr_audio</obj_property>
+      <obj_property name="ObjectShortName">validraddr_audio</obj_property>
+   </wvobject>
    <wvobject type="divider" fp_name="divider239">
-      <obj_property name="label">UART</obj_property>
+      <obj_property name="label">APU</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/aclk" type="logic">
-      <obj_property name="ElementShortName">aclk</obj_property>
-      <obj_property name="ObjectShortName">aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/aresetn" type="logic">
-      <obj_property name="ElementShortName">aresetn</obj_property>
-      <obj_property name="ObjectShortName">aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartbaseclock" type="logic">
-      <obj_property name="ElementShortName">uartbaseclock</obj_property>
-      <obj_property name="ObjectShortName">uartbaseclock</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uart_rxd_out" type="logic">
-      <obj_property name="ElementShortName">uart_rxd_out</obj_property>
-      <obj_property name="ObjectShortName">uart_rxd_out</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uart_txd_in" type="logic">
-      <obj_property name="ElementShortName">uart_txd_in</obj_property>
-      <obj_property name="ObjectShortName">uart_txd_in</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartrcvempty" type="logic">
-      <obj_property name="ElementShortName">uartrcvempty</obj_property>
-      <obj_property name="ObjectShortName">uartrcvempty</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/writestate" type="array">
-      <obj_property name="ElementShortName">writestate[1:0]</obj_property>
-      <obj_property name="ObjectShortName">writestate[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/raddrstate" type="array">
-      <obj_property name="ElementShortName">raddrstate[1:0]</obj_property>
-      <obj_property name="ObjectShortName">raddrstate[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/din" type="array">
-      <obj_property name="ElementShortName">din[7:0]</obj_property>
-      <obj_property name="ObjectShortName">din[7:0]</obj_property>
-      <obj_property name="Radix">ASCIIRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/we" type="array">
-      <obj_property name="ElementShortName">we[3:0]</obj_property>
-      <obj_property name="ObjectShortName">we[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/transmitbyte" type="logic">
-      <obj_property name="ElementShortName">transmitbyte</obj_property>
-      <obj_property name="ObjectShortName">transmitbyte</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/datatotransmit" type="array">
-      <obj_property name="ElementShortName">datatotransmit[7:0]</obj_property>
-      <obj_property name="ObjectShortName">datatotransmit[7:0]</obj_property>
-      <obj_property name="Radix">ASCIIRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uarttxbusy" type="logic">
-      <obj_property name="ElementShortName">uarttxbusy</obj_property>
-      <obj_property name="ObjectShortName">uarttxbusy</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartbyteavailable" type="logic">
-      <obj_property name="ElementShortName">uartbyteavailable</obj_property>
-      <obj_property name="ObjectShortName">uartbyteavailable</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartbytein" type="array">
-      <obj_property name="ElementShortName">uartbytein[7:0]</obj_property>
-      <obj_property name="ObjectShortName">uartbytein[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartrcvfull" type="logic">
-      <obj_property name="ElementShortName">uartrcvfull</obj_property>
-      <obj_property name="ObjectShortName">uartrcvfull</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartrcvvalid" type="logic">
-      <obj_property name="ElementShortName">uartrcvvalid</obj_property>
-      <obj_property name="ObjectShortName">uartrcvvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartrcvdin" type="array">
-      <obj_property name="ElementShortName">uartrcvdin[7:0]</obj_property>
-      <obj_property name="ObjectShortName">uartrcvdin[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartrcvdout" type="array">
-      <obj_property name="ElementShortName">uartrcvdout[7:0]</obj_property>
-      <obj_property name="ObjectShortName">uartrcvdout[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartrcvre" type="logic">
-      <obj_property name="ElementShortName">uartrcvre</obj_property>
-      <obj_property name="ObjectShortName">uartrcvre</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/uartrcvwe" type="logic">
-      <obj_property name="ElementShortName">uartrcvwe</obj_property>
-      <obj_property name="ObjectShortName">uartrcvwe</obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider200">
-      <obj_property name="label">BRAM</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_aclk" type="logic">
-      <obj_property name="ElementShortName">s_aclk</obj_property>
-      <obj_property name="ObjectShortName">s_aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_aresetn" type="logic">
-      <obj_property name="ElementShortName">s_aresetn</obj_property>
-      <obj_property name="ObjectShortName">s_aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_awid" type="array">
-      <obj_property name="ElementShortName">s_axi_awid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_awaddr" type="array">
-      <obj_property name="ElementShortName">s_axi_awaddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awaddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_awlen" type="array">
-      <obj_property name="ElementShortName">s_axi_awlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_awsize" type="array">
-      <obj_property name="ElementShortName">s_axi_awsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_awburst" type="array">
-      <obj_property name="ElementShortName">s_axi_awburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_awvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_awvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_awready" type="logic">
-      <obj_property name="ElementShortName">s_axi_awready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_wdata" type="array">
-      <obj_property name="ElementShortName">s_axi_wdata[127:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wdata[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_wstrb" type="array">
-      <obj_property name="ElementShortName">s_axi_wstrb[15:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wstrb[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_wlast" type="logic">
-      <obj_property name="ElementShortName">s_axi_wlast</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_wvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_wvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_wready" type="logic">
-      <obj_property name="ElementShortName">s_axi_wready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_bid" type="array">
-      <obj_property name="ElementShortName">s_axi_bid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_bresp" type="array">
-      <obj_property name="ElementShortName">s_axi_bresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_bvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_bready" type="logic">
-      <obj_property name="ElementShortName">s_axi_bready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_arid" type="array">
-      <obj_property name="ElementShortName">s_axi_arid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_araddr" type="array">
-      <obj_property name="ElementShortName">s_axi_araddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_araddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_arlen" type="array">
-      <obj_property name="ElementShortName">s_axi_arlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_arsize" type="array">
-      <obj_property name="ElementShortName">s_axi_arsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_arburst" type="array">
-      <obj_property name="ElementShortName">s_axi_arburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_arvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_arvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_arready" type="logic">
-      <obj_property name="ElementShortName">s_axi_arready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_rid" type="array">
-      <obj_property name="ElementShortName">s_axi_rid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_rdata" type="array">
-      <obj_property name="ElementShortName">s_axi_rdata[127:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rdata[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_rresp" type="array">
-      <obj_property name="ElementShortName">s_axi_rresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_rlast" type="logic">
-      <obj_property name="ElementShortName">s_axi_rlast</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_rvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_rvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/BRAM64K/BRAM/s_axi_rready" type="logic">
-      <obj_property name="ElementShortName">s_axi_rready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rready</obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider232">
-      <obj_property name="label">MAILBOX</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_aclk" type="logic">
-      <obj_property name="ElementShortName">s_aclk</obj_property>
-      <obj_property name="ObjectShortName">s_aclk</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_aresetn" type="logic">
-      <obj_property name="ElementShortName">s_aresetn</obj_property>
-      <obj_property name="ObjectShortName">s_aresetn</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_awid" type="array">
-      <obj_property name="ElementShortName">s_axi_awid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_awaddr" type="array">
-      <obj_property name="ElementShortName">s_axi_awaddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awaddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_awlen" type="array">
-      <obj_property name="ElementShortName">s_axi_awlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_awsize" type="array">
-      <obj_property name="ElementShortName">s_axi_awsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_awburst" type="array">
-      <obj_property name="ElementShortName">s_axi_awburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_awvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_awvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_awready" type="logic">
-      <obj_property name="ElementShortName">s_axi_awready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_awready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_wdata" type="array">
-      <obj_property name="ElementShortName">s_axi_wdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_wstrb" type="array">
-      <obj_property name="ElementShortName">s_axi_wstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_wlast" type="logic">
-      <obj_property name="ElementShortName">s_axi_wlast</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_wvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_wvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_wready" type="logic">
-      <obj_property name="ElementShortName">s_axi_wready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_wready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_bid" type="array">
-      <obj_property name="ElementShortName">s_axi_bid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_bresp" type="array">
-      <obj_property name="ElementShortName">s_axi_bresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_bvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_bready" type="logic">
-      <obj_property name="ElementShortName">s_axi_bready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_arid" type="array">
-      <obj_property name="ElementShortName">s_axi_arid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_araddr" type="array">
-      <obj_property name="ElementShortName">s_axi_araddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_araddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_arlen" type="array">
-      <obj_property name="ElementShortName">s_axi_arlen[7:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arlen[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_arsize" type="array">
-      <obj_property name="ElementShortName">s_axi_arsize[2:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arsize[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_arburst" type="array">
-      <obj_property name="ElementShortName">s_axi_arburst[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arburst[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_arvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_arvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_arready" type="logic">
-      <obj_property name="ElementShortName">s_axi_arready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_rid" type="array">
-      <obj_property name="ElementShortName">s_axi_rid[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rid[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_rdata" type="array">
-      <obj_property name="ElementShortName">s_axi_rdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_rresp" type="array">
-      <obj_property name="ElementShortName">s_axi_rresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_rlast" type="logic">
-      <obj_property name="ElementShortName">s_axi_rlast</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rlast</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_rvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_rvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/mailbox/MAILBOX/s_axi_rready" type="logic">
-      <obj_property name="ElementShortName">s_axi_rready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rready</obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider142">
-      <obj_property name="label">DDR3</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3instance/init_calib_complete" type="logic">
-      <obj_property name="ElementShortName">init_calib_complete</obj_property>
-      <obj_property name="ObjectShortName">init_calib_complete</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_reset_n" type="logic">
-      <obj_property name="ElementShortName">ddr3_reset_n</obj_property>
-      <obj_property name="ObjectShortName">ddr3_reset_n</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_cke" type="array">
-      <obj_property name="ElementShortName">ddr3_cke[0:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_cke[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_ck_p" type="array">
-      <obj_property name="ElementShortName">ddr3_ck_p[0:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_ck_p[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_ck_n" type="array">
-      <obj_property name="ElementShortName">ddr3_ck_n[0:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_ck_n[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_ras_n" type="logic">
-      <obj_property name="ElementShortName">ddr3_ras_n</obj_property>
-      <obj_property name="ObjectShortName">ddr3_ras_n</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_cas_n" type="logic">
-      <obj_property name="ElementShortName">ddr3_cas_n</obj_property>
-      <obj_property name="ObjectShortName">ddr3_cas_n</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_we_n" type="logic">
-      <obj_property name="ElementShortName">ddr3_we_n</obj_property>
-      <obj_property name="ObjectShortName">ddr3_we_n</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_ba" type="array">
-      <obj_property name="ElementShortName">ddr3_ba[2:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_ba[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_addr" type="array">
-      <obj_property name="ElementShortName">ddr3_addr[14:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_addr[14:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_odt" type="array">
-      <obj_property name="ElementShortName">ddr3_odt[0:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_odt[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_dm" type="array">
-      <obj_property name="ElementShortName">ddr3_dm[1:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_dm[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_dqs_p" type="array">
-      <obj_property name="ElementShortName">ddr3_dqs_p[1:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_dqs_p[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_dqs_n" type="array">
-      <obj_property name="ElementShortName">ddr3_dqs_n[1:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_dqs_n[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3wires/ddr3_dq" type="array">
-      <obj_property name="ElementShortName">ddr3_dq[15:0]</obj_property>
-      <obj_property name="ObjectShortName">ddr3_dq[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/INTERCONNECT_ACLK" type="logic">
-      <obj_property name="ElementShortName">INTERCONNECT_ACLK</obj_property>
-      <obj_property name="ObjectShortName">INTERCONNECT_ACLK</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/INTERCONNECT_ARESETN" type="logic">
-      <obj_property name="ElementShortName">INTERCONNECT_ARESETN</obj_property>
-      <obj_property name="ObjectShortName">INTERCONNECT_ARESETN</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARESET_OUT_N" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_ARESET_OUT_N</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARESET_OUT_N</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ACLK" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_ACLK</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ACLK</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWID" type="array">
-      <obj_property name="ElementShortName">S00_AXI_AWID[0:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWID[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWADDR" type="array">
-      <obj_property name="ElementShortName">S00_AXI_AWADDR[31:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWADDR[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWLEN" type="array">
-      <obj_property name="ElementShortName">S00_AXI_AWLEN[7:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWLEN[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWSIZE" type="array">
-      <obj_property name="ElementShortName">S00_AXI_AWSIZE[2:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWSIZE[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWBURST" type="array">
-      <obj_property name="ElementShortName">S00_AXI_AWBURST[1:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWBURST[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWLOCK" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_AWLOCK</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWLOCK</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWCACHE" type="array">
-      <obj_property name="ElementShortName">S00_AXI_AWCACHE[3:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWCACHE[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWPROT" type="array">
-      <obj_property name="ElementShortName">S00_AXI_AWPROT[2:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWPROT[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWQOS" type="array">
-      <obj_property name="ElementShortName">S00_AXI_AWQOS[3:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWQOS[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWVALID" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_AWVALID</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_AWREADY" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_AWREADY</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_AWREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_WDATA" type="array">
-      <obj_property name="ElementShortName">S00_AXI_WDATA[127:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_WDATA[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_WSTRB" type="array">
-      <obj_property name="ElementShortName">S00_AXI_WSTRB[15:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_WSTRB[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_WLAST" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_WLAST</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_WLAST</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_WVALID" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_WVALID</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_WVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_WREADY" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_WREADY</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_WREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_BID" type="array">
-      <obj_property name="ElementShortName">S00_AXI_BID[0:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_BID[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_BRESP" type="array">
-      <obj_property name="ElementShortName">S00_AXI_BRESP[1:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_BRESP[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_BVALID" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_BVALID</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_BVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_BREADY" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_BREADY</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_BREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARID" type="array">
-      <obj_property name="ElementShortName">S00_AXI_ARID[0:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARID[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARADDR" type="array">
-      <obj_property name="ElementShortName">S00_AXI_ARADDR[31:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARADDR[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARLEN" type="array">
-      <obj_property name="ElementShortName">S00_AXI_ARLEN[7:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARLEN[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARSIZE" type="array">
-      <obj_property name="ElementShortName">S00_AXI_ARSIZE[2:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARSIZE[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARBURST" type="array">
-      <obj_property name="ElementShortName">S00_AXI_ARBURST[1:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARBURST[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARLOCK" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_ARLOCK</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARLOCK</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARCACHE" type="array">
-      <obj_property name="ElementShortName">S00_AXI_ARCACHE[3:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARCACHE[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARPROT" type="array">
-      <obj_property name="ElementShortName">S00_AXI_ARPROT[2:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARPROT[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARQOS" type="array">
-      <obj_property name="ElementShortName">S00_AXI_ARQOS[3:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARQOS[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARVALID" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_ARVALID</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_ARREADY" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_ARREADY</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_ARREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_RID" type="array">
-      <obj_property name="ElementShortName">S00_AXI_RID[0:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_RID[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_RDATA" type="array">
-      <obj_property name="ElementShortName">S00_AXI_RDATA[127:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_RDATA[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_RRESP" type="array">
-      <obj_property name="ElementShortName">S00_AXI_RRESP[1:0]</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_RRESP[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_RLAST" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_RLAST</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_RLAST</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_RVALID" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_RVALID</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_RVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/S00_AXI_RREADY" type="logic">
-      <obj_property name="ElementShortName">S00_AXI_RREADY</obj_property>
-      <obj_property name="ObjectShortName">S00_AXI_RREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARESET_OUT_N" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_ARESET_OUT_N</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARESET_OUT_N</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ACLK" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_ACLK</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ACLK</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWID" type="array">
-      <obj_property name="ElementShortName">M00_AXI_AWID[3:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWID[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWADDR" type="array">
-      <obj_property name="ElementShortName">M00_AXI_AWADDR[31:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWADDR[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWLEN" type="array">
-      <obj_property name="ElementShortName">M00_AXI_AWLEN[7:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWLEN[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWSIZE" type="array">
-      <obj_property name="ElementShortName">M00_AXI_AWSIZE[2:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWSIZE[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWBURST" type="array">
-      <obj_property name="ElementShortName">M00_AXI_AWBURST[1:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWBURST[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWLOCK" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_AWLOCK</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWLOCK</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWCACHE" type="array">
-      <obj_property name="ElementShortName">M00_AXI_AWCACHE[3:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWCACHE[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWPROT" type="array">
-      <obj_property name="ElementShortName">M00_AXI_AWPROT[2:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWPROT[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWQOS" type="array">
-      <obj_property name="ElementShortName">M00_AXI_AWQOS[3:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWQOS[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWVALID" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_AWVALID</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_AWREADY" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_AWREADY</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_AWREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_WDATA" type="array">
-      <obj_property name="ElementShortName">M00_AXI_WDATA[127:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_WDATA[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_WSTRB" type="array">
-      <obj_property name="ElementShortName">M00_AXI_WSTRB[15:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_WSTRB[15:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_WLAST" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_WLAST</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_WLAST</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_WVALID" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_WVALID</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_WVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_WREADY" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_WREADY</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_WREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_BID" type="array">
-      <obj_property name="ElementShortName">M00_AXI_BID[3:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_BID[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_BRESP" type="array">
-      <obj_property name="ElementShortName">M00_AXI_BRESP[1:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_BRESP[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_BVALID" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_BVALID</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_BVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_BREADY" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_BREADY</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_BREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARID" type="array">
-      <obj_property name="ElementShortName">M00_AXI_ARID[3:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARID[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARADDR" type="array">
-      <obj_property name="ElementShortName">M00_AXI_ARADDR[31:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARADDR[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARLEN" type="array">
-      <obj_property name="ElementShortName">M00_AXI_ARLEN[7:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARLEN[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARSIZE" type="array">
-      <obj_property name="ElementShortName">M00_AXI_ARSIZE[2:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARSIZE[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARBURST" type="array">
-      <obj_property name="ElementShortName">M00_AXI_ARBURST[1:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARBURST[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARLOCK" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_ARLOCK</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARLOCK</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARCACHE" type="array">
-      <obj_property name="ElementShortName">M00_AXI_ARCACHE[3:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARCACHE[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARPROT" type="array">
-      <obj_property name="ElementShortName">M00_AXI_ARPROT[2:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARPROT[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARQOS" type="array">
-      <obj_property name="ElementShortName">M00_AXI_ARQOS[3:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARQOS[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARVALID" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_ARVALID</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_ARREADY" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_ARREADY</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_ARREADY</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_RID" type="array">
-      <obj_property name="ElementShortName">M00_AXI_RID[3:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_RID[3:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_RDATA" type="array">
-      <obj_property name="ElementShortName">M00_AXI_RDATA[127:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_RDATA[127:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_RRESP" type="array">
-      <obj_property name="ElementShortName">M00_AXI_RRESP[1:0]</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_RRESP[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_RLAST" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_RLAST</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_RLAST</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_RVALID" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_RVALID</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_RVALID</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/AXI4DDRInterconnect/M00_AXI_RREADY" type="logic">
-      <obj_property name="ElementShortName">M00_AXI_RREADY</obj_property>
-      <obj_property name="ObjectShortName">M00_AXI_RREADY</obj_property>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/MSG_I" type="logic">
+      <obj_property name="ElementShortName">MSG_I</obj_property>
+      <obj_property name="ObjectShortName">MSG_I</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/STB_I" type="logic">
+      <obj_property name="ElementShortName">STB_I</obj_property>
+      <obj_property name="ObjectShortName">STB_I</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/A_I" type="array">
+      <obj_property name="ElementShortName">A_I[7:0]</obj_property>
+      <obj_property name="ObjectShortName">A_I[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/D_I" type="array">
+      <obj_property name="ElementShortName">D_I[7:0]</obj_property>
+      <obj_property name="ObjectShortName">D_I[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/D_O" type="array">
+      <obj_property name="ElementShortName">D_O[7:0]</obj_property>
+      <obj_property name="ObjectShortName">D_O[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/DONE_O" type="logic">
+      <obj_property name="ElementShortName">DONE_O</obj_property>
+      <obj_property name="ObjectShortName">DONE_O</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/ERR_O" type="logic">
+      <obj_property name="ElementShortName">ERR_O</obj_property>
+      <obj_property name="ObjectShortName">ERR_O</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/CLK" type="logic">
+      <obj_property name="ElementShortName">CLK</obj_property>
+      <obj_property name="ObjectShortName">CLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/SRST" type="logic">
+      <obj_property name="ElementShortName">SRST</obj_property>
+      <obj_property name="ObjectShortName">SRST</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/SDA" type="logic">
+      <obj_property name="ElementShortName">SDA</obj_property>
+      <obj_property name="ObjectShortName">SDA</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/SCL" type="logic">
+      <obj_property name="ElementShortName">SCL</obj_property>
+      <obj_property name="ObjectShortName">SCL</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/state" type="other">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/nstate" type="other">
+      <obj_property name="ElementShortName">nstate</obj_property>
+      <obj_property name="ObjectShortName">nstate</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/dSda" type="logic">
+      <obj_property name="ElementShortName">dSda</obj_property>
+      <obj_property name="ObjectShortName">dSda</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/ddSda" type="logic">
+      <obj_property name="ElementShortName">ddSda</obj_property>
+      <obj_property name="ObjectShortName">ddSda</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/dScl" type="logic">
+      <obj_property name="ElementShortName">dScl</obj_property>
+      <obj_property name="ObjectShortName">dScl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/ddScl" type="logic">
+      <obj_property name="ElementShortName">ddScl</obj_property>
+      <obj_property name="ObjectShortName">ddScl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/fStart" type="logic">
+      <obj_property name="ElementShortName">fStart</obj_property>
+      <obj_property name="ObjectShortName">fStart</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/fStop" type="logic">
+      <obj_property name="ElementShortName">fStop</obj_property>
+      <obj_property name="ObjectShortName">fStop</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/busState" type="other">
+      <obj_property name="ElementShortName">busState</obj_property>
+      <obj_property name="ObjectShortName">busState</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/errTypeR" type="other">
+      <obj_property name="ElementShortName">errTypeR</obj_property>
+      <obj_property name="ObjectShortName">errTypeR</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/errType" type="other">
+      <obj_property name="ElementShortName">errType</obj_property>
+      <obj_property name="ObjectShortName">errType</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/busFreeCnt" type="other">
+      <obj_property name="ElementShortName">busFreeCnt</obj_property>
+      <obj_property name="ObjectShortName">busFreeCnt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/sclCnt" type="other">
+      <obj_property name="ElementShortName">sclCnt</obj_property>
+      <obj_property name="ObjectShortName">sclCnt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/timeOutCnt" type="other">
+      <obj_property name="ElementShortName">timeOutCnt</obj_property>
+      <obj_property name="ObjectShortName">timeOutCnt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/slaveWait" type="logic">
+      <obj_property name="ElementShortName">slaveWait</obj_property>
+      <obj_property name="ObjectShortName">slaveWait</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/arbLost" type="logic">
+      <obj_property name="ElementShortName">arbLost</obj_property>
+      <obj_property name="ObjectShortName">arbLost</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/dataByte" type="array">
+      <obj_property name="ElementShortName">dataByte[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dataByte[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/loadByte" type="array">
+      <obj_property name="ElementShortName">loadByte[7:0]</obj_property>
+      <obj_property name="ObjectShortName">loadByte[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/currAddr" type="array">
+      <obj_property name="ElementShortName">currAddr[7:0]</obj_property>
+      <obj_property name="ObjectShortName">currAddr[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/rSda" type="logic">
+      <obj_property name="ElementShortName">rSda</obj_property>
+      <obj_property name="ObjectShortName">rSda</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/rScl" type="logic">
+      <obj_property name="ElementShortName">rScl</obj_property>
+      <obj_property name="ObjectShortName">rScl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/subState" type="array">
+      <obj_property name="ElementShortName">subState[1:0]</obj_property>
+      <obj_property name="ObjectShortName">subState[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/latchData" type="logic">
+      <obj_property name="ElementShortName">latchData</obj_property>
+      <obj_property name="ObjectShortName">latchData</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/latchAddr" type="logic">
+      <obj_property name="ElementShortName">latchAddr</obj_property>
+      <obj_property name="ObjectShortName">latchAddr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/iDone" type="logic">
+      <obj_property name="ElementShortName">iDone</obj_property>
+      <obj_property name="ObjectShortName">iDone</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/iErr" type="logic">
+      <obj_property name="ElementShortName">iErr</obj_property>
+      <obj_property name="ObjectShortName">iErr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/iSda" type="logic">
+      <obj_property name="ElementShortName">iSda</obj_property>
+      <obj_property name="ObjectShortName">iSda</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/iScl" type="logic">
+      <obj_property name="ElementShortName">iScl</obj_property>
+      <obj_property name="ObjectShortName">iScl</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/shiftBit" type="logic">
+      <obj_property name="ElementShortName">shiftBit</obj_property>
+      <obj_property name="ObjectShortName">shiftBit</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/dataBitOut" type="logic">
+      <obj_property name="ElementShortName">dataBitOut</obj_property>
+      <obj_property name="ObjectShortName">dataBitOut</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/rwBit" type="logic">
+      <obj_property name="ElementShortName">rwBit</obj_property>
+      <obj_property name="ObjectShortName">rwBit</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/addrNData" type="logic">
+      <obj_property name="ElementShortName">addrNData</obj_property>
+      <obj_property name="ObjectShortName">addrNData</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/bitCount" type="other">
+      <obj_property name="ElementShortName">bitCount</obj_property>
+      <obj_property name="ObjectShortName">bitCount</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/int_Rst" type="logic">
+      <obj_property name="ElementShortName">int_Rst</obj_property>
+      <obj_property name="ObjectShortName">int_Rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/CLOCKFREQ" type="other">
+      <obj_property name="ElementShortName">CLOCKFREQ</obj_property>
+      <obj_property name="ObjectShortName">CLOCKFREQ</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/FSCL" type="other">
+      <obj_property name="ElementShortName">FSCL</obj_property>
+      <obj_property name="ObjectShortName">FSCL</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/TIMEOUT" type="other">
+      <obj_property name="ElementShortName">TIMEOUT</obj_property>
+      <obj_property name="ObjectShortName">TIMEOUT</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/TSCL_CYCLES" type="other">
+      <obj_property name="ElementShortName">TSCL_CYCLES</obj_property>
+      <obj_property name="ObjectShortName">TSCL_CYCLES</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/APU/AudioI2CInit/twi_controller/TIMEOUT_CYCLES" type="other">
+      <obj_property name="ElementShortName">TIMEOUT_CYCLES</obj_property>
+      <obj_property name="ObjectShortName">TIMEOUT_CYCLES</obj_property>
    </wvobject>
 </wave_config>

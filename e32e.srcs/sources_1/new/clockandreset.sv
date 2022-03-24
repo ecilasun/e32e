@@ -12,6 +12,7 @@ module clockandreset(
 	output wire hidclock,
 	output wire clk_sys_i,
 	output wire clk_ref_i,
+	output wire audioclock,
 	output logic selfresetn,
 	output wire aresetn );
 
@@ -36,6 +37,7 @@ videoclockgen peripheralclock(
 	.videoclock(videoclock),
 	.hidclock(hidclock),
 	.uartbaseclock(uartbaseclock),
+	.audioclock(audioclock),
 	.locked(peripheralclklocked) );
 
 // Hold reset until clocks are locked

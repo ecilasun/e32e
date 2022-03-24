@@ -4,10 +4,10 @@ import axi_pkg::*;
 
 module uncacheddevicechain(
 	input wire aclk,
+	input wire aresetn,
 	input wire pixelclock,
 	input wire videoclock,
 	input wire hidclock,
-	input wire aresetn,
 	input wire uartbaseclock,
 	input wire spibaseclock,
 	output wire uart_rxd_out,
@@ -21,7 +21,14 @@ module uncacheddevicechain(
 	input wire spi_cd, // TODO: Wire this to IRQ line
     axi_if.slave axi4if,
 	gpudataoutput.def gpudata,
-	output wire [11:0] irq);
+	output wire [11:0] irq,
+	output wire initDone, // Audio init done, might want an IRQ from this (or negative of this) to notify OS?
+    inout scl,
+    inout sda,
+    output wire ac_bclk,
+    output wire ac_lrclk,
+    output wire ac_dac_sdata,
+    input wire ac_adc_sdata );
 
 // ------------------------------------------------------------------------------------
 // Memory mapped hardware
@@ -32,6 +39,7 @@ logic validwaddr_uart = 1'b0, validraddr_uart = 1'b0;
 logic validwaddr_spi = 1'b0, validraddr_spi = 1'b0;
 logic validwaddr_ps2 = 1'b0, validraddr_ps2 = 1'b0;
 logic validwaddr_gpu = 1'b0, validraddr_gpu = 1'b0;
+logic validwaddr_audio = 1'b0, validraddr_audio = 1'b0;
 
 always_comb begin
 	// mailbox @80000000
@@ -52,6 +60,9 @@ always_comb begin
 	// GPU @81000000
 	validwaddr_gpu		= (axi4if.awaddr>=32'h81000000) && (axi4if.awaddr<32'h81080000);
 	validraddr_gpu		= (axi4if.araddr>=32'h81000000) && (axi4if.araddr<32'h81080000);
+	// AUDIO @82000000
+	validwaddr_audio	= (axi4if.awaddr>=32'h82000000) && (axi4if.awaddr<32'h82000010);
+	validraddr_audio	= (axi4if.araddr>=32'h82000000) && (axi4if.araddr<32'h82000010);
 end
 
 axi_if mailboxif();
@@ -112,6 +123,20 @@ axi4gpu GPU(
 	.videoclock(videoclock),
 	.s_axi(gpuif),
 	.gpudata(gpudata) );
+
+axi_if audioif();
+a4i2saudio APU(
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.hidclock(hidclock),
+	.s_axi(audioif),
+    .scl(scl),
+    .sda(sda),
+    .initDone(initDone),
+    .ac_bclk(ac_bclk),
+    .ac_lrclk(ac_lrclk),
+    .ac_dac_sdata(ac_dac_sdata),
+    .ac_adc_sdata(ac_adc_sdata) );
 
 // ------------------------------------------------------------------------------------
 // interrupt setup
@@ -208,6 +233,17 @@ always_comb begin
 	buttonif.bready = validwaddr_button ? axi4if.bready : 1'b0;
 	buttonif.wlast = validwaddr_button ? axi4if.wlast : 1'b0;*/
 
+	audioif.awaddr = validwaddr_audio ? waddr : 32'd0;
+	audioif.awvalid = validwaddr_audio ? axi4if.awvalid : 1'b0;
+	audioif.awlen = validwaddr_audio ? axi4if.awlen : 0;
+	audioif.awsize = validwaddr_audio ? axi4if.awsize : 0;
+	audioif.awburst = validwaddr_audio ? axi4if.awburst : 0;
+	audioif.wdata = validwaddr_audio ? axi4if.wdata : 0;
+	audioif.wstrb = validwaddr_audio ? axi4if.wstrb : 'd0;
+	audioif.wvalid = validwaddr_audio ? axi4if.wvalid : 1'b0;
+	audioif.bready = validwaddr_audio ? axi4if.bready : 1'b0;
+	audioif.wlast = validwaddr_audio ? axi4if.wlast : 1'b0;
+
 	if (validwaddr_uart) begin
 		axi4if.awready = uartif.awready;
 		axi4if.bresp = uartif.bresp;
@@ -253,6 +289,11 @@ always_comb begin
 		axi4if.bresp = buttonif.bresp;
 		axi4if.bvalid = buttonif.bvalid;
 		axi4if.wready = buttonif.wready;*/
+	end else if (validwaddr_audio) begin
+		axi4if.awready = audioif.awready;
+		axi4if.bresp = audioif.bresp;
+		axi4if.bvalid = audioif.bvalid;
+		axi4if.wready = audioif.wready;
 	end else begin
 		axi4if.awready = 0;
 		axi4if.bresp = 0;
@@ -316,6 +357,13 @@ always_comb begin
 	buttonif.arvalid = validraddr_button ? axi4if.arvalid : 1'b0;
 	buttonif.rready = validraddr_button ? axi4if.rready : 1'b0;*/
 
+	audioif.araddr = validraddr_audio ? raddr : 32'd0;
+	audioif.arlen = validraddr_audio ? axi4if.arlen : 0;
+	audioif.arsize = validraddr_audio ? axi4if.arsize : 0;
+	audioif.arburst = validraddr_audio ? axi4if.arburst : 0;
+	audioif.arvalid = validraddr_audio ? axi4if.arvalid : 1'b0;
+	audioif.rready = validraddr_audio ? axi4if.rready : 1'b0;
+
 	if (validraddr_uart) begin
 		axi4if.arready = uartif.arready;
 		axi4if.rdata = uartif.rdata;
@@ -370,6 +418,12 @@ always_comb begin
 		axi4if.rresp = buttonif.rresp;
 		axi4if.rvalid = buttonif.rvalid;
 		axi4if.rlast = buttonif.rlast;*/
+	end else if (validraddr_audio) begin
+		axi4if.arready = audioif.arready;
+		axi4if.rdata = audioif.rdata;
+		axi4if.rresp = audioif.rresp;
+		axi4if.rvalid = audioif.rvalid;
+		axi4if.rlast = audioif.rlast;
 	end else begin
 		axi4if.arready = 0;
 		axi4if.rdata = 0;
