@@ -36,7 +36,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity i2s_ctl is
    generic (
       -- Width of one Slot (24/20/18/16-bit wide)
-      C_DATA_WIDTH: integer := 24
+      C_DATA_WIDTH: integer := 16
    );
    port (
       CLK_I       : in  std_logic; -- System clock (100 MHz)

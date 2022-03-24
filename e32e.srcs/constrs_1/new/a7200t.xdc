@@ -19,14 +19,14 @@ create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_
 
 
 ## LEDs
-set_property -dict {PACKAGE_PIN T14 IOSTANDARD LVCMOS25} [get_ports {led[0]}]
-set_property -dict {PACKAGE_PIN T15 IOSTANDARD LVCMOS25} [get_ports {led[1]}]
-set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS25} [get_ports {led[2]}]
-set_property -dict {PACKAGE_PIN U16 IOSTANDARD LVCMOS25} [get_ports {led[3]}]
-set_property -dict {PACKAGE_PIN V15 IOSTANDARD LVCMOS25} [get_ports {led[4]}]
-set_property -dict {PACKAGE_PIN W16 IOSTANDARD LVCMOS25} [get_ports {led[5]}]
-set_property -dict {PACKAGE_PIN W15 IOSTANDARD LVCMOS25} [get_ports {led[6]}]
-set_property -dict {PACKAGE_PIN Y13 IOSTANDARD LVCMOS25} [get_ports {led[7]}]
+# set_property -dict {PACKAGE_PIN T14 IOSTANDARD LVCMOS25} [get_ports {led[0]}]
+# set_property -dict {PACKAGE_PIN T15 IOSTANDARD LVCMOS25} [get_ports {led[1]}]
+# set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS25} [get_ports {led[2]}]
+# set_property -dict {PACKAGE_PIN U16 IOSTANDARD LVCMOS25} [get_ports {led[3]}]
+# set_property -dict {PACKAGE_PIN V15 IOSTANDARD LVCMOS25} [get_ports {led[4]}]
+# set_property -dict {PACKAGE_PIN W16 IOSTANDARD LVCMOS25} [get_ports {led[5]}]
+# set_property -dict {PACKAGE_PIN W15 IOSTANDARD LVCMOS25} [get_ports {led[6]}]
+# set_property -dict {PACKAGE_PIN Y13 IOSTANDARD LVCMOS25} [get_ports {led[7]}]
 
 
 ## Buttons
@@ -74,7 +74,7 @@ set_property -dict {PACKAGE_PIN Y13 IOSTANDARD LVCMOS25} [get_ports {led[7]}]
 #set_property -dict { PACKAGE_PIN U2    IOSTANDARD TMDS_33  } [get_ports { hdmi_rx_p[2] }]; #IO_L2P_T0_34 Sch=hdmi_rx_p[2]
 
 
-## HDMI out
+## HDMI out : wired as DVI output, only image (no audio)
 #set_property -dict { PACKAGE_PIN AA4   IOSTANDARD LVCMOS33 } [get_ports { hdmi_tx_cec }]; #IO_L11N_T1_SRCC_34 Sch=hdmi_tx_cec
 #set_property -dict { PACKAGE_PIN AB13  IOSTANDARD LVCMOS25 } [get_ports { hdmi_tx_hpd }]; #IO_L3N_T0_DQS_13 Sch=hdmi_tx_hpd
 #set_property -dict { PACKAGE_PIN U3    IOSTANDARD LVCMOS33 } [get_ports { hdmi_tx_rscl }]; #IO_L6P_T0_34 Sch=hdmi_tx_rscl
@@ -209,15 +209,15 @@ set_property -dict { PACKAGE_PIN N13   IOSTANDARD LVCMOS33 PULLUP true } [get_po
 #set_property -dict { PACKAGE_PIN P21   IOSTANDARD LVCMOS33 } [get_ports { qspi_dq[2] }]; #IO_L2P_T0_D02_14 Sch=qspi_dq[2]
 #set_property -dict { PACKAGE_PIN R21   IOSTANDARD LVCMOS33 } [get_ports { qspi_dq[3] }]; #IO_L2N_T0_D03_14 Sch=qspi_dq[3]
 
-# SD card - SPI style
+
+# SD card : re-wired as SPI style
 set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { spi_sck }]; #IO_L12P_T1_MRCC_14 Sch=spi_sck
 set_property -dict { PACKAGE_PIN T18   IOSTANDARD LVCMOS33 } [get_ports { spi_cd }]; #IO_L20N_T3_A07_D23_14 Sch=spi_cd
 set_property -dict { PACKAGE_PIN W20   IOSTANDARD LVCMOS33 } [get_ports { spi_mosi }]; #IO_L12N_T1_MRCC_14 Sch=spi_mosi
 set_property -dict { PACKAGE_PIN V19   IOSTANDARD LVCMOS33 } [get_ports { spi_miso }]; #IO_L14N_T2_SRCC_14 Sch=spi_miso
 set_property -dict { PACKAGE_PIN U18   IOSTANDARD LVCMOS33 } [get_ports { spi_cs_n }]; #IO_L18N_T2_A11_D27_14 Sch=spi_cs_n
 set_property -dict { PACKAGE_PIN V20   IOSTANDARD LVCMOS33 } [get_ports { sd_poweron_n }]; #IO_L11N_T1_SRCC_14 Sch=sd_poweron_n
-
-## SD card
+## SD card : original wiring
 #set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { sd_cclk }]; #IO_L12P_T1_MRCC_14 Sch=sd_cclk >spi_sck
 #set_property -dict { PACKAGE_PIN T18   IOSTANDARD LVCMOS33 } [get_ports { sd_cd }]; #IO_L20N_T3_A07_D23_14 Sch=sd_cd <spi_cd
 #set_property -dict { PACKAGE_PIN W20   IOSTANDARD LVCMOS33 } [get_ports { sd_cmd }]; #IO_L12N_T1_MRCC_14 Sch=sd_cmd >spi_mosi
@@ -237,6 +237,57 @@ set_property -dict { PACKAGE_PIN V5    IOSTANDARD LVCMOS33 } [get_ports { sda }]
 #set_property -dict { PACKAGE_PIN AA13  IOSTANDARD LVCMOS25 } [get_ports { set_vadj[0] }]; #IO_L3P_T0_DQS_13 Sch=set_vadj[0]
 #set_property -dict { PACKAGE_PIN AB17  IOSTANDARD LVCMOS25 } [get_ports { set_vadj[1] }]; #IO_L2N_T0_13 Sch=set_vadj[1]
 #set_property -dict { PACKAGE_PIN V14   IOSTANDARD LVCMOS25 } [get_ports { vadj_en }]; #IO_L13N_T2_MRCC_13 Sch=vadj_en
+
+
+##DDR3
+# set_property -dict {PACKAGE_PIN M2} [get_ports {ddr3_addr[0]}]
+# set_property -dict {PACKAGE_PIN M5} [get_ports {ddr3_addr[1]}]
+# set_property -dict {PACKAGE_PIN M3} [get_ports {ddr3_addr[2]}]
+# set_property -dict {PACKAGE_PIN M1} [get_ports {ddr3_addr[3]}]
+# set_property -dict {PACKAGE_PIN L6} [get_ports {ddr3_addr[4]}]
+# set_property -dict {PACKAGE_PIN P1} [get_ports {ddr3_addr[5]}]
+# set_property -dict {PACKAGE_PIN N3} [get_ports {ddr3_addr[6]}]
+# set_property -dict {PACKAGE_PIN N2} [get_ports {ddr3_addr[7]}]
+# set_property -dict {PACKAGE_PIN M6} [get_ports {ddr3_addr[8]}]
+# set_property -dict {PACKAGE_PIN R1} [get_ports {ddr3_addr[9]}]
+# set_property -dict {PACKAGE_PIN L5} [get_ports {ddr3_addr[10]}]
+# set_property -dict {PACKAGE_PIN N5} [get_ports {ddr3_addr[11]}]
+# set_property -dict {PACKAGE_PIN N4} [get_ports {ddr3_addr[12]}]
+# set_property -dict {PACKAGE_PIN P2} [get_ports {ddr3_addr[13]}]
+# set_property -dict {PACKAGE_PIN P6} [get_ports {ddr3_addr[14]}]
+# set_property -dict {PACKAGE_PIN L3} [get_ports {ddr3_ba[0]}]
+# set_property -dict {PACKAGE_PIN K6} [get_ports {ddr3_ba[1]}]
+# set_property -dict {PACKAGE_PIN L4} [get_ports {ddr3_ba[2]}]
+# set_property -dict {PACKAGE_PIN K3} [get_ports ddr3_cas_n]
+# set_property -dict {PACKAGE_PIN J6} [get_ports ddr3_cke]
+# set_property -dict {PACKAGE_PIN P4} [get_ports ddr3_ck_n]
+# set_property -dict {PACKAGE_PIN P5} [get_ports ddr3_ck_p]
+# set_property -dict {PACKAGE_PIN G3} [get_ports {ddr3_dm[0]}]
+# set_property -dict {PACKAGE_PIN F1} [get_ports {ddr3_dm[1]}]
+# set_property -dict {PACKAGE_PIN G2} [get_ports {ddr3_dq[0]}]
+# set_property -dict {PACKAGE_PIN H4} [get_ports {ddr3_dq[1]}]
+# set_property -dict {PACKAGE_PIN H5} [get_ports {ddr3_dq[2]}]
+# set_property -dict {PACKAGE_PIN J1} [get_ports {ddr3_dq[3]}]
+# set_property -dict {PACKAGE_PIN K1} [get_ports {ddr3_dq[4]}]
+# set_property -dict {PACKAGE_PIN H3} [get_ports {ddr3_dq[5]}]
+# set_property -dict {PACKAGE_PIN H2} [get_ports {ddr3_dq[6]}]
+# set_property -dict {PACKAGE_PIN J5} [get_ports {ddr3_dq[7]}]
+# set_property -dict {PACKAGE_PIN E3} [get_ports {ddr3_dq[8]}]
+# set_property -dict {PACKAGE_PIN B2} [get_ports {ddr3_dq[9]}]
+# set_property -dict {PACKAGE_PIN F3} [get_ports {ddr3_dq[10]}]
+# set_property -dict {PACKAGE_PIN D2} [get_ports {ddr3_dq[11]}]
+# set_property -dict {PACKAGE_PIN C2} [get_ports {ddr3_dq[12]}]
+# set_property -dict {PACKAGE_PIN A1} [get_ports {ddr3_dq[13]}]
+# set_property -dict {PACKAGE_PIN E2} [get_ports {ddr3_dq[14]}]
+# set_property -dict {PACKAGE_PIN B1} [get_ports {ddr3_dq[15]}]
+# set_property -dict {PACKAGE_PIN J2} [get_ports {ddr3_dqs_n[0]}]
+# set_property -dict {PACKAGE_PIN K2} [get_ports {ddr3_dqs_p[0]}]
+# set_property -dict {PACKAGE_PIN D1} [get_ports {ddr3_dqs_n[1]}]
+# set_property -dict {PACKAGE_PIN E1} [get_ports {ddr3_dqs_p[1]}]
+# set_property -dict {PACKAGE_PIN K4} [get_ports ddr3_odt]
+# set_property -dict {PACKAGE_PIN J4} [get_ports ddr3_ras_n]
+# set_property -dict {PACKAGE_PIN G1} [get_ports { ddr3_reset_n }]; #IO_L5P_T0_AD13P_35 Sch=ddr3_reset
+# set_property -dict {PACKAGE_PIN L1} [get_ports ddr3_we_n]
 
 
 ## FMC
@@ -324,9 +375,10 @@ set_property CONFIG_MODE SPIx4 [current_design]
 # Reset is a false path
 set_false_path -from [get_pins ClockAndResetGen/selfresetn_reg/C]
 # set_false_path -to [get_pins ClockAndResetGen/calib_done]
-# CSR register times are not that critical and are false paths
+# CSR register mapped times are not that critical and are false paths
 set_false_path -from [get_pins wallclocktime_reg[*]/C]
 set_false_path -from [get_pins cpuclocktime_reg[*]/C]
-set_false_path -to [get_ports led[*]]
+# MISC
+# set_false_path -to [get_ports led[*]]
 # set_false_path -to [get_ports uart_txd_in]
 # set_false_path -to [get_ports uart_rxd_out]

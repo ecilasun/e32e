@@ -3,15 +3,15 @@
 module a4i2saudio (
 	input wire aclk,
 	input wire aresetn,
-    input wire hidclock,		// 50MHz clock
+    input wire hidclock,		// 50MHz clock shared with PS/2
     axi_if.slave s_axi,
-    inout scl,					// I2C bus
-    inout sda,
-    output wire initDone,
-    output wire ac_bclk,
-    output wire ac_lrclk,
-    output wire ac_dac_sdata,
-    input wire ac_adc_sdata );
+    inout scl,					// I2C SCL for audio chip
+    inout sda,					// I2C SDA for audio chip
+    output wire initDone,		// I2C initialization is done
+    output wire ac_bclk,		// Audio bus
+    output wire ac_lrclk,		// L/R sample clock
+    output wire ac_dac_sdata,	// DAC output (i.e. playback)
+    input wire ac_adc_sdata );	// ADC input is set up but not used yet
 
 // ------------------------------------------------------------------------------------
 // Audio Init
@@ -49,42 +49,49 @@ audiofifo AudioBuffer(
 // I2S Controller
 // ------------------------------------------------------------------------------------
 
+// 16 bit output data per channel
 logic [15:0] leftchannel = 0;
 logic [15:0] rightchannel = 0;
 
 i2s_ctl I2SController(
-.CLK_I(aclk),
-.RST_I(~aresetn),		 
-.EN_TX_I(1'b1),
-.EN_RX_I(1'b0),
-.FS_I(4'b0101), 
-.MM_I(1'b0),
-.D_L_I({leftchannel, 8'd0}),
-.D_R_I({rightchannel, 8'd0}),
-.D_L_O(),
-.D_R_O(),
-.BCLK_O(ac_bclk),
-.LRCLK_O(ac_lrclk),
-.SDATA_O(ac_dac_sdata),
-.SDATA_I(ac_adc_sdata) );
+	.CLK_I(aclk),
+	.RST_I(~aresetn),		 
+	.EN_TX_I(1'b1),
+	.EN_RX_I(1'b0),
+	.FS_I(4'b0101), 
+	.MM_I(1'b0),
+	.D_L_I(leftchannel),
+	.D_R_I(rightchannel),
+	.D_L_O(),
+	.D_R_O(),
+	.BCLK_O(ac_bclk),
+	.LRCLK_O(ac_lrclk),
+	.SDATA_O(ac_dac_sdata),
+	.SDATA_I(ac_adc_sdata) );
 
 logic lrclkD1 = 0;
 logic lrclkD2 = 0;
 logic [3:0] lrclkcnt = 4'h0;
 
 always@(posedge aclk) begin
+	// Edge detector
 	lrclkD1 <= ac_lrclk;
 	lrclkD2 <= lrclkD1;
+
+	// Stop pending reads from last clock
 	abre <= 1'b0;
 
+	// Time to attempt to load another sample
 	if (lrclkcnt==8 && (~abempty))begin
 		abre <= 1'b1;
-		lrclkcnt<=0;
+		lrclkcnt <= 0;
 	end
 
+	// ac_lrclk trigger high
 	if (lrclkD1 & (~lrclkD2))
 		lrclkcnt <= lrclkcnt + 4'd1;
 
+	// Data pending from FIFO, set it as current sample
 	if (abvalid) begin
 		leftchannel <= abdout[31:16];
 		rightchannel <= abdout[15:0]; 
@@ -108,7 +115,7 @@ always @(posedge aclk) begin
 			2'b00: begin
 				if (s_axi.awvalid) begin
 					s_axi.awready <= 1'b1;
-					//writeaddress <= s_axi.awaddr; // todo: select subdevice using some bits of address
+					// TODO: Might want volume control or other effects at different s_axi.awaddr here
 					waddrstate <= 2'b01;
 				end
 			end
@@ -166,7 +173,7 @@ always @(posedge aclk) begin
 				end
 			end
 			default/*2'b01*/: begin
-				// cannot read this, return zero
+				// Cannot read from audio output FIFO, return 0
 				s_axi.rdata[31:0] <= 32'd0;
 				s_axi.rvalid <= 1'b1;
 				raddrstate <= 2'b00;
