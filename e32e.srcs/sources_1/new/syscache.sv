@@ -53,7 +53,7 @@ logic cacheid = 1'b0;				// 0: D$ 1: I$
 logic [7:0] dccount = 8'h00;		// Line counter for cache flush
 
 cachemem CacheMemory512(
-	.addra(flushing ? {1'b0, dccount} : {ifetch,addr[13:6]}),	// current cache line (cline)
+	.addra(flushing ? {1'b0, dccount} : {ifetch, addr[13:6]}),	// current cache line (cline)
 	.clka(aclk),												// cache clock
 	.dina(cdin),												// updated cache data to write
 	.wea(cachewe),												// write strobe for current cache line
@@ -136,11 +136,15 @@ always_ff @(posedge aclk) begin
 				cacheid <= dcacheop[2];
 				dccount <= 8'h00;
 
-				case ({ren, |wstrb})
-					2'b01: cachestate <= uncached ? UCWRITE : CWRITE;
-					2'b10: cachestate <= uncached ? UCREAD : (dcacheop==2'b00 ? CREAD : CDATAFLUSHBEGIN);
-					default: cachestate <= IDLE;
-				endcase
+				if (dcacheop[0])
+					cachestate <= CDATAFLUSHBEGIN;
+				else begin
+					case ({ren, |wstrb})
+						3'b001: cachestate <= uncached ? UCWRITE : CWRITE;
+						3'b010: cachestate <= uncached ? UCREAD : CREAD;
+						default: cachestate <= IDLE;
+					endcase
+				end
 			end
 			
 			CDATAFLUSHBEGIN: begin

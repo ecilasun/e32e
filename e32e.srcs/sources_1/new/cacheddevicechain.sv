@@ -22,10 +22,23 @@ logic validwaddr_ddr3 = 1'b0, validraddr_ddr3 = 1'b0;
 logic validwaddr_bram = 1'b0, validraddr_bram = 1'b0;
 
 always_comb begin
-	validwaddr_ddr3 = (axi4if.awaddr>=32'h00000000) && (axi4if.awaddr<32'h20000000);
-	validraddr_ddr3 = (axi4if.araddr>=32'h00000000) && (axi4if.araddr<32'h20000000);
-	validwaddr_bram = (axi4if.awaddr>=32'h20000000) && (axi4if.awaddr<32'h20010000);
-	validraddr_bram = (axi4if.araddr>=32'h20000000) && (axi4if.araddr<32'h20010000);
+	if(axi4if.awaddr[31] == 1'b0) begin
+		validwaddr_ddr3 = (axi4if.awaddr>=32'h00000000) && (axi4if.awaddr<32'h20000000);
+		validwaddr_bram = (axi4if.awaddr>=32'h20000000) && (axi4if.awaddr<32'h20010000);
+	end else begin
+		validwaddr_ddr3 = 1'b0;
+		validwaddr_bram = 1'b0;
+	end
+end
+
+always_comb begin
+	if(axi4if.araddr[31] == 1'b0) begin
+		validraddr_ddr3 = (axi4if.araddr>=32'h00000000) && (axi4if.araddr<32'h20000000);
+		validraddr_bram = (axi4if.araddr>=32'h20000000) && (axi4if.araddr<32'h20010000);
+	end else begin
+		validraddr_ddr3 = 1'b0;
+		validraddr_bram = 1'b0;
+	end
 end
 
 axi_if ddr3if();

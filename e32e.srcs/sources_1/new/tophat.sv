@@ -66,7 +66,8 @@ assign sd_poweron_n = 1'b0; // always grounded to keep sdcard powered
 //  PS/2: 80001020..8000102F : [+] uncached r/w
 //   BTN: 80001030..8000103F : [ ] uncached r/w
 //   LED: 80001040..8000104F : [ ] uncached r/w
-// ...  : 80001050..80FFFFFF : [ ] unused
+//  HART: 80001050..8000105F : [ ] uncached w
+// ...  : 80001060..80FFFFFF : [ ] unused
 // FB0/1: 81000000..8101FFFF : [+] uncached w
 // ...  : 81020000..8103FFFF : [ ] unused
 //   PAL: 81040000..810400FF : [+] uncached w
@@ -139,11 +140,9 @@ axi_if A4CH7(), A4UCH7();
 // Arbitrated cached and uncached busses
 axi_if A4CH(), A4UCH();
 
-// IRQs in descending bit order: [H7 H6 H5 H4 H3 H2 H1 H0 unused PS2 unused UART]
-// Top 8 bits are used to talk to HART7..HART0
-// TODO: Each HART will have a memory mapped address that will wake them from WFI to respond
-// Other bits simply interrupt execution and branch to a service handler
-// In effect, all IRQ bits invoke the same kind of processing in the HART (branch to mtvec)
+// IRQs in descending bit order
+//  11 10 9  8  7  6  5  4  3      2   1      0
+// [H7 H6 H5 H4 H3 H2 H1 H0 unused PS2 unused UART]
 wire [11:0] irq;
 
 // ----------------------------------------------------------------------------
@@ -164,7 +163,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
-	.irq(irq),
+	.irq({irq[4], irq[3:0]}),	// H0 unused PS2 unused UART
 	.a4buscached(A4CH0),
 	.a4busuncached(A4UCH0) );
 
@@ -173,7 +172,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
-	.irq(irq),
+	.irq({irq[5], irq[3:0]}),	// H1 unused PS2 unused UART
 	.a4buscached(A4CH1),
 	.a4busuncached(A4UCH1) );
 
@@ -182,7 +181,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
-	.irq(irq),
+	.irq({irq[6], irq[3:0]}),	// H2 unused PS2 unused UART
 	.a4buscached(A4CH2),
 	.a4busuncached(A4UCH2) );
 
@@ -191,7 +190,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
-	.irq(irq),
+	.irq({irq[7], irq[3:0]}),	// H3 unused PS2 unused UART
 	.a4buscached(A4CH3),
 	.a4busuncached(A4UCH3) );
 
@@ -200,7 +199,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
-	.irq(irq),
+	.irq({irq[8], irq[3:0]}),	// H4 unused PS2 unused UART
 	.a4buscached(A4CH4),
 	.a4busuncached(A4UCH4) );
 
@@ -209,7 +208,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
-	.irq(irq),
+	.irq({irq[9], irq[3:0]}),	// H5 unused PS2 unused UART
 	.a4buscached(A4CH5),
 	.a4busuncached(A4UCH5) );
 
@@ -218,7 +217,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
-	.irq(irq),
+	.irq({irq[10], irq[3:0]}),	// H6 unused PS2 unused UART
 	.a4buscached(A4CH6),
 	.a4busuncached(A4UCH6) );
 
@@ -227,7 +226,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
 	.aresetn(aresetn),
-	.irq(irq),
+	.irq({irq[11], irq[3:0]}),	// H7 unused PS2 unused UART
 	.a4buscached(A4CH7),
 	.a4busuncached(A4UCH7) );
 

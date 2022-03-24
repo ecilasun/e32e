@@ -14,7 +14,7 @@ module rv32cpu #(
 ) (
 	input wire aclk,
 	input wire aresetn,
-	wire [11:0] irq,
+	wire [4:0] irq, // Top bit is HART IRQ
 	input wire [63:0] wallclocktime,
 	input wire [63:0] cpuclocktime,
 	axi_if.master a4buscached,
@@ -293,7 +293,7 @@ always @(posedge aclk) begin
 				csrenforceindex <= `CSR_MTVAL;
 				if (hwint) begin
 					// MEI, external hardware interrupt
-					csrdin  <= {20'd0, irq};	// Device IRQ bits, all those are pending
+					csrdin  <= {27'd0, irq};	// Device IRQ bits, all those are pending (bit 4 is HART wake up)
 				end else if (illegalinstruction || ecall || ebreak) begin
 					// MSI, exception
 					csrdin <= 32'd0;			// TODO: write offending instruction here for illlegalinstruction
@@ -409,9 +409,10 @@ always @(posedge aclk) begin
 
 						// f12         rs1   f3  rd    OPCODE
 						//000000000000_00000_001_00000_0001111 -> FENCE.I (32'h0000100F) Flush I$
-						if ({func12, func3} == {12'd0, 3'b001})
+						if ({func12, func3} == {12'd0, 3'b001}) begin
 							dcacheop <= 3'b101;		// I$, do not write back, mark not dirty
-						else
+							cpustate <= LOADWAIT;	// HINT: Since rd==0, nothing will actually happen to register file
+						end	else
 							dcacheop <= 3'b000;		// noop
 					end
 					instrOneHotOut[`O_H_SYSTEM]: begin

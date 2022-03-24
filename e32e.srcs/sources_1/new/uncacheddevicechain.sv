@@ -38,31 +38,58 @@ logic validwaddr_mailbox = 1'b0, validraddr_mailbox = 1'b0;
 logic validwaddr_uart = 1'b0, validraddr_uart = 1'b0;
 logic validwaddr_spi = 1'b0, validraddr_spi = 1'b0;
 logic validwaddr_ps2 = 1'b0, validraddr_ps2 = 1'b0;
+//logic validwaddr_buttons = 1'b0, validraddr_buttons = 1'b0;
+//logic validwaddr_leds = 1'b0, validraddr_leds = 1'b0;
+logic validwaddr_hart = 1'b0, validraddr_hart = 1'b0;
 logic validwaddr_gpu = 1'b0, validraddr_gpu = 1'b0;
 logic validwaddr_audio = 1'b0, validraddr_audio = 1'b0;
 
 always_comb begin
-	// mailbox @80000000
-	validwaddr_mailbox	= (axi4if.awaddr>=32'h80000000) && (axi4if.awaddr<32'h80001000);
-	validraddr_mailbox	= (axi4if.araddr>=32'h80000000) && (axi4if.araddr<32'h80001000);
-	// uart @80001000
-	validwaddr_uart		= (axi4if.awaddr>=32'h80001000) && (axi4if.awaddr<32'h80001010);
-	validraddr_uart		= (axi4if.araddr>=32'h80001000) && (axi4if.araddr<32'h80001010);
-	// spimaster @80001010
-	validwaddr_spi		= (axi4if.awaddr>=32'h80001010) && (axi4if.awaddr<32'h80001020);
-	validraddr_spi		= (axi4if.araddr>=32'h80001010) && (axi4if.araddr<32'h80001020);
-	// ps2 keyboard @80001020
-	validwaddr_ps2		= (axi4if.awaddr>=32'h80001020) && (axi4if.awaddr<32'h80001030);
-	validraddr_ps2		= (axi4if.araddr>=32'h80001020) && (axi4if.araddr<32'h80001030);
-	// buttons @80001040
-	// LEDs @80001040-80001050
-	// unused space for other devices @80001060-80FFFFFF
-	// GPU @81000000
-	validwaddr_gpu		= (axi4if.awaddr>=32'h81000000) && (axi4if.awaddr<32'h81080000);
-	validraddr_gpu		= (axi4if.araddr>=32'h81000000) && (axi4if.araddr<32'h81080000);
-	// AUDIO @82000000
-	validwaddr_audio	= (axi4if.awaddr>=32'h82000000) && (axi4if.awaddr<32'h82000010);
-	validraddr_audio	= (axi4if.araddr>=32'h82000000) && (axi4if.araddr<32'h82000010);
+	if (axi4if.awaddr[31]) begin
+		validwaddr_mailbox		= (axi4if.awaddr[27:0]>=28'h0000000) && (axi4if.awaddr[27:0]<28'h0001000);
+		validwaddr_uart			= (axi4if.awaddr[27:0]>=28'h0001000) && (axi4if.awaddr[27:0]<28'h0001010);
+		validwaddr_spi			= (axi4if.awaddr[27:0]>=28'h0001010) && (axi4if.awaddr[27:0]<28'h0001020);
+		validwaddr_ps2			= (axi4if.awaddr[27:0]>=28'h0001020) && (axi4if.awaddr[27:0]<28'h0001030);
+		//validwaddr_buttons	= (axi4if.awaddr[27:0]>=28'h0001030) && (axi4if.awaddr[27:0]<28'h0001040);
+		//validwaddr_leds		= (axi4if.awaddr[27:0]>=28'h0001040) && (axi4if.awaddr[27:0]<28'h0001050);
+		validwaddr_hart			= (axi4if.awaddr[27:0]>=28'h0001050) && (axi4if.awaddr[27:0]<28'h0001060);
+		validwaddr_gpu			= (axi4if.awaddr[27:0]>=28'h1000000) && (axi4if.awaddr[27:0]<28'h1080000);
+		validwaddr_audio		= (axi4if.awaddr[27:0]>=28'h2000000) && (axi4if.awaddr[27:0]<28'h2000010);
+	end else begin
+		validwaddr_mailbox		= 1'b0;
+		validwaddr_uart			= 1'b0;
+		validwaddr_spi			= 1'b0;
+		validwaddr_ps2			= 1'b0;
+		//validwaddr_buttons	= 1'b0;
+		//validwaddr_leds		= 1'b0;
+		validwaddr_hart			= 1'b0;
+		validwaddr_gpu			= 1'b0;
+		validwaddr_audio		= 1'b0;
+	end
+end
+
+always_comb begin
+	if (axi4if.araddr[31]) begin
+		validraddr_mailbox		= (axi4if.araddr[27:0]>=28'h0000000) && (axi4if.araddr[27:0]<28'h0001000);
+		validraddr_uart			= (axi4if.araddr[27:0]>=28'h0001000) && (axi4if.araddr[27:0]<28'h0001010);
+		validraddr_spi			= (axi4if.araddr[27:0]>=28'h0001010) && (axi4if.araddr[27:0]<28'h0001020);
+		validraddr_ps2			= (axi4if.araddr[27:0]>=28'h0001020) && (axi4if.araddr[27:0]<28'h0001030);
+		//validraddr_buttons	= (axi4if.araddr[27:0]>=28'h0001030) && (axi4if.araddr[27:0]<28'h0001040);
+		//validraddr_leds		= (axi4if.araddr[27:0]>=28'h0001040) && (axi4if.araddr[27:0]<28'h0001050);
+		validraddr_hart			= (axi4if.araddr[27:0]>=28'h0001050) && (axi4if.araddr[27:0]<28'h0001060);
+		validraddr_gpu			= (axi4if.araddr[27:0]>=28'h1000000) && (axi4if.araddr[27:0]<28'h1080000);
+		validraddr_audio		= (axi4if.araddr[27:0]>=28'h2000000) && (axi4if.araddr[27:0]<28'h2000010);
+	end else begin
+		validraddr_mailbox		= 1'b0;
+		validraddr_uart			= 1'b0;
+		validraddr_spi			= 1'b0;
+		validraddr_ps2			= 1'b0;
+		//validraddr_buttons	= 1'b0;
+		//validraddr_leds		= 1'b0;
+		validraddr_hart			= 1'b0;
+		validraddr_gpu			= 1'b0;
+		validraddr_audio		= 1'b0;
+	end
 end
 
 axi_if mailboxif();
@@ -104,6 +131,14 @@ axi4ps2keyboard ps2keyboard(
 	.ps2fifoempty(ps2fifoempty),
 	.s_axi(ps2if) );
 
+wire [15:0] hirq;
+axi_if hartif();
+axi4hartirq hartirq(
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.s_axi(hartif),
+	.hirq(hirq) );
+
 /*
 axi_if buttonif();
 wire buttonfifoempty;
@@ -144,8 +179,10 @@ a4i2saudio APU(
 
 // TODO: Also add wires.spi_cd != oldcd as an interrupt trigger here, preferably debounced
 //assign irq = {1'b0, ~ps2fifoempty, ~buttonfifoempty, ~uartrcvempty};
-// TODO: Writing to top 8 bits will wake up HARTs from WFI in descending order (top bit:H7 and so on)
-assign irq = {8'h00, 1'b0, ~ps2fifoempty, 1'b0, ~uartrcvempty};
+// Top 8 bits are used to wake up corresponding HART
+// Writint one to byte pointer 80001050[hartid] will hold the IRQ high
+// Writing zero to the same address by the responder HART by its own HARTID in the ISR will stop the IRQ
+assign irq = {hirq[7:0], 1'b0, ~ps2fifoempty, 1'b0, ~uartrcvempty};
 
 // ------------------------------------------------------------------------------------
 // write router
@@ -197,6 +234,17 @@ always_comb begin
 	ps2if.wvalid = validwaddr_ps2 ? axi4if.wvalid : 1'b0;
 	ps2if.bready = validwaddr_ps2 ? axi4if.bready : 1'b0;
 	ps2if.wlast = validwaddr_ps2 ? axi4if.wlast : 1'b0;
+
+	hartif.awaddr = validwaddr_hart ? waddr : 32'd0;
+	hartif.awvalid = validwaddr_hart ? axi4if.awvalid : 1'b0;
+	hartif.awlen = validwaddr_hart ? axi4if.awlen : 0;
+	hartif.awsize = validwaddr_hart ? axi4if.awsize : 0;
+	hartif.awburst = validwaddr_hart ? axi4if.awburst : 0;
+	hartif.wdata = validwaddr_hart ? axi4if.wdata : 0;
+	hartif.wstrb = validwaddr_hart ? axi4if.wstrb : 'd0;
+	hartif.wvalid = validwaddr_hart ? axi4if.wvalid : 1'b0;
+	hartif.bready = validwaddr_hart ? axi4if.bready : 1'b0;
+	hartif.wlast = validwaddr_hart ? axi4if.wlast : 1'b0;
 
 	/*ledif.awaddr = validwaddr_led ? waddr : 32'd0;
 	ledif.awvalid = validwaddr_led ? axi4if.awvalid : 1'b0;
@@ -264,6 +312,11 @@ always_comb begin
 		axi4if.bresp = ps2if.bresp;
 		axi4if.bvalid = ps2if.bvalid;
 		axi4if.wready = ps2if.wready;
+	end else if (validwaddr_hart) begin
+		axi4if.awready = hartif.awready;
+		axi4if.bresp = hartif.bresp;
+		axi4if.bvalid = hartif.bvalid;
+		axi4if.wready = hartif.wready;
 	/*end else if (validwaddr_led) begin
 		axi4if.awready = ledif.awready;
 		axi4if.bresp = ledif.bresp;
@@ -338,6 +391,13 @@ always_comb begin
 	ps2if.arvalid = validraddr_ps2 ? axi4if.arvalid : 1'b0;
 	ps2if.rready = validraddr_ps2 ? axi4if.rready : 1'b0;
 
+	hartif.araddr = validraddr_hart ? raddr : 32'd0;
+	hartif.arlen = validraddr_hart ? axi4if.arlen : 0;
+	hartif.arsize = validraddr_hart ? axi4if.arsize : 0;
+	hartif.arburst = validraddr_hart ? axi4if.arburst : 0;
+	hartif.arvalid = validraddr_hart ? axi4if.arvalid : 1'b0;
+	hartif.rready = validraddr_hart ? axi4if.rready : 1'b0;
+
 	/*ledif.araddr = validraddr_led ? raddr : 32'd0;
 	ledif.arvalid = validraddr_led ? axi4if.arvalid : 1'b0;
 	ledif.rready = validraddr_led ? axi4if.rready : 1'b0;*/
@@ -388,6 +448,12 @@ always_comb begin
 		axi4if.rresp = ps2if.rresp;
 		axi4if.rvalid = ps2if.rvalid;
 		axi4if.rlast = ps2if.rlast;
+	end else if (validraddr_hart) begin
+		axi4if.arready = hartif.arready;
+		axi4if.rdata = hartif.rdata;
+		axi4if.rresp = hartif.rresp;
+		axi4if.rvalid = hartif.rvalid;
+		axi4if.rlast = hartif.rlast;
 	/*end else if (validraddr_led) begin
 		axi4if.arready = ledif.arready;
 		axi4if.rdata = ledif.rdata;
