@@ -128,7 +128,7 @@ mig_7series_0 ddr3instance (
     .device_temp					(), // unused
 
     .mmcm_locked                    (mmcm_locked), // unused
-    .aresetn                        (aresetn),
+    .aresetn                        (maresetn),
 
     .app_sr_req                     (1'b0), // unused
     .app_ref_req                    (1'b0), // unused
