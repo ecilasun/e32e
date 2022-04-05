@@ -1,0 +1,268 @@
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:38 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_ui2f'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_ui2f (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:36 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_sub'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_sub (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:34 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_sqrt'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_sqrt (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:31 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_mul'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_mul (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:29 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_lt'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_lt (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:26 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_le'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_le (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:24 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_i2f'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_i2f (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:21 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_f2i'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_f2i (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:19 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_eq'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_eq (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:16 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_div'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_div (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:12:14 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_add'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_add (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:11:55 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_msub'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_msub (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+
+
+
+
+
+
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2021.1.1 (win64) Build 3286242 Wed Jul 28 13:10:47 MDT 2021
+| Date         : Sun Apr  3 19:11:41 2022
+| Host         : Programmy running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a200tsbg484-1
+--------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'fp_madd'
+
+1. Summary
+----------
+
+SUCCESS in the conversion of fp_madd (xilinx.com:ip:floating_point:7.1 (Rev. 12)) to Vivado generation flows.
+

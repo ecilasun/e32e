@@ -5,10 +5,10 @@ import axi_pkg::*;
 `include "shared.vh"
 
 // ----------------------------------------------------------------------------
-// CPU with FPU
+// CPU with no FPU
 // ----------------------------------------------------------------------------
 
-module rv32cpu #(
+module rv32cpunofpu #(
 	parameter int RESETVECTOR = 32'h20000000,
 	parameter int HARTID = 32'h00000000
 ) (
@@ -20,7 +20,7 @@ module rv32cpu #(
 	axi_if.master a4buscached,
 	axi_if.master a4busuncached );
 
-`define ENABLEFPU
+`undef ENABLEFPU
 `include "rv32.vi"
 
 endmodule

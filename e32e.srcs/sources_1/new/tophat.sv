@@ -156,6 +156,8 @@ wire [11:0] irq;
 // Currently the ROM image can detect up to 16 HARTs.
 // Ideal count recommended is two (HART#0 and HART#1) for most scenarios.
 // Simply comment out the HARTS starting from the last one to fit your needs.
+// Only the first HART contains an FPU, the remaining HARTs are planned to
+// contain a specific set of custom instructions and are kept smaller.
 // ----------------------------------------------------------------------------
 
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
@@ -167,7 +169,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 	.a4buscached(A4CH0),
 	.a4busuncached(A4UCH0) );
 
-rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
@@ -176,7 +178,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.a4buscached(A4CH1),
 	.a4busuncached(A4UCH1) );
 
-rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
@@ -185,7 +187,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 	.a4buscached(A4CH2),
 	.a4busuncached(A4UCH2) );
 
-rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
@@ -194,7 +196,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.a4buscached(A4CH3),
 	.a4busuncached(A4UCH3) );
 
-rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
@@ -203,7 +205,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.a4buscached(A4CH4),
 	.a4busuncached(A4UCH4) );
 
-rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
@@ -212,7 +214,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.a4buscached(A4CH5),
 	.a4busuncached(A4UCH5) );
 
-rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
@@ -221,7 +223,7 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
 	.a4buscached(A4CH6),
 	.a4busuncached(A4UCH6) );
 
-rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),

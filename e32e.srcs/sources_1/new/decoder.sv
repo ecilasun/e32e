@@ -140,13 +140,13 @@ always_comb begin
 	case (1'b1)
 		instrOneHot[`O_H_OP]: begin
 			if (muldiv) begin // MUL/DIV
-				unique case (f3)
+				case (f3)
 					3'b000, 3'b001, 3'b010, 3'b011: aluop = `ALU_MUL;
 					3'b100, 3'b101: aluop = `ALU_DIV;
-					3'b110, 3'b111: aluop = `ALU_REM;
+					default/*3'b110, 3'b111*/: aluop = `ALU_REM;
 				endcase
 			end else begin
-				unique case (f3)
+				case (f3)
 					3'b000: aluop = instrOneHot[`O_H_OP_IMM] ? `ALU_ADD : (mathopsel ? `ALU_SUB : `ALU_ADD);
 					3'b001: aluop = `ALU_SLL;
 					3'b011: aluop = `ALU_SLTU;
@@ -154,13 +154,13 @@ always_comb begin
 					3'b110: aluop = `ALU_OR;
 					3'b111: aluop = `ALU_AND;
 					3'b101: aluop = mathopsel ? `ALU_SRA : `ALU_SRL;
-					3'b100: aluop = `ALU_XOR;
+					default/*3'b100*/: aluop = `ALU_XOR;
 				endcase
 			end
 		end
 
 		instrOneHot[`O_H_OP_IMM]: begin
-			unique case (f3)
+			case (f3)
 				3'b000: aluop = instrOneHot[`O_H_OP_IMM] ? `ALU_ADD : (mathopsel ? `ALU_SUB : `ALU_ADD);
 				3'b001: aluop = `ALU_SLL;
 				3'b011: aluop = `ALU_SLTU;
@@ -168,7 +168,7 @@ always_comb begin
 				3'b110: aluop = `ALU_OR;
 				3'b111: aluop = `ALU_AND;
 				3'b101: aluop = mathopsel ? `ALU_SRA : `ALU_SRL;
-				3'b100: aluop = `ALU_XOR;
+				default/*3'b100*/: aluop = `ALU_XOR;
 			endcase
 		end
 		
@@ -186,7 +186,7 @@ end
 always_comb begin
 	case (1'b1)
 		instrOneHot[`O_H_BRANCH]: begin
-			unique case (f3)
+			case (f3)
 				3'b000: bluop = `BLU_EQ;
 				3'b001: bluop = `BLU_NE;
 				3'b011: bluop = `BLU_NONE;
@@ -194,7 +194,7 @@ always_comb begin
 				3'b110: bluop = `BLU_LU;
 				3'b111: bluop = `BLU_GEU;
 				3'b101: bluop = `BLU_GE;
-				3'b100: bluop = `BLU_L;
+				default/*3'b100*/: bluop = `BLU_L;
 			endcase
 		end
 
