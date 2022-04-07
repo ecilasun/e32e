@@ -240,15 +240,15 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
 arbiter CARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.M({A4CH7, A4CH6, A4CH5, A4CH4, A4CH3, A4CH2, A4CH1, A4CH0}),
-	.S(A4CH) );
+	.axi_s({A4CH7, A4CH6, A4CH5, A4CH4, A4CH3, A4CH2, A4CH1, A4CH0}),
+	.axi_m(A4CH) );
 
 // Uncached bus arbiter
 arbiter UCARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.M({A4UCH7, A4UCH6, A4UCH5, A4UCH4, A4UCH3, A4UCH2, A4UCH1, A4UCH0}),
-	.S(A4UCH) );
+	.axi_s({A4UCH7, A4UCH6, A4UCH5, A4UCH4, A4UCH3, A4UCH2, A4UCH1, A4UCH0}),
+	.axi_m(A4UCH) );
 
 // ----------------------------------------------------------------------------
 // Cached devices (unrouted for now)
