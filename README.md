@@ -1,6 +1,6 @@
 # E32E
 
-This system contains eight RISC-V (rv32im) harts with the following features:
+This system contains five RISC-V (rv32im) harts with the following features:
 
 What's available
 - Each HART conforms to minimal feature set of rv32im (DIV/MUL and base integer instructions)
@@ -17,13 +17,14 @@ What's available
 - There is a PS/2 keyboard interface enabled (memory mapped) which is not in use by the current ROM
 - FENCE.I, CFLUSH.D.L1 and CDISCARD.D.L1 instructions supported
 - SDCard file access available via SPIMaster and SDK helpers (ROM has a small commandline to help load ELF executables)
+- HART#0 contains an FPU, other cores do not (might share/add one if/when FPU gets smaller to be reasonable)
+- Preliminary floor planning for the A7-200T device
 
 Work in progress
 - Make cost of cache hit less than 3 clocks (2 clocks experimented with, works properly)
-- Add an FPU if/when required
-- Need to move framebuffer to cached memory region, but reads can be only 32 bits when writes are 128 bits, fix scan-out hardware for this
+- Need to move framebuffer to cached memory region, but reads can be only 32 bits when writes are 128 bits, fix scan-out hardware to accept 32bits for this
 - Start looking at BVH8 tracing, and tools to generate BVH8 data offline
 - Experiment with _even more_ cores
-- Need terminal output over DVI on top of TTY at one point
+- Need terminal output over DVI on top of TTY at one point (i.e. fonts)
 - Perhaps retire TTY to utilize it as a debug port instead
 - Get rid of 'GPU' and move everything over to software using all other cores instead

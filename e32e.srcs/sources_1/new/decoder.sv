@@ -3,6 +3,8 @@
 `include "shared.vh"
 
 module instructiondecoder(
+	input wire aresetn,
+	input wire aclk,
 	input wire enable,
 	input wire [31:0] instruction,		// Raw input instruction
 	output bit [17:0] instrOneHotOut,	// Current instruction class
@@ -21,10 +23,14 @@ module instructiondecoder(
 	output bit selectimmedasrval2		// Select rval2 or unpacked integer during EXEC
 );
 
-logic [31:0] instrlatch = 32'd0;
+logic [31:0] instrlatch;
 
-always_latch begin
-	if (enable) instrlatch <= instruction;
+always_comb begin
+	if (~aresetn) begin
+		instrlatch <= 32'd0;
+	end else begin
+		if (enable) instrlatch <= instruction;
+	end
 end
 
 wire [17:0] instrOneHot = {

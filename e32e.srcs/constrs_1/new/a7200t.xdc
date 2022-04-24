@@ -79,14 +79,14 @@ create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_
 #set_property -dict { PACKAGE_PIN AB13  IOSTANDARD LVCMOS25 } [get_ports { hdmi_tx_hpd }]; #IO_L3N_T0_DQS_13 Sch=hdmi_tx_hpd
 #set_property -dict { PACKAGE_PIN U3    IOSTANDARD LVCMOS33 } [get_ports { hdmi_tx_rscl }]; #IO_L6P_T0_34 Sch=hdmi_tx_rscl
 #set_property -dict { PACKAGE_PIN V3    IOSTANDARD LVCMOS33 } [get_ports { hdmi_tx_rsda }]; #IO_L6N_T0_VREF_34 Sch=hdmi_tx_rsda
-set_property -dict { PACKAGE_PIN T1    IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_clk_p }]; #IO_L1P_T0_34 Sch=hdmi_tx_clk_p
-set_property -dict { PACKAGE_PIN U1    IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_clk_n }]; #IO_L1N_T0_34 Sch=hdmi_tx_clk_n
-set_property -dict { PACKAGE_PIN W1    IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_p[0] }]; #IO_L5P_T0_34 Sch=hdmi_tx_p[0]
-set_property -dict { PACKAGE_PIN AA1   IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_p[1] }]; #IO_L7P_T1_34 Sch=hdmi_tx_p[1]
-set_property -dict { PACKAGE_PIN AB3   IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_p[2] }]; #IO_L8P_T1_34 Sch=hdmi_tx_p[2]
-set_property -dict { PACKAGE_PIN Y1    IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_n[0] }]; #IO_L5N_T0_34 Sch=hdmi_tx_n[0]
-set_property -dict { PACKAGE_PIN AB1   IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_n[1] }]; #IO_L7N_T1_34 Sch=hdmi_tx_n[1]
-set_property -dict { PACKAGE_PIN AB2   IOSTANDARD TMDS_33  } [get_ports { hdmi_tx_n[2] }]; #IO_L8N_T1_34 Sch=hdmi_tx_n[2]
+set_property -dict {PACKAGE_PIN T1 IOSTANDARD TMDS_33} [get_ports hdmi_tx_clk_p]
+set_property -dict {PACKAGE_PIN U1 IOSTANDARD TMDS_33} [get_ports hdmi_tx_clk_n]
+set_property -dict {PACKAGE_PIN W1 IOSTANDARD TMDS_33} [get_ports {hdmi_tx_p[0]}]
+set_property -dict {PACKAGE_PIN AA1 IOSTANDARD TMDS_33} [get_ports {hdmi_tx_p[1]}]
+set_property -dict {PACKAGE_PIN AB3 IOSTANDARD TMDS_33} [get_ports {hdmi_tx_p[2]}]
+set_property -dict {PACKAGE_PIN Y1 IOSTANDARD TMDS_33} [get_ports {hdmi_tx_n[0]}]
+set_property -dict {PACKAGE_PIN AB1 IOSTANDARD TMDS_33} [get_ports {hdmi_tx_n[1]}]
+set_property -dict {PACKAGE_PIN AB2 IOSTANDARD TMDS_33} [get_ports {hdmi_tx_n[2]}]
 
 
 ## Display Port
@@ -98,11 +98,11 @@ set_property -dict { PACKAGE_PIN AB2   IOSTANDARD TMDS_33  } [get_ports { hdmi_t
 
 
 ## Audio Codec
-set_property -dict { PACKAGE_PIN T4    IOSTANDARD LVCMOS33 } [get_ports { ac_adc_sdata }]; #IO_L13N_T2_MRCC_34 Sch=ac_adc_sdata
-set_property -dict { PACKAGE_PIN T5    IOSTANDARD LVCMOS33 } [get_ports { ac_bclk }]; #IO_L14P_T2_SRCC_34 Sch=ac_bclk
-set_property -dict { PACKAGE_PIN W6    IOSTANDARD LVCMOS33 } [get_ports { ac_dac_sdata }]; #IO_L15P_T2_DQS_34 Sch=ac_dac_sdata
-set_property -dict { PACKAGE_PIN U5    IOSTANDARD LVCMOS33 } [get_ports { ac_lrclk }]; #IO_L14N_T2_SRCC_34 Sch=ac_lrclk
-set_property -dict { PACKAGE_PIN U6    IOSTANDARD LVCMOS33 } [get_ports { ac_mclk }]; #IO_L16P_T2_34 Sch=ac_mclk
+set_property -dict {PACKAGE_PIN T4 IOSTANDARD LVCMOS33} [get_ports ac_adc_sdata]
+set_property -dict {PACKAGE_PIN T5 IOSTANDARD LVCMOS33} [get_ports ac_bclk]
+set_property -dict {PACKAGE_PIN W6 IOSTANDARD LVCMOS33} [get_ports ac_dac_sdata]
+set_property -dict {PACKAGE_PIN U5 IOSTANDARD LVCMOS33} [get_ports ac_lrclk]
+set_property -dict {PACKAGE_PIN U6 IOSTANDARD LVCMOS33} [get_ports ac_mclk]
 
 
 ## Pmod header JA
@@ -150,8 +150,8 @@ set_property -dict { PACKAGE_PIN U6    IOSTANDARD LVCMOS33 } [get_ports { ac_mcl
 
 
 ## UART
-set_property -dict { PACKAGE_PIN AA19  IOSTANDARD LVCMOS33 } [get_ports { uart_rxd_out }]; #IO_L15P_T2_DQS_RDWR_B_14 Sch=uart_rx_out
-set_property -dict { PACKAGE_PIN V18   IOSTANDARD LVCMOS33 } [get_ports { uart_txd_in }]; #IO_L14P_T2_SRCC_14 Sch=uart_tx_in
+set_property -dict {PACKAGE_PIN AA19 IOSTANDARD LVCMOS33} [get_ports uart_rxd_out]
+set_property -dict {PACKAGE_PIN V18 IOSTANDARD LVCMOS33} [get_ports uart_txd_in]
 
 
 ## Ethernet
@@ -198,8 +198,12 @@ set_property -dict { PACKAGE_PIN V18   IOSTANDARD LVCMOS33 } [get_ports { uart_t
 
 
 ## HID port
-set_property -dict { PACKAGE_PIN W17   IOSTANDARD LVCMOS33 PULLUP true } [get_ports { ps2_clk }]; #IO_L16N_T2_A15_D31_14 Sch=ps2_clk
-set_property -dict { PACKAGE_PIN N13   IOSTANDARD LVCMOS33 PULLUP true } [get_ports { ps2_data }]; #IO_L23P_T3_A03_D19_14 Sch=ps2_data
+set_property PACKAGE_PIN W17 [get_ports ps2_clk]
+set_property IOSTANDARD LVCMOS33 [get_ports ps2_clk]
+set_property PULLUP true [get_ports ps2_clk]
+set_property PACKAGE_PIN N13 [get_ports ps2_data]
+set_property IOSTANDARD LVCMOS33 [get_ports ps2_data]
+set_property PULLUP true [get_ports ps2_data]
 
 
 ## QSPI
@@ -211,12 +215,12 @@ set_property -dict { PACKAGE_PIN N13   IOSTANDARD LVCMOS33 PULLUP true } [get_po
 
 
 # SD card : re-wired as SPI style
-set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { spi_sck }]; #IO_L12P_T1_MRCC_14 Sch=spi_sck
-set_property -dict { PACKAGE_PIN T18   IOSTANDARD LVCMOS33 } [get_ports { spi_cd }]; #IO_L20N_T3_A07_D23_14 Sch=spi_cd
-set_property -dict { PACKAGE_PIN W20   IOSTANDARD LVCMOS33 } [get_ports { spi_mosi }]; #IO_L12N_T1_MRCC_14 Sch=spi_mosi
-set_property -dict { PACKAGE_PIN V19   IOSTANDARD LVCMOS33 } [get_ports { spi_miso }]; #IO_L14N_T2_SRCC_14 Sch=spi_miso
-set_property -dict { PACKAGE_PIN U18   IOSTANDARD LVCMOS33 } [get_ports { spi_cs_n }]; #IO_L18N_T2_A11_D27_14 Sch=spi_cs_n
-set_property -dict { PACKAGE_PIN V20   IOSTANDARD LVCMOS33 } [get_ports { sd_poweron_n }]; #IO_L11N_T1_SRCC_14 Sch=sd_poweron_n
+set_property -dict {PACKAGE_PIN W19 IOSTANDARD LVCMOS33} [get_ports spi_sck]
+set_property -dict {PACKAGE_PIN T18 IOSTANDARD LVCMOS33} [get_ports spi_cd]
+set_property -dict {PACKAGE_PIN W20 IOSTANDARD LVCMOS33} [get_ports spi_mosi]
+set_property -dict {PACKAGE_PIN V19 IOSTANDARD LVCMOS33} [get_ports spi_miso]
+set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports spi_cs_n]
+set_property -dict {PACKAGE_PIN V20 IOSTANDARD LVCMOS33} [get_ports sd_poweron_n]
 ## SD card : original wiring
 #set_property -dict { PACKAGE_PIN W19   IOSTANDARD LVCMOS33 } [get_ports { sd_cclk }]; #IO_L12P_T1_MRCC_14 Sch=sd_cclk >spi_sck
 #set_property -dict { PACKAGE_PIN T18   IOSTANDARD LVCMOS33 } [get_ports { sd_cd }]; #IO_L20N_T3_A07_D23_14 Sch=sd_cd <spi_cd
@@ -229,8 +233,8 @@ set_property -dict { PACKAGE_PIN V20   IOSTANDARD LVCMOS33 } [get_ports { sd_pow
 
 
 ## I2C
-set_property -dict { PACKAGE_PIN W5    IOSTANDARD LVCMOS33 } [get_ports { scl }]; #IO_L15N_T2_DQS_34 Sch=scl
-set_property -dict { PACKAGE_PIN V5    IOSTANDARD LVCMOS33 } [get_ports { sda }]; #IO_L16N_T2_34 Sch=sda
+set_property -dict {PACKAGE_PIN W5 IOSTANDARD LVCMOS33} [get_ports scl]
+set_property -dict {PACKAGE_PIN V5 IOSTANDARD LVCMOS33} [get_ports sda]
 
 
 ## Voltage Adjust
@@ -376,9 +380,59 @@ set_property CONFIG_MODE SPIx4 [current_design]
 set_false_path -from [get_pins ClockAndResetGen/selfresetn_reg/C]
 # set_false_path -to [get_pins ClockAndResetGen/calib_done]
 # CSR register mapped times are not that critical and are false paths
-set_false_path -from [get_pins wallclocktime_reg[*]/C]
-set_false_path -from [get_pins cpuclocktime_reg[*]/C]
+set_false_path -from [get_pins {wallclocktime_reg[*]/C}]
+set_false_path -from [get_pins {cpuclocktime_reg[*]/C}]
 # MISC
 # set_false_path -to [get_ports led[*]]
 # set_false_path -to [get_ports uart_txd_in]
 # set_false_path -to [get_ports uart_rxd_out]
+
+
+
+
+
+
+
+create_pblock pblock_HART0
+add_cells_to_pblock [get_pblocks pblock_HART0] [get_cells -quiet {HART0/ALU HART0/BLU HART0/CACHE HART0/CSRREGS HART0/DECODER HART0/FREGS HART0/GND HART0/IDIVS HART0/IDIVU HART0/IMULSU {HART0/PC[31]_i_1} {HART0/PC_reg[0]} {HART0/PC_reg[10]} {HART0/PC_reg[11]} {HART0/PC_reg[12]} {HART0/PC_reg[13]} {HART0/PC_reg[14]} {HART0/PC_reg[15]} {HART0/PC_reg[16]} {HART0/PC_reg[17]} {HART0/PC_reg[18]} {HART0/PC_reg[19]} {HART0/PC_reg[1]} {HART0/PC_reg[20]} {HART0/PC_reg[21]} {HART0/PC_reg[22]} {HART0/PC_reg[23]} {HART0/PC_reg[24]} {HART0/PC_reg[25]} {HART0/PC_reg[26]} {HART0/PC_reg[27]} {HART0/PC_reg[28]} {HART0/PC_reg[29]} {HART0/PC_reg[2]} {HART0/PC_reg[30]} {HART0/PC_reg[31]} {HART0/PC_reg[3]} {HART0/PC_reg[4]} {HART0/PC_reg[5]} {HART0/PC_reg[6]} {HART0/PC_reg[7]} {HART0/PC_reg[8]} {HART0/PC_reg[9]} HART0/REGS HART0/VCC {HART0/addr_reg[0]} {HART0/addr_reg[10]} {HART0/addr_reg[11]} {HART0/addr_reg[12]} {HART0/addr_reg[13]} {HART0/addr_reg[14]} {HART0/addr_reg[15]} {HART0/addr_reg[16]} {HART0/addr_reg[17]} {HART0/addr_reg[18]} {HART0/addr_reg[19]} {HART0/addr_reg[1]} {HART0/addr_reg[20]} {HART0/addr_reg[21]} {HART0/addr_reg[22]} {HART0/addr_reg[23]} {HART0/addr_reg[24]} {HART0/addr_reg[25]} {HART0/addr_reg[26]} {HART0/addr_reg[27]} {HART0/addr_reg[28]} {HART0/addr_reg[29]} {HART0/addr_reg[2]} {HART0/addr_reg[30]} {HART0/addr_reg[31]} {HART0/addr_reg[3]} {HART0/addr_reg[4]} {HART0/addr_reg[5]} {HART0/addr_reg[6]} {HART0/addr_reg[7]} {HART0/addr_reg[8]} {HART0/addr_reg[9]} {HART0/adjacentPC[4]_i_2} {HART0/adjacentPC_reg[0]} {HART0/adjacentPC_reg[10]} {HART0/adjacentPC_reg[11]} {HART0/adjacentPC_reg[12]} {HART0/adjacentPC_reg[12]_i_1} {HART0/adjacentPC_reg[13]} {HART0/adjacentPC_reg[14]} {HART0/adjacentPC_reg[15]} {HART0/adjacentPC_reg[16]} {HART0/adjacentPC_reg[16]_i_1} {HART0/adjacentPC_reg[17]} {HART0/adjacentPC_reg[18]} {HART0/adjacentPC_reg[19]} {HART0/adjacentPC_reg[1]} {HART0/adjacentPC_reg[20]} {HART0/adjacentPC_reg[20]_i_1} {HART0/adjacentPC_reg[21]} {HART0/adjacentPC_reg[22]} {HART0/adjacentPC_reg[23]} {HART0/adjacentPC_reg[24]} {HART0/adjacentPC_reg[24]_i_1} {HART0/adjacentPC_reg[25]} {HART0/adjacentPC_reg[26]} {HART0/adjacentPC_reg[27]} {HART0/adjacentPC_reg[28]} {HART0/adjacentPC_reg[28]_i_1} {HART0/adjacentPC_reg[29]} {HART0/adjacentPC_reg[2]} {HART0/adjacentPC_reg[30]} {HART0/adjacentPC_reg[31]} {HART0/adjacentPC_reg[31]_i_1} {HART0/adjacentPC_reg[3]} {HART0/adjacentPC_reg[4]} {HART0/adjacentPC_reg[4]_i_1} {HART0/adjacentPC_reg[5]} {HART0/adjacentPC_reg[6]} {HART0/adjacentPC_reg[7]} {HART0/adjacentPC_reg[8]} {HART0/adjacentPC_reg[8]_i_1} {HART0/adjacentPC_reg[9]} {HART0/cpustate[1]_i_5} {HART0/cpustate[2]_i_3} {HART0/cpustate[3]_i_1} {HART0/cpustate[3]_i_10} {HART0/cpustate[3]_i_9} {HART0/cpustate_reg[0]} {HART0/cpustate_reg[1]} {HART0/cpustate_reg[2]} {HART0/cpustate_reg[3]} {HART0/csrdin[0]_i_2} {HART0/csrdin[0]_i_6} {HART0/csrdin[10]_i_4} {HART0/csrdin[11]_i_5} {HART0/csrdin[12]_i_5} {HART0/csrdin[13]_i_5} {HART0/csrdin[14]_i_5} {HART0/csrdin[15]_i_5} {HART0/csrdin[16]_i_5} {HART0/csrdin[17]_i_5} {HART0/csrdin[18]_i_5} {HART0/csrdin[19]_i_5} {HART0/csrdin[1]_i_5} {HART0/csrdin[20]_i_5} {HART0/csrdin[21]_i_5} {HART0/csrdin[22]_i_5} {HART0/csrdin[23]_i_5} {HART0/csrdin[24]_i_5} {HART0/csrdin[25]_i_5} {HART0/csrdin[26]_i_5} {HART0/csrdin[27]_i_5} {HART0/csrdin[28]_i_5} {HART0/csrdin[29]_i_5} {HART0/csrdin[2]_i_4} {HART0/csrdin[30]_i_5} {HART0/csrdin[31]_i_12} {HART0/csrdin[31]_i_18} {HART0/csrdin[31]_i_5} {HART0/csrdin[3]_i_4} {HART0/csrdin[3]_i_5} {HART0/csrdin[3]_i_6} {HART0/csrdin[3]_i_7} {HART0/csrdin[4]_i_4} {HART0/csrdin[5]_i_4} {HART0/csrdin[6]_i_4} {HART0/csrdin[7]_i_3} {HART0/csrdin[8]_i_4} {HART0/csrdin[9]_i_4} {HART0/csrdin_reg[0]} {HART0/csrdin_reg[10]} {HART0/csrdin_reg[11]} {HART0/csrdin_reg[12]} {HART0/csrdin_reg[13]} {HART0/csrdin_reg[14]} {HART0/csrdin_reg[15]} {HART0/csrdin_reg[16]} {HART0/csrdin_reg[17]} {HART0/csrdin_reg[18]} {HART0/csrdin_reg[19]} {HART0/csrdin_reg[1]} {HART0/csrdin_reg[20]} {HART0/csrdin_reg[21]} {HART0/csrdin_reg[22]} {HART0/csrdin_reg[23]} {HART0/csrdin_reg[24]} {HART0/csrdin_reg[25]} {HART0/csrdin_reg[26]} {HART0/csrdin_reg[27]} {HART0/csrdin_reg[28]} {HART0/csrdin_reg[29]} {HART0/csrdin_reg[2]} {HART0/csrdin_reg[30]} {HART0/csrdin_reg[31]} {HART0/csrdin_reg[3]} {HART0/csrdin_reg[4]} {HART0/csrdin_reg[5]} {HART0/csrdin_reg[6]} {HART0/csrdin_reg[7]} {HART0/csrdin_reg[8]} {HART0/csrdin_reg[9]} {HART0/csrenforceindex[2]_i_3} {HART0/csrenforceindex_reg[0]} {HART0/csrenforceindex_reg[1]} {HART0/csrenforceindex_reg[2]} {HART0/csrprevval[31]_i_1} {HART0/csrprevval_reg[0]} {HART0/csrprevval_reg[10]} {HART0/csrprevval_reg[11]} {HART0/csrprevval_reg[12]} {HART0/csrprevval_reg[13]} {HART0/csrprevval_reg[14]} {HART0/csrprevval_reg[15]} {HART0/csrprevval_reg[16]} {HART0/csrprevval_reg[17]} {HART0/csrprevval_reg[18]} {HART0/csrprevval_reg[19]} {HART0/csrprevval_reg[1]} {HART0/csrprevval_reg[20]} {HART0/csrprevval_reg[21]} {HART0/csrprevval_reg[22]} {HART0/csrprevval_reg[23]} {HART0/csrprevval_reg[24]} {HART0/csrprevval_reg[25]} {HART0/csrprevval_reg[26]} {HART0/csrprevval_reg[27]} {HART0/csrprevval_reg[28]} {HART0/csrprevval_reg[29]} {HART0/csrprevval_reg[2]} {HART0/csrprevval_reg[30]} {HART0/csrprevval_reg[31]} {HART0/csrprevval_reg[3]} {HART0/csrprevval_reg[4]} {HART0/csrprevval_reg[5]} {HART0/csrprevval_reg[6]} {HART0/csrprevval_reg[7]} {HART0/csrprevval_reg[8]} {HART0/csrprevval_reg[9]} HART0/csrwe_reg HART0/csrwenforce_reg {HART0/dcacheop[0]_i_1} {HART0/dcacheop[2]_i_3} {HART0/dcacheop_reg[0]} {HART0/dcacheop_reg[1]} {HART0/dcacheop_reg[2]} {HART0/dout_reg[0]} {HART0/dout_reg[10]} {HART0/dout_reg[11]} {HART0/dout_reg[12]} {HART0/dout_reg[13]} {HART0/dout_reg[14]} {HART0/dout_reg[15]} {HART0/dout_reg[16]} {HART0/dout_reg[17]} {HART0/dout_reg[18]} {HART0/dout_reg[19]} {HART0/dout_reg[1]} {HART0/dout_reg[20]} {HART0/dout_reg[21]} {HART0/dout_reg[22]} {HART0/dout_reg[23]} {HART0/dout_reg[24]} {HART0/dout_reg[25]} {HART0/dout_reg[26]} {HART0/dout_reg[27]} {HART0/dout_reg[28]} {HART0/dout_reg[29]} {HART0/dout_reg[2]} {HART0/dout_reg[30]} {HART0/dout_reg[31]} {HART0/dout_reg[3]} {HART0/dout_reg[4]} {HART0/dout_reg[5]} {HART0/dout_reg[6]} {HART0/dout_reg[7]} {HART0/dout_reg[8]} {HART0/dout_reg[9]} HART0/ebreak_reg HART0/ecall_reg HART0/faddstrobe_reg HART0/fdivstrobe_reg HART0/feqstrobe_reg HART0/ff2istrobe_reg HART0/ff2uistrobe_reg HART0/fi2fstrobe_reg HART0/flestrobe_reg HART0/fltstrobe_reg HART0/fmaddstrobe_reg HART0/fmsubstrobe_reg HART0/fmulstrobe_reg HART0/fnmaddstrobe_reg HART0/fnmsubstrobe_reg {HART0/frdin[0]_i_6} {HART0/frdin[31]_i_11} {HART0/frdin[31]_i_5} {HART0/frdin_reg[0]} {HART0/frdin_reg[10]} {HART0/frdin_reg[11]} {HART0/frdin_reg[12]} {HART0/frdin_reg[13]} {HART0/frdin_reg[14]} {HART0/frdin_reg[15]} {HART0/frdin_reg[16]} {HART0/frdin_reg[17]} {HART0/frdin_reg[18]} {HART0/frdin_reg[19]} {HART0/frdin_reg[1]} {HART0/frdin_reg[20]} {HART0/frdin_reg[21]} {HART0/frdin_reg[22]} {HART0/frdin_reg[23]} {HART0/frdin_reg[24]} {HART0/frdin_reg[25]} {HART0/frdin_reg[26]} {HART0/frdin_reg[27]} {HART0/frdin_reg[28]} {HART0/frdin_reg[29]} {HART0/frdin_reg[2]} {HART0/frdin_reg[30]} {HART0/frdin_reg[31]} {HART0/frdin_reg[3]} {HART0/frdin_reg[4]} {HART0/frdin_reg[5]} {HART0/frdin_reg[6]} {HART0/frdin_reg[7]} {HART0/frdin_reg[8]} {HART0/frdin_reg[9]} HART0/frwe_reg HART0/fsqrtstrobe_reg HART0/fsubstrobe_reg HART0/fui2fstrobe_reg HART0/ifetch_reg HART0/illegalinstruction_i_3 HART0/illegalinstruction_reg {HART0/nextPC[31]_i_1} {HART0/nextPC_reg[0]} {HART0/nextPC_reg[10]} {HART0/nextPC_reg[11]} {HART0/nextPC_reg[12]} {HART0/nextPC_reg[13]} {HART0/nextPC_reg[14]} {HART0/nextPC_reg[15]} {HART0/nextPC_reg[16]} {HART0/nextPC_reg[17]} {HART0/nextPC_reg[18]} {HART0/nextPC_reg[19]} {HART0/nextPC_reg[1]} {HART0/nextPC_reg[20]} {HART0/nextPC_reg[21]} {HART0/nextPC_reg[22]} {HART0/nextPC_reg[23]} {HART0/nextPC_reg[24]} {HART0/nextPC_reg[25]} {HART0/nextPC_reg[26]} {HART0/nextPC_reg[27]} {HART0/nextPC_reg[28]} {HART0/nextPC_reg[29]} {HART0/nextPC_reg[2]} {HART0/nextPC_reg[30]} {HART0/nextPC_reg[31]} {HART0/nextPC_reg[3]} {HART0/nextPC_reg[4]} {HART0/nextPC_reg[5]} {HART0/nextPC_reg[6]} {HART0/nextPC_reg[7]} {HART0/nextPC_reg[8]} {HART0/nextPC_reg[9]} {HART0/rdin[30]_i_3} {HART0/rdin[31]_i_14} {HART0/rdin[31]_i_28} {HART0/rdin[31]_i_62} {HART0/rdin[31]_i_63} {HART0/rdin[31]_i_64} {HART0/rdin[31]_i_80} {HART0/rdin[7]_i_6} {HART0/rdin_reg[0]} {HART0/rdin_reg[10]} {HART0/rdin_reg[11]} {HART0/rdin_reg[12]} {HART0/rdin_reg[13]} {HART0/rdin_reg[14]} {HART0/rdin_reg[15]} {HART0/rdin_reg[16]} {HART0/rdin_reg[17]} {HART0/rdin_reg[18]} {HART0/rdin_reg[19]} {HART0/rdin_reg[1]} {HART0/rdin_reg[20]} {HART0/rdin_reg[21]} {HART0/rdin_reg[22]} {HART0/rdin_reg[23]} {HART0/rdin_reg[24]} {HART0/rdin_reg[25]} {HART0/rdin_reg[26]} {HART0/rdin_reg[27]} {HART0/rdin_reg[28]} {HART0/rdin_reg[29]} {HART0/rdin_reg[2]} {HART0/rdin_reg[30]} {HART0/rdin_reg[31]} {HART0/rdin_reg[3]} {HART0/rdin_reg[4]} {HART0/rdin_reg[5]} {HART0/rdin_reg[6]} {HART0/rdin_reg[7]} {HART0/rdin_reg[8]} {HART0/rdin_reg[9]} HART0/ren_reg {HART0/retired[0]_i_2} {HART0/retired_reg[0]} {HART0/retired_reg[0]_i_1} {HART0/retired_reg[10]} {HART0/retired_reg[11]} {HART0/retired_reg[12]} {HART0/retired_reg[12]_i_1} {HART0/retired_reg[13]} {HART0/retired_reg[14]} {HART0/retired_reg[15]} {HART0/retired_reg[16]} {HART0/retired_reg[16]_i_1} {HART0/retired_reg[17]} {HART0/retired_reg[18]} {HART0/retired_reg[19]} {HART0/retired_reg[1]} {HART0/retired_reg[20]} {HART0/retired_reg[20]_i_1} {HART0/retired_reg[21]} {HART0/retired_reg[22]} {HART0/retired_reg[23]} {HART0/retired_reg[24]} {HART0/retired_reg[24]_i_1} {HART0/retired_reg[25]} {HART0/retired_reg[26]} {HART0/retired_reg[27]} {HART0/retired_reg[28]} {HART0/retired_reg[28]_i_1} {HART0/retired_reg[29]} {HART0/retired_reg[2]} {HART0/retired_reg[30]} {HART0/retired_reg[31]} {HART0/retired_reg[32]} {HART0/retired_reg[32]_i_1} {HART0/retired_reg[33]} {HART0/retired_reg[34]} {HART0/retired_reg[35]} {HART0/retired_reg[36]} {HART0/retired_reg[36]_i_1} {HART0/retired_reg[37]} {HART0/retired_reg[38]} {HART0/retired_reg[39]} {HART0/retired_reg[3]} {HART0/retired_reg[40]} {HART0/retired_reg[40]_i_1} {HART0/retired_reg[41]} {HART0/retired_reg[42]} {HART0/retired_reg[43]} {HART0/retired_reg[44]} {HART0/retired_reg[44]_i_1} {HART0/retired_reg[45]} {HART0/retired_reg[46]} {HART0/retired_reg[47]} {HART0/retired_reg[48]} {HART0/retired_reg[48]_i_1} {HART0/retired_reg[49]} {HART0/retired_reg[4]} {HART0/retired_reg[4]_i_1} {HART0/retired_reg[50]} {HART0/retired_reg[51]} {HART0/retired_reg[52]} {HART0/retired_reg[52]_i_1} {HART0/retired_reg[53]} {HART0/retired_reg[54]} {HART0/retired_reg[55]} {HART0/retired_reg[56]} {HART0/retired_reg[56]_i_1} {HART0/retired_reg[57]} {HART0/retired_reg[58]} {HART0/retired_reg[59]} {HART0/retired_reg[5]} {HART0/retired_reg[60]} {HART0/retired_reg[60]_i_1} {HART0/retired_reg[61]} {HART0/retired_reg[62]} {HART0/retired_reg[63]} {HART0/retired_reg[6]} {HART0/retired_reg[7]} {HART0/retired_reg[8]} {HART0/retired_reg[8]_i_1} {HART0/retired_reg[9]} {HART0/rwaddress_reg[0]} {HART0/rwaddress_reg[10]} {HART0/rwaddress_reg[11]} {HART0/rwaddress_reg[12]} {HART0/rwaddress_reg[13]} {HART0/rwaddress_reg[14]} {HART0/rwaddress_reg[15]} {HART0/rwaddress_reg[16]} {HART0/rwaddress_reg[17]} {HART0/rwaddress_reg[18]} {HART0/rwaddress_reg[19]} {HART0/rwaddress_reg[1]} {HART0/rwaddress_reg[20]} {HART0/rwaddress_reg[21]} {HART0/rwaddress_reg[22]} {HART0/rwaddress_reg[23]} {HART0/rwaddress_reg[24]} {HART0/rwaddress_reg[25]} {HART0/rwaddress_reg[26]} {HART0/rwaddress_reg[27]} {HART0/rwaddress_reg[28]} {HART0/rwaddress_reg[29]} {HART0/rwaddress_reg[2]} {HART0/rwaddress_reg[30]} {HART0/rwaddress_reg[31]} {HART0/rwaddress_reg[3]} {HART0/rwaddress_reg[4]} {HART0/rwaddress_reg[5]} {HART0/rwaddress_reg[6]} {HART0/rwaddress_reg[7]} {HART0/rwaddress_reg[8]} {HART0/rwaddress_reg[9]} HART0/rwe_i_7 HART0/rwe_reg {HART0/wstrb_reg[0]} {HART0/wstrb_reg[1]} {HART0/wstrb_reg[2]} {HART0/wstrb_reg[3]}}]
+resize_pblock [get_pblocks pblock_HART0] -add {SLICE_X84Y100:SLICE_X109Y149}
+resize_pblock [get_pblocks pblock_HART0] -add {DSP48_X5Y40:DSP48_X6Y59}
+resize_pblock [get_pblocks pblock_HART0] -add {RAMB18_X5Y40:RAMB18_X6Y59}
+resize_pblock [get_pblocks pblock_HART0] -add {RAMB36_X5Y20:RAMB36_X6Y29}
+create_pblock pblock_FPU
+add_cells_to_pblock [get_pblocks pblock_FPU] [get_cells -quiet [list HART0/FPU]]
+resize_pblock [get_pblocks pblock_FPU] -add {SLICE_X120Y100:SLICE_X151Y149}
+resize_pblock [get_pblocks pblock_FPU] -add {DSP48_X7Y40:DSP48_X7Y59}
+resize_pblock [get_pblocks pblock_FPU] -add {RAMB18_X7Y40:RAMB18_X7Y59}
+resize_pblock [get_pblocks pblock_FPU] -add {RAMB36_X7Y20:RAMB36_X7Y29}
+create_pblock pblock_HART1
+add_cells_to_pblock [get_pblocks pblock_HART1] [get_cells -quiet [list HART1]]
+resize_pblock [get_pblocks pblock_HART1] -add {SLICE_X66Y100:SLICE_X83Y149}
+resize_pblock [get_pblocks pblock_HART1] -add {DSP48_X4Y40:DSP48_X4Y59}
+resize_pblock [get_pblocks pblock_HART1] -add {RAMB18_X4Y40:RAMB18_X4Y59}
+resize_pblock [get_pblocks pblock_HART1] -add {RAMB36_X4Y20:RAMB36_X4Y29}
+create_pblock pblock_HART2
+add_cells_to_pblock [get_pblocks pblock_HART2] [get_cells -quiet [list HART2]]
+resize_pblock [get_pblocks pblock_HART2] -add {SLICE_X44Y100:SLICE_X61Y149}
+resize_pblock [get_pblocks pblock_HART2] -add {DSP48_X2Y40:DSP48_X2Y59}
+resize_pblock [get_pblocks pblock_HART2] -add {RAMB18_X3Y40:RAMB18_X3Y59}
+resize_pblock [get_pblocks pblock_HART2] -add {RAMB36_X3Y20:RAMB36_X3Y29}
+create_pblock pblock_HART3
+add_cells_to_pblock [get_pblocks pblock_HART3] [get_cells -quiet [list HART3]]
+resize_pblock [get_pblocks pblock_HART3] -add {SLICE_X66Y50:SLICE_X83Y99}
+resize_pblock [get_pblocks pblock_HART3] -add {DSP48_X4Y20:DSP48_X4Y39}
+resize_pblock [get_pblocks pblock_HART3] -add {RAMB18_X4Y20:RAMB18_X4Y39}
+resize_pblock [get_pblocks pblock_HART3] -add {RAMB36_X4Y10:RAMB36_X4Y19}
+create_pblock pblock_HART4
+add_cells_to_pblock [get_pblocks pblock_HART4] [get_cells -quiet [list HART4]]
+resize_pblock [get_pblocks pblock_HART4] -add {SLICE_X44Y50:SLICE_X61Y99}
+resize_pblock [get_pblocks pblock_HART4] -add {DSP48_X2Y20:DSP48_X2Y39}
+resize_pblock [get_pblocks pblock_HART4] -add {RAMB18_X3Y20:RAMB18_X3Y39}
+resize_pblock [get_pblocks pblock_HART4] -add {RAMB36_X3Y10:RAMB36_X3Y19}
+
+create_pblock pblock_GPU
+add_cells_to_pblock [get_pblocks pblock_GPU] [get_cells -quiet [list UCDEVICECHAIN/GPU]]
+resize_pblock [get_pblocks pblock_GPU] -add {SLICE_X114Y0:SLICE_X163Y99}
+resize_pblock [get_pblocks pblock_GPU] -add {DSP48_X7Y0:DSP48_X8Y39}
+resize_pblock [get_pblocks pblock_GPU] -add {RAMB18_X7Y0:RAMB18_X8Y39}
+resize_pblock [get_pblocks pblock_GPU] -add {RAMB36_X7Y0:RAMB36_X8Y19}

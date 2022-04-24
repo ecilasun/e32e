@@ -53,6 +53,8 @@ wire [31:0] immed;
 wire immsel, isrecordingform;
 
 instructiondecoder DECODER(
+	.aresetn(aresetn),
+	.aclk(aclk),
 	.enable(rready & (cpustate == FETCH)),
 	.instruction(din),
 	.instrOneHotOut(instrOneHotOut),
