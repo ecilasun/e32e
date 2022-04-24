@@ -14,7 +14,7 @@ module clockandreset(
 	output wire clk_ref_i,
 	output wire audioclock,
 	output logic selfresetn,
-	output wire aresetn );
+	output logic aresetn );
 
 wire centralclocklocked, peripheralclklocked, ddr3clklocked;
 
@@ -49,14 +49,14 @@ always @(posedge wallclock) begin // using slowest clock
 	if (internalreset) begin
 		resetcountdown <= 4'hf;
 		selfresetn <= 1'b0;
+		aresetn <= 1'b0;
 	end else begin
 		if (/*busready &&*/ (resetcountdown == 4'h0))
 			selfresetn <= 1'b1;
 		else
 			resetcountdown <= resetcountdown - 4'h1;
+		aresetn <= selfresetn ? calib_done : 1'b0;
 	end
 end
-
-assign aresetn = selfresetn ? calib_done : 1'b0;
 
 endmodule

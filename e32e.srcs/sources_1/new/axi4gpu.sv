@@ -21,8 +21,12 @@ logic [31:0] fbdin;
 logic [3:0] fbwe0 = 4'h0;
 logic [3:0] fbwe1 = 4'h0;
 
+logic hsync_d, vsync_d, blank_d;
+logic [23:0] paletteout_d;
+
 // Framebuffer select
 logic writepage = 1'b0;
+logic writepage_d = 1'b0;
 
 wire out_tmds_red;
 wire out_tmds_green;
@@ -55,7 +59,7 @@ framebuffer FB0(
 	.addrb(fbra),
 	.clkb(pixelclock),
 	.doutb(fbdout0),
-	.enb((~blank) & writepage) );
+	.enb((~blank_d) & writepage_d) );
 
 framebuffer FB1(
 	// Input from uncached bus
@@ -68,7 +72,7 @@ framebuffer FB1(
 	.addrb(fbra),
 	.clkb(pixelclock),
 	.doutb(fbdout1),
-	.enb((~blank) & (~writepage)) );
+	.enb((~blank_d) & (~writepage_d)) );
 
 // ----------------------------------------------------------------------------
 // Color palette
@@ -79,7 +83,7 @@ logic [7:0] palettewa = 8'h00;
 logic [23:0] palettedin = 24'h000000;
 
 // Look up the palette data with based on which framebuffer has scanout
-wire [7:0] palettera = writepage ? fbdout0 : fbdout1;
+wire [7:0] palettera = writepage_d ? fbdout0 : fbdout1;
 
 logic [23:0] paletteentries[0:255];
 
@@ -100,12 +104,11 @@ assign paletteout = paletteentries[palettera];
 // One clock (half pixel) delay
 // ----------------------------------------------------------------------------
 
-logic hsync_d, vsync_d, blank_d;
-logic [23:0] paletteout_d;
 always @(posedge pixelclock) begin
 	hsync_d <= hsync;
 	vsync_d <= vsync;
 	blank_d <= blank;
+	writepage_d <= writepage;
 	paletteout_d <= paletteout;
 end
 
