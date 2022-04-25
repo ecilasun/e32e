@@ -7,6 +7,9 @@ module systemcache(
 	input wire aresetn,
 	// custom bus to cpu
 	input wire uncached,
+	input wire [7:0] line,
+	input wire [16:0] tag,
+	input wire [3:0] offset,
 	input wire [2:0] dcacheop,
 	input wire [31:0] addr,
 	input wire [31:0] din,
@@ -53,7 +56,7 @@ logic cacheid = 1'b0;				// 0: D$ 1: I$
 logic [7:0] dccount = 8'h00;		// Line counter for cache flush
 
 cachemem CacheMemory512(
-	.addra(flushing ? {1'b0, dccount} : {ifetch, addr[13:6]}),	// current cache line (cline)
+	.addra(flushing ? {1'b0, dccount} : {ifetch, line}),		// current cache line (cline)
 	.clka(aclk),												// cache clock
 	.dina(cdin),												// updated cache data to write
 	.wea(cachewe),												// write strobe for current cache line
@@ -126,10 +129,10 @@ always_ff @(posedge aclk) begin
 			IDLE : begin
 				rwmode <= {ren, |wstrb};					// Record r/w mode
 				bsel <= wstrb;								// Write byte select
-				coffset <= addr[5:2];						// Cache offset 0..15
-				cline <= {ifetch,addr[13:6]};				// Cache line
-				ctag <= addr[30:14];						// Cache tag 00000..1ffff
-				ptag <= cachelinetags[{ifetch,addr[13:6]}];	// Previous cache tag
+				coffset <= offset;							// Cache offset 0..15
+				cline <= {ifetch,line};						// Cache line
+				ctag <= tag;								// Cache tag 00000..1ffff
+				ptag <= cachelinetags[{ifetch,line}];		// Previous cache tag
 
 				flushing <= dcacheop[0];
 				writeback <= dcacheop[1];

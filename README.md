@@ -1,13 +1,13 @@
 # E32E
 
-This system contains five RISC-V (rv32im) harts with the following features:
+This system contains six RISC-V (5*RV32IMZicsr + 1*RV32IMFZicsr) harts with the following features:
 
 What's available
-- Each HART conforms to minimal feature set of rv32im (DIV/MUL and base integer instructions)
+- Each HART conforms to minimal feature set of rv32imzicsr (DIV/MUL, base integer, CSR registers) except the first which also includes an FPU
 - Each HART has its own 32Kbyte caches (16KBytes I$, 16KBytes D$)
 - HARTs are currently clocked at 100MHz (TBD)
 - A few of the CSRs are implemented (time/cycle/retired instruction counters, exception trap vectors, trap cause and a few more)
-- Hardware interrupts, timer interrupts and illegal instruction exceptions supported
+- Hardware interrupts, timer interrupts and illegal instruction exceptions supported (with a memory mapped hardware interrupt trigger bit per core)
 - Cache lines are 512bit wide, 512 lines long. R/W from/to memory completes in very few clocks. Cache hits bring data in 3 clocks.
 - Two very simple arbiters; one for cached, one for uncached bus
 - A very simple device chain; one UART (with built-in FIFOs) and one shared mailbox memory (4KBytes)

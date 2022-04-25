@@ -12,11 +12,18 @@ logic ebreak = 1'b0;			// BREAKPOINT
 logic [2:0] dcacheop = 3'b000;	// Cache command
 
 wire isuncached = addr[31];		// NOTE: anything at and above 0x80000000 is uncached memory
+wire [7:0] cline = addr[13:6];	// Cache line, disregarding ifetch
+wire [16:0] ctag = addr[30:14];	// Cache tag
+wire [3:0] coffset = addr[5:2];	// Cache word offset
 
 systemcache CACHE(
 	.aclk(aclk),
 	.aresetn(aresetn),
+	// Cache address, decoded
 	.uncached(isuncached),
+	.line(cline),
+	.tag(ctag),
+	.offset(coffset),
 	// From CPU
 	.dcacheop(dcacheop),
 	.ifetch(ifetch),

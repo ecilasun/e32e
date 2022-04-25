@@ -205,7 +205,7 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.a4buscached(A4CH4),
 	.a4busuncached(A4UCH4) );
 
-/*rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
@@ -214,7 +214,7 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.a4buscached(A4CH5),
 	.a4busuncached(A4UCH5) );
 
-rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
+/*rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
