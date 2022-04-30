@@ -92,9 +92,9 @@ always @(posedge clk) begin
             q_out[7:0] <= q_m[8] ? q_m[7:0] : ~q_m[7:0];
 
             if (q_m[8] == 0) begin
-                cnt = cnt_prev + (N0(q_m[7:0]) - N1(q_m[7:0]));
+                cnt <= cnt_prev + (N0(q_m[7:0]) - N1(q_m[7:0]));
             end else begin
-                cnt = cnt_prev + (N1(q_m[7:0]) - N0(q_m[7:0]));
+                cnt <= cnt_prev + (N1(q_m[7:0]) - N0(q_m[7:0]));
             end /*q_m[8] == 0*/
 
         end else begin
@@ -104,12 +104,12 @@ always @(posedge clk) begin
                 q_out[9] <= 1;
                 q_out[8] <= q_m[8];
                 q_out[7:0] <= ~q_m[7:0];
-                cnt = cnt_prev + 2*q_m[8] + (N0(q_m[7:0]) - N1(q_m[7:0]));
+                cnt <= cnt_prev + 2*q_m[8] + (N0(q_m[7:0]) - N1(q_m[7:0]));
             end else begin
                 q_out[9] <= 0;
                 q_out[8] <= q_m[8];
                 q_out[7:0] <= q_m[7:0];
-                cnt = cnt_prev - {~q_m[8], 1'b0} + (N1(q_m[7:0]) - N0(q_m[7:0]));
+                cnt <= cnt_prev - {~q_m[8], 1'b0} + (N1(q_m[7:0]) - N0(q_m[7:0]));
             end /*
                 (cnt_prev > 0 & N1(q_m[7:0]) > N0(q_m[7:0]))) |
                 (cnt_prev < 0 & N0(q_m[7:0]) > N1(q_m[7:0])))
@@ -119,7 +119,7 @@ always @(posedge clk) begin
 
     end else begin
         /* !DE */
-        cnt = 0;
+        cnt <= 0;
         /* hsync -> c0 | vsync -> c1 */
         case ({C1, C0})
 `ifdef LEGACY_DVI_CONTROL_LUT
@@ -130,10 +130,10 @@ always @(posedge clk) begin
             2'b11: q_out <= 10'b11010_10101;
 `else
             /* hdmi control data period */
-            2'b00: q_out <= 10'b1101010100;
-            2'b01: q_out <= 10'b0010101011;
-            2'b10: q_out <= 10'b0101010100;
-            2'b11: q_out <= 10'b1010101011;
+            2'b00: q_out <= 10'b11010_10100;
+            2'b01: q_out <= 10'b00101_01011;
+            2'b10: q_out <= 10'b01010_10100;
+            2'b11: q_out <= 10'b10101_01011;
 `endif
         endcase
 

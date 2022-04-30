@@ -214,7 +214,7 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.a4buscached(A4CH5),
 	.a4busuncached(A4UCH5) );
 
-/*rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
+rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
 	.aclk(aclk),
 	.wallclocktime(wallclocktime),
 	.cpuclocktime(cpuclocktime),
@@ -230,7 +230,7 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
 	.aresetn(aresetn),
 	.irq({irq[11], irq[3:0]}),	// H7 unused PS2 unused UART
 	.a4buscached(A4CH7),
-	.a4busuncached(A4UCH7) );*/
+	.a4busuncached(A4UCH7) );
 
 // ----------------------------------------------------------------------------
 // HART arbiters for cached and uncached busses

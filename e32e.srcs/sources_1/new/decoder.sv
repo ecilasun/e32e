@@ -25,7 +25,7 @@ module instructiondecoder(
 
 logic [31:0] instrlatch;
 
-always_comb begin
+always_latch begin
 	if (~aresetn) begin
 		instrlatch <= 32'd0;
 	end else begin

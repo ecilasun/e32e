@@ -59,7 +59,7 @@ i2s_ctl I2SController(
 	.EN_TX_I(1'b1),
 	.EN_RX_I(1'b0),
 	.FS_I(4'b0101), 
-	.MM_I(1'b0),
+	// .MM_I(1'b0),
 	.D_L_I(leftchannel),
 	.D_R_I(rightchannel),
 	.D_L_O(),

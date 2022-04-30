@@ -44,7 +44,7 @@ entity i2s_ctl is
       EN_TX_I     : in  std_logic; -- Transmit enable
       EN_RX_I     : in  std_logic; -- Receive enable
 		FS_I			: in  std_logic_vector(3 downto 0); -- Sampling rate 
-		MM_I    		: in  std_logic; -- Audio controler Master Mode 
+		-- MM_I    		: in  std_logic; -- Audio controler Master Mode 
 		D_L_I       : in  std_logic_vector(C_DATA_WIDTH-1 downto 0); -- Left channel data
       D_R_I       : in  std_logic_vector(C_DATA_WIDTH-1 downto 0); -- Right channel data
 --      OE_L_O      : out std_logic; -- Left channel data output enable pulse

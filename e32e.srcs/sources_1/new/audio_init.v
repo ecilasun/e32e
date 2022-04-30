@@ -134,12 +134,6 @@ end
 
 
 always @(posedge(clk))begin
-    if (state == stData1 && done == 1 && error != 1)
-        regData1 <= data_o;
-end
-
-
-always @(posedge(clk))begin
     if (rst==1)begin
         state<= stIdle;
         delayEn <= 0;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Product Version: Vivado v2021.1.1 (64-bit)              -->
+<!-- Product Version: Vivado v2022.1 (64-bit)              -->
 <!--                                                         -->
-<!-- Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.   -->
+<!-- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="55" Path="F:/FPGA/e32e/e32e.xpr">
+<Project Version="7" Minor="60" Path="F:/FPGA/e32e/e32e.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="8221a9d6005e4863b8b11bee6ceecec5"/>
@@ -12,43 +12,37 @@
     <Option Name="CompiledLibDirXSim" Val=""/>
     <Option Name="CompiledLibDirModelSim" Val="$PCACHEDIR/compile_simlib/modelsim"/>
     <Option Name="CompiledLibDirQuesta" Val="$PCACHEDIR/compile_simlib/questa"/>
-    <Option Name="CompiledLibDirIES" Val="$PCACHEDIR/compile_simlib/ies"/>
     <Option Name="CompiledLibDirXcelium" Val="$PCACHEDIR/compile_simlib/xcelium"/>
     <Option Name="CompiledLibDirVCS" Val="$PCACHEDIR/compile_simlib/vcs"/>
     <Option Name="CompiledLibDirRiviera" Val="$PCACHEDIR/compile_simlib/riviera"/>
     <Option Name="CompiledLibDirActivehdl" Val="$PCACHEDIR/compile_simlib/activehdl"/>
     <Option Name="SimulatorInstallDirModelSim" Val=""/>
     <Option Name="SimulatorInstallDirQuesta" Val=""/>
-    <Option Name="SimulatorInstallDirIES" Val=""/>
     <Option Name="SimulatorInstallDirXcelium" Val=""/>
     <Option Name="SimulatorInstallDirVCS" Val=""/>
     <Option Name="SimulatorInstallDirRiviera" Val=""/>
     <Option Name="SimulatorInstallDirActiveHdl" Val=""/>
     <Option Name="SimulatorGccInstallDirModelSim" Val=""/>
     <Option Name="SimulatorGccInstallDirQuesta" Val=""/>
-    <Option Name="SimulatorGccInstallDirIES" Val=""/>
     <Option Name="SimulatorGccInstallDirXcelium" Val=""/>
     <Option Name="SimulatorGccInstallDirVCS" Val=""/>
     <Option Name="SimulatorGccInstallDirRiviera" Val=""/>
     <Option Name="SimulatorGccInstallDirActiveHdl" Val=""/>
-    <Option Name="SimulatorVersionXsim" Val="2021.1"/>
-    <Option Name="SimulatorVersionModelSim" Val="2020.4"/>
-    <Option Name="SimulatorVersionQuesta" Val="2020.4"/>
-    <Option Name="SimulatorVersionIES" Val="15.20.083"/>
+    <Option Name="SimulatorVersionXsim" Val="2022.1"/>
+    <Option Name="SimulatorVersionModelSim" Val="2021.3"/>
+    <Option Name="SimulatorVersionQuesta" Val="2021.3"/>
     <Option Name="SimulatorVersionXcelium" Val="20.09.006"/>
     <Option Name="SimulatorVersionVCS" Val="R-2020.12"/>
-    <Option Name="SimulatorVersionRiviera" Val="2020.10"/>
+    <Option Name="SimulatorVersionRiviera" Val="2021.04"/>
     <Option Name="SimulatorVersionActiveHdl" Val="12.0"/>
     <Option Name="SimulatorGccVersionXsim" Val="6.2.0"/>
-    <Option Name="SimulatorGccVersionModelSim" Val="5.3.0"/>
-    <Option Name="SimulatorGccVersionQuesta" Val="5.3.0"/>
-    <Option Name="SimulatorGccVersionIES" Val="6.2.0"/>
+    <Option Name="SimulatorGccVersionModelSim" Val="7.4.0"/>
+    <Option Name="SimulatorGccVersionQuesta" Val="7.4.0"/>
     <Option Name="SimulatorGccVersionXcelium" Val="6.3"/>
     <Option Name="SimulatorGccVersionVCS" Val="6.2.0"/>
-    <Option Name="SimulatorGccVersionRiviera" Val="6.2.0"/>
-    <Option Name="SimulatorGccVersionActiveHdl" Val="6.2.0"/>
+    <Option Name="SimulatorGccVersionRiviera" Val="9.3.0"/>
+    <Option Name="SimulatorGccVersionActiveHdl" Val="9.3.0"/>
     <Option Name="BoardPart" Val="digilentinc.com:nexys_video:part0:1.1"/>
-    <Option Name="BoardPartRepoPaths" Val="$PPRDIR/e32e.board"/>
     <Option Name="ActiveSimSet" Val="sim_1"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="ProjectType" Val="Default"/>
@@ -56,7 +50,8 @@
     <Option Name="IPDefaultOutputPath" Val="$PGENDIR/sources_1"/>
     <Option Name="IPCachePermission" Val="read"/>
     <Option Name="IPCachePermission" Val="write"/>
-    <Option Name="EnableCoreContainer" Val="FALSE"/>
+    <Option Name="EnableCoreContainer" Val="TRUE"/>
+    <Option Name="EnableResourceEstimation" Val="FALSE"/>
     <Option Name="CreateRefXciForCoreContainers" Val="FALSE"/>
     <Option Name="IPUserFilesDir" Val="$PIPUSERFILESDIR"/>
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
@@ -69,13 +64,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="442"/>
-    <Option Name="WTModelSimExportSim" Val="442"/>
-    <Option Name="WTQuestaExportSim" Val="442"/>
+    <Option Name="WTXSimExportSim" Val="478"/>
+    <Option Name="WTModelSimExportSim" Val="478"/>
+    <Option Name="WTQuestaExportSim" Val="478"/>
     <Option Name="WTIesExportSim" Val="442"/>
-    <Option Name="WTVcsExportSim" Val="442"/>
-    <Option Name="WTRivieraExportSim" Val="442"/>
-    <Option Name="WTActivehdlExportSim" Val="441"/>
+    <Option Name="WTVcsExportSim" Val="478"/>
+    <Option Name="WTRivieraExportSim" Val="478"/>
+    <Option Name="WTActivehdlExportSim" Val="477"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -88,11 +83,44 @@
     <Option Name="MEMEnableMemoryMapGeneration" Val="TRUE"/>
     <Option Name="DcpsUptoDate" Val="TRUE"/>
     <Option Name="ClassicSocBoot" Val="FALSE"/>
+    <Option Name="LocalIPRepoLeafDirName" Val="ip_repo"/>
   </Configuration>
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
+      <File Path="$PSRCDIR/sources_1/ip/audiofifo.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/audiofifo/audiofifo.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/audiofifo/audiofifo.xci"/>
+          <Attr Name="ImportTime" Val="1651350092"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/framebuffer.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/ip/framebuffer/framebuffer.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/framebuffer/framebuffer.xci"/>
+          <Attr Name="ImportTime" Val="1651350132"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/ps2infifo.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -101,6 +129,15 @@
       </File>
       <File Path="$PSRCDIR/sources_1/ip/ps2infifo/ps2infifo.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/ps2infifo/ps2infifo.xci"/>
+          <Attr Name="ImportTime" Val="1651350132"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/spimasteroutfifo.xcix">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -108,12 +145,30 @@
       </File>
       <File Path="$PSRCDIR/sources_1/ip/spimasteroutfifo/spimasteroutfifo.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/spimasteroutfifo/spimasteroutfifo.xci"/>
+          <Attr Name="ImportTime" Val="1651350133"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/spimasterinfifo.xcix">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/spimasterinfifo/spimasterinfifo.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/spimasterinfifo/spimasterinfifo.xci"/>
+          <Attr Name="ImportTime" Val="1651350133"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/uartinfifo.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -129,7 +184,23 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/ip/uartoutfifo.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/ip/uartoutfifo/uartoutfifo.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/uartoutfifo/uartoutfifo.xci"/>
+          <Attr Name="ImportTime" Val="1651350134"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/a4mailboxram.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -137,6 +208,15 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/a4mailboxram/a4mailboxram.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/a4mailboxram/a4mailboxram.xci"/>
+          <Attr Name="ImportTime" Val="1651350091"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/a4bram64k.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -152,7 +232,23 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/ip/axi_interconnect_0.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/ip/axi_interconnect_0/axi_interconnect_0.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/axi_interconnect_0/axi_interconnect_0.xci"/>
+          <Attr Name="ImportTime" Val="1651350093"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/multDSP.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -160,6 +256,15 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/multDSP/multDSP.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/multDSP/multDSP.xci"/>
+          <Attr Name="ImportTime" Val="1651350132"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/cachemem.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -175,7 +280,23 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_le.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_le/fp_le.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_le/fp_le.xci"/>
+          <Attr Name="ImportTime" Val="1651350113"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_lt.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -184,12 +305,30 @@
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_lt/fp_lt.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_lt/fp_lt.xci"/>
+          <Attr Name="ImportTime" Val="1651350115"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_eq.xcix">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_eq/fp_eq.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_eq/fp_eq.xci"/>
+          <Attr Name="ImportTime" Val="1651350105"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_sqrt.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -198,12 +337,30 @@
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_sqrt/fp_sqrt.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_sqrt/fp_sqrt.xci"/>
+          <Attr Name="ImportTime" Val="1651350126"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_f2i.xcix">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_f2i/fp_f2i.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_f2i/fp_f2i.xci"/>
+          <Attr Name="ImportTime" Val="1651350108"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_ui2f.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -212,12 +369,30 @@
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_ui2f/fp_ui2f.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_ui2f/fp_ui2f.xci"/>
+          <Attr Name="ImportTime" Val="1651350131"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_i2f.xcix">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_i2f/fp_i2f.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_i2f/fp_i2f.xci"/>
+          <Attr Name="ImportTime" Val="1651350110"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_div.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -226,12 +401,30 @@
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_div/fp_div.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_div/fp_div.xci"/>
+          <Attr Name="ImportTime" Val="1651350102"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_mul.xcix">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_mul/fp_mul.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_mul/fp_mul.xci"/>
+          <Attr Name="ImportTime" Val="1651350124"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_sub.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -240,12 +433,30 @@
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_sub/fp_sub.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_sub/fp_sub.xci"/>
+          <Attr Name="ImportTime" Val="1651350129"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_add.xcix">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_add/fp_add.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_add/fp_add.xci"/>
+          <Attr Name="ImportTime" Val="1651350100"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_msub.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -254,12 +465,62 @@
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_msub/fp_msub.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_msub/fp_msub.xci"/>
+          <Attr Name="ImportTime" Val="1651350121"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/fp_madd.xcix">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/ip/fp_madd/fp_madd.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_madd/fp_madd.xci"/>
+          <Attr Name="ImportTime" Val="1651350118"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/videoclockgen.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/videoclockgen/videoclockgen.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/videoclockgen/videoclockgen.xci"/>
+          <Attr Name="ImportTime" Val="1651350135"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/ddr3clk.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/ddr3clk/ddr3clk.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/ddr3clk/ddr3clk.xci"/>
+          <Attr Name="ImportTime" Val="1651350097"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/centralclockgen.xcix">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -323,6 +584,7 @@
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
+          <Attr Name="IsVisible" Val="1"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/new/vgaclkgen.v">
@@ -391,6 +653,7 @@
           <Attr Name="ImportTime" Val="1645732594"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
+          <Attr Name="IsVisible" Val="1"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/new/alu.sv">
@@ -544,6 +807,7 @@
         <FileInfo SFType="VHeader">
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
+          <Attr Name="IsVisible" Val="1"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/new/rv32cpu.sv">
@@ -660,6 +924,7 @@
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
+          <Attr Name="IsVisible" Val="1"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sim_1/new/ddr3_model.sv">
@@ -707,19 +972,6 @@
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
-    <FileSet Name="ddr3clk" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ddr3clk" RelGenDir="$PGENDIR/ddr3clk">
-      <File Path="$PSRCDIR/sources_1/ip/ddr3clk/ddr3clk.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="ddr3clk"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
     <FileSet Name="mig_7series_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/mig_7series_0" RelGenDir="$PGENDIR/mig_7series_0">
       <File Path="$PSRCDIR/sources_1/ip/mig_7series_0_1/mig_7series_0.xci">
         <FileInfo>
@@ -730,32 +982,6 @@
       </File>
       <Config>
         <Option Name="TopModule" Val="mig_7series_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="audiofifo" Type="BlockSrcs" RelSrcDir="$PSRCDIR/audiofifo" RelGenDir="$PGENDIR/audiofifo">
-      <File Path="$PSRCDIR/sources_1/ip/audiofifo/audiofifo.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="audiofifo"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="videoclockgen" Type="BlockSrcs" RelSrcDir="$PSRCDIR/videoclockgen" RelGenDir="$PGENDIR/videoclockgen">
-      <File Path="$PSRCDIR/sources_1/ip/videoclockgen/videoclockgen.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="videoclockgen"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -778,8 +1004,8 @@
       <Option Name="Description" Val="Active-HDL Simulator"/>
     </Simulator>
   </Simulators>
-  <Runs Version="1" Minor="15">
-    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a200tsbg484-1" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/synth_1">
+  <Runs Version="1" Minor="19">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a200tsbg484-1" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
@@ -789,47 +1015,19 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="ddr3clk_synth_1" Type="Ft3:Synth" SrcSet="ddr3clk" Part="xc7a200tsbg484-1" ConstrsSet="ddr3clk" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/ddr3clk_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ddr3clk_synth_1">
+    <Run Id="mig_7series_0_synth_1" Type="Ft3:Synth" SrcSet="mig_7series_0" Part="xc7a200tsbg484-1" ConstrsSet="mig_7series_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/mig_7series_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/mig_7series_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/mig_7series_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="mig_7series_0_synth_1" Type="Ft3:Synth" SrcSet="mig_7series_0" Part="xc7a200tsbg484-1" ConstrsSet="mig_7series_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/mig_7series_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/mig_7series_0_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="audiofifo_synth_1" Type="Ft3:Synth" SrcSet="audiofifo" Part="xc7a200tsbg484-1" ConstrsSet="audiofifo" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/audiofifo_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/audiofifo_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="videoclockgen_synth_1" Type="Ft3:Synth" SrcSet="videoclockgen" Part="xc7a200tsbg484-1" ConstrsSet="videoclockgen" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/videoclockgen_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/videoclockgen_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
@@ -849,9 +1047,11 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="ddr3clk_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="ddr3clk" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="ddr3clk_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ddr3clk_impl_1">
+    <Run Id="mig_7series_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="mig_7series_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="mig_7series_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/mig_7series_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/mig_7series_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -862,58 +1062,7 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="mig_7series_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="mig_7series_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="mig_7series_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/mig_7series_0_impl_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="audiofifo_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="audiofifo" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="audiofifo_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/audiofifo_impl_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="videoclockgen_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="videoclockgen" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="videoclockgen_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/videoclockgen_impl_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
