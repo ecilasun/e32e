@@ -536,12 +536,14 @@ always @(posedge aclk) begin
 							default/*3'b000*/: begin
 								case (func12)
 									12'b1111110_00000: begin	// CFLUSH.D.L1 (32'hFC000073) Writeback dirty D$ lines and invalidate tags
+										// 1111110_00000_0000000000000_1110011
 										dcacheop <= 3'b011;		// D$, write back, mark not dirty
 										ren <= 1'b1;
 										addr <= rval1;
 										cpustate <= LOADWAIT; // HINT: Since rd==0, nothing will actually happen to register file
 									end
 									12'b1111110_00010: begin	// CDISCARD.D.L1 (32'hFC200073) Invalidate D$
+										// 1111110_00010_0000000000000_1110011
 										dcacheop <= 3'b001;		// D$, do not write back, mark not dirty
 										ren <= 1'b1;
 										addr <= rval1;

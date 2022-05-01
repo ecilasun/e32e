@@ -56,7 +56,7 @@ logic cacheid = 1'b0;				// 0: D$ 1: I$
 logic [7:0] dccount = 8'h00;		// Line counter for cache flush
 
 cachemem CacheMemory512(
-	.addra(flushing ? {1'b0, dccount} : {ifetch, line}),		// current cache line (cline)
+	.addra(flushing ? {cacheid, dccount} : {ifetch, line}),		// current cache line (cline)
 	.clka(aclk),												// cache clock
 	.dina(cdin),												// updated cache data to write
 	.wea(cachewe),												// write strobe for current cache line
@@ -130,18 +130,19 @@ always_ff @(posedge aclk) begin
 				rwmode <= {ren, |wstrb};					// Record r/w mode
 				bsel <= wstrb;								// Write byte select
 				coffset <= offset;							// Cache offset 0..15
-				cline <= {ifetch,line};						// Cache line
+				cline <= {ifetch, line};					// Cache line
 				ctag <= tag;								// Cache tag 00000..1ffff
 				ptag <= cachelinetags[{ifetch,line}];		// Previous cache tag
 
 				flushing <= dcacheop[0];
 				writeback <= dcacheop[1];
 				cacheid <= dcacheop[2];
-				dccount <= 8'h00;
 
-				if (dcacheop[0])
+				if (dcacheop[0]) begin
+					// Start cache flush / invalidate op
+					dccount <= 8'h00;
 					cachestate <= CDATAFLUSHBEGIN;
-				else begin
+				end else begin
 					case ({ren, |wstrb})
 						3'b001: cachestate <= uncached ? UCWRITE : CWRITE;
 						3'b010: cachestate <= uncached ? UCREAD : CREAD;
@@ -165,16 +166,16 @@ always_ff @(posedge aclk) begin
 				// Change tag to cause a cache miss for next time around
 				cachelinetags[{cacheid, dccount}] <= 17'h1ffff;
 				// Determine flush state
-				if (cachelinevalid[{cacheid, dccount}] || (~writeback)) begin // In 2'b01 case we're forced to skip writeback, just invalidate
-					// Skip this line if it doesn't need a write back operation
-					cachestate <= CDATAFLUSHSKIP;
-				end else begin
+				if ((~cachelinevalid[{cacheid, dccount}]) && writeback) begin // Write back to memory if forced and line is dirty
 					// Write current line back to RAM
 					cacheaddress <= {1'b0, cachelinetags[{cacheid, dccount}], dccount, 6'd0};
 					cachedout <= {cdout[127:0], cdout[255:128], cdout[383:256], cdout[511:384]};
 					memwritestrobe <= 1'b1;
 					// We're done if this Was the last write
 					cachestate <= CDATAFLUSHWAIT;
+				end else begin // Otherwise, skip writeback
+					// Skip this line if it doesn't need a write back operation
+					cachestate <= CDATAFLUSHSKIP;
 				end
 			end
 
@@ -186,7 +187,7 @@ always_ff @(posedge aclk) begin
 				// Finish our mock 'read' operation
 				rready <= dccount == 8'hFF;
 				// Repeat until we process line 0xFF and go back to idle state
-				cachestate <= dccount == 8'hFF ? IDLE : CDATAFLUSHWAITCREAD;
+				cachestate <= dccount == 8'hFF ? IDLE : CDATAFLUSHBEGIN;
 			end
 
 			CDATAFLUSHWAIT: begin
@@ -201,7 +202,7 @@ always_ff @(posedge aclk) begin
 					// Finish our mock 'read' operation
 					rready <= dccount == 8'hFF;
 					// Repeat until we process line 0xFF and go back to idle state
-					cachestate <= dccount == 8'hFF ? IDLE : CDATAFLUSHWAITCREAD;
+					cachestate <= dccount == 8'hFF ? IDLE : CDATAFLUSHBEGIN;
 				end
 			end
 
