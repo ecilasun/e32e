@@ -1,6 +1,6 @@
 # E32E
 
-This system contains six RISC-V (5*RV32IMZicsr + 1*RV32IMFZicsr) harts with the following features:
+This system contains eigth RISC-V (7*RV32IMZicsr + 1*RV32IMFZicsr) harts with the following features:
 
 What's available
 - Each HART conforms to minimal feature set of rv32imzicsr (DIV/MUL, base integer, CSR registers) except the first which also includes an FPU
