@@ -522,8 +522,8 @@ always @(posedge aclk) begin
 						// f12         rs1   f3  rd    OPCODE
 						//000000000000_00000_001_00000_0001111 -> FENCE.I (32'h0000100F) Flush I$
 						if ({func12, func3} == {12'd0, 3'b001}) begin
-							dcacheop <= 3'b101;		// I$, do not write back, mark not dirty
-							cpustate <= LOADWAIT;	// HINT: Since rd==0, nothing will actually happen to register file
+							dcacheop <= 3'b101;			// I$, do not write back (invalidate tags to fore re-read), mark valid
+							cpustate <= STOREWAIT;
 						end	else
 							dcacheop <= 3'b000;		// noop
 					end
@@ -537,17 +537,17 @@ always @(posedge aclk) begin
 								case (func12)
 									12'b1111110_00000: begin	// CFLUSH.D.L1 (32'hFC000073) Writeback dirty D$ lines and invalidate tags
 										// 1111110_00000_0000000000000_1110011
-										dcacheop <= 3'b011;		// D$, write back, mark not dirty
+										dcacheop <= 3'b011;		// D$, write back (no tag invalidation), mark valid
 										ren <= 1'b1;
 										addr <= rval1;
-										cpustate <= LOADWAIT; // HINT: Since rd==0, nothing will actually happen to register file
+										cpustate <= STOREWAIT;
 									end
 									12'b1111110_00010: begin	// CDISCARD.D.L1 (32'hFC200073) Invalidate D$
 										// 1111110_00010_0000000000000_1110011
-										dcacheop <= 3'b001;		// D$, do not write back, mark not dirty
+										dcacheop <= 3'b001;		// D$, do not write back (invalidate tags to fore re-read), mark valid
 										ren <= 1'b1;
 										addr <= rval1;
-										cpustate <= LOADWAIT; // HINT: Since rd==0, nothing will actually happen to register file
+										cpustate <= STOREWAIT;
 									end
 									12'b0000000_00000: begin	// ECALL - sys call
 										ecall <= mie[3]; // MSIE
@@ -612,6 +612,7 @@ always @(posedge aclk) begin
 			end
 
 			STOREWAIT: begin
+				// Wait for memory write (or cacheop) to complete
 				cpustate <= wready ? RETIRE : STOREWAIT;
 			end
 
