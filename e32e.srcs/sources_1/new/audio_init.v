@@ -52,43 +52,43 @@ module audio_init(
 
     always @(posedge(clk))begin
         case (initA)
-            0: initWord <= {IWR,31'h40150100};
-            1: initWord <= {IWR,31'h40160000};
-            2: initWord <= {IWR,31'h40170000};
-            3: initWord <= {IWR,31'h40F80000};
-            4: initWord <= {IWR,31'h40191300};
-            5: initWord <= {IWR,31'h402A0300};
-            6: initWord <= {IWR,31'h40290300};
-            7: initWord <= {IWR,31'h40F20100};
-            8: initWord <= {IWR,31'h40F97F00};
-            9: initWord <= {IWR,31'h40FA0300};
-            
-            10: initWord <= {IWR,31'h40200300};
-            11: initWord <= {IWR,31'h40220100};
-            12: initWord <= {IWR,31'h40210900};
-            13: initWord <= {IWR,31'h4025E600};
-            14: initWord <= {IWR,31'h4026E600};
-            15: initWord <= {IWR,31'h40270300};
-            16: initWord <= {IWR,31'h40100100};
-            17: initWord <= {IWR,31'h40280000};
-            18: initWord <= {IWR,31'h4023E600};
-            19: initWord <= {IWR,31'h4024E600};
-            
-            20: initWord <= {IWR,31'h400A0100};
-            21: initWord <= {IWR,31'h400B0500};
-            22: initWord <= {IWR,31'h400C0100};
-            23: initWord <= {IWR,31'h400D0500};
-            24: initWord <= {IWR,31'h400E0300};
-            25: initWord <= {IWR,31'h400F0300};
-            26: initWord <= {IWR,31'h401C2100};
-            27: initWord <= {IWR,31'h401D0000};
-            28: initWord <= {IWR,31'h401E4100};
-            29: initWord <= {IWR,31'h401F0000};
-            30: initWord <= {IWR,31'h40F30100};
-            31: initWord <= {IWR,31'h40F40000};
-            32: initWord <= {IWR,31'h40000F00};
-            33: initWord <= {IWR,31'h4002007D};//This sends the address of the PLL reg and the first config bits
-            34: initWord <= {IWR,31'h000C2101}; //These are the config bytes for the PLL reg
+             0: initWord <= {IWR,31'h4015_0100}; // Serial port 0 : MS:1
+             1: initWord <= {IWR,31'h4016_0000}; // Serial port 1 : -
+             2: initWord <= {IWR,31'h4017_0000}; // Converter 0 : CONVSR:000 (48KHz)
+             3: initWord <= {IWR,31'h40F8_0000}; // Serial port sampling rate : SPSR:000
+             4: initWord <= {IWR,31'h4019_1300}; // ADC control : DMPOL:1 ADCEN:11
+             5: initWord <= {IWR,31'h402A_0300}; // DAC control : DACEN:11
+             6: initWord <= {IWR,31'h4029_0300}; // Player power mgmt : PREN:1 PLEN:1
+             7: initWord <= {IWR,31'h40F2_0100}; // Serial input router ctl : SINRT:001
+             8: initWord <= {IWR,31'h40F9_7F00}; // Clock enable 0 : SLEWPD:1 ALCPD:1 DECPD:1 SOUTPD:1 INPTD:1 SINPD:1 SPPD:1
+             9: initWord <= {IWR,31'h40FA_0300}; // Clock enable 1 : CLK1:1 CLK0:1
+
+            10: initWord <= {IWR,31'h4020_0300}; // Play L/R mixer left : MX5G3:01 MX5EN:1
+            11: initWord <= {IWR,31'h4022_0100}; // Play L/R mixer mono : MX7EN:1
+            12: initWord <= {IWR,31'h4021_0900}; // Play L/R mixer right : MX5G4:01 MX6EN:1
+            13: initWord <= {IWR,31'h4025_E600}; // Line output left vol : LOUTVOL:111001 (57) LOUTM:1 LOMODE:0
+            14: initWord <= {IWR,31'h4026_E600}; // Line output right vol : ROUTVOL:111001 (57) ROUTM:1 ROMODE:0
+            15: initWord <= {IWR,31'h4027_0300}; // Play mono output : MONOM:1 MOMODE:1
+            16: initWord <= {IWR,31'h4010_0100}; // Record mic bias : MBIEN:1
+            17: initWord <= {IWR,31'h4028_0000}; // Pop/click supress : POPMODE:0 POPLESS:0 ASLEW:00 Reserved:0
+            18: initWord <= {IWR,31'h4023_E600}; // Play HP left vol LHPVOL:111001 (57) LHPM:1 HPEN:0
+            19: initWord <= {IWR,31'h4024_E600}; // Play HP right vol RHPVOL:111001 (57) RHPM:1 HPEN:0
+
+            20: initWord <= {IWR,31'h400A_0100}; // Rec mixer left 0: MX1EN:1
+            21: initWord <= {IWR,31'h400B_0500}; // Rec mixer left 1: MX1AUXG:101
+            22: initWord <= {IWR,31'h400C_0100}; // Rec mixer right 0: MX2EN:1
+            23: initWord <= {IWR,31'h400D_0500}; // Rec mixer right 1: MX2AUXG:101
+            24: initWord <= {IWR,31'h400E_0300}; // Left diff input vol: LDMUTE:1 LDEN:1
+            25: initWord <= {IWR,31'h400F_0300}; // Right diff input vol: RDMUTE:1 RDEN:1
+            26: initWord <= {IWR,31'h401C_2100}; // Play mixer left 0: MX3LM:1 MX3AUXG:0000 MX3EN:1
+            27: initWord <= {IWR,31'h401D_0000}; // Play mixer left 1: -
+            28: initWord <= {IWR,31'h401E_4100}; // Play mixer right 0: MX4RM:1 MX4LM:0 MX4AUXG:0000 MX4EN:1
+            29: initWord <= {IWR,31'h401F_0000}; // Play mixer right 1: -
+            30: initWord <= {IWR,31'h40F3_0100}; // Serial output route ctl: SOUTRT:0001
+            31: initWord <= {IWR,31'h40F4_0000}; // Serial data/GPIO pin config: LRGP3:0 BGP2:0 SDOGP1:0 SDIGP0:0
+            32: initWord <= {IWR,31'h4000_0F00}; // Clock control: CLKSRC:1(PLL clk) INFREQ:11(1024xfs) COREN:1
+            33: initWord <= {IWR,31'h4002_007D}; // PLL control: M[15:0]:125
+            34: initWord <= {IWR,31'h000C_2101}; // N[15:0]:12 R:0100(int:4) X:00(div:1) Type:1 Lock,PLLEN:0x01
         endcase
     end
     reg msg;//New message signal

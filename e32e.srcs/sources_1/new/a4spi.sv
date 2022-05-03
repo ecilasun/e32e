@@ -30,7 +30,7 @@ wire cansend;
 wire hasvaliddata;
 wire [7:0] spiincomingdata;
 
-// base clock is @50mhz, therefore we're running at 12.5mhz (2->2x2 due to 'half'->50/4==12.5)
+// base clock is @100mhz, therefore we're running at 25mhz (2->2x2 due to 'half'->50/4==12.5)
 spi_master #(.spi_mode(0), .clks_per_half_bit(2)) spi(
    // control/data signals,
    .i_rst_l(aresetn),

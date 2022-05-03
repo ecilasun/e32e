@@ -43,7 +43,7 @@ logic [16:0] ctag;					// current cache tag (17 bits)
 logic [3:0] coffset;				// current word offset 0..15
 logic [8:0] cline;					// current cache line 0..511
 
-logic cachelinevalid[0:511];		// cache line valid bits
+logic cachelinenowb[0:511];			// cache line does not need write back
 logic [16:0] cachelinetags[0:511];	// cache line tags (17 bits)
 
 logic [63:0] cachewe = 64'd0;		// byte select for 64 byte cache line
@@ -65,7 +65,7 @@ initial begin
 	integer i;
 	// all pages are 'clean', all tags are invalid and cache is zeroed out by default
 	for (int i=0; i<512; i=i+1) begin	// 512 lines (256 I$, 256 D$)
-		cachelinevalid[i] = 1'b1;		// cache lines are all valid by default, so no write-back for initial cache-miss
+		cachelinenowb[i] = 1'b1;		// cache lines do not require write-back for initial cache-miss
 		cachelinetags[i]  = 17'h1ffff;	// all bits set for default tag
 	end
 end
@@ -111,7 +111,7 @@ typedef enum logic [4:0] {
 	CWBACK, CWBACKWAIT,
 	CPOPULATE, CPOPULATEWAIT, CUPDATE, CUPDATEDELAY,
 	CDATANOFLUSHBEGIN, CDATANOFLUSHSTEP,
-	CDATAFLUSH, CDATAFLUSHSKIP, CDATAFLUSHWAIT, CDATAFLUSHWAITCREAD } cachestatetype;
+	CDATAFLUSHBEGIN, CDATAFLUSHWAITCREAD, CDATAFLUSH, CDATAFLUSHSKIP, CDATAFLUSHWAIT } cachestatetype;
 cachestatetype cachestate = IDLE;
 
 wire cachehit = ctag == ptag ? 1'b1 : 1'b0;
@@ -139,14 +139,12 @@ always_ff @(posedge aclk) begin
 				cline <= {ifetch, line};					// Cache line
 				ctag <= tag;								// Cache tag 00000..1ffff
 				ptag <= cachelinetags[{ifetch,line}];		// Previous cache tag
-				
-				flushing <= dcacheop[0] & dcacheop[1];
-				cacheid <= dcacheop[2];
 
 				if (dcacheop[0]) begin
 					// Start cache flush / invalidate op
 					dccount <= 8'h00;
-					cachestate <= dcacheop[1] ? CDATAFLUSHWAITCREAD : CDATANOFLUSHBEGIN;
+					cacheid <= dcacheop[2];
+					cachestate <= dcacheop[1] ? CDATAFLUSHBEGIN : CDATANOFLUSHBEGIN;
 				end else begin
 					case ({ren, |wstrb})
 						3'b001: cachestate <= uncached ? UCWRITE : CWRITE;
@@ -158,7 +156,7 @@ always_ff @(posedge aclk) begin
 
 			CDATANOFLUSHBEGIN: begin
 				// Nothing to write from cache for next time around
-				cachelinevalid[{cacheid, dccount}] <= 1'b1;
+				cachelinenowb[{cacheid, dccount}] <= 1'b1;
 				// Change tag to cause a cache miss for next time around
 				cachelinetags[{cacheid, dccount}] <= 17'h1ffff;
 				cachestate <= CDATANOFLUSHSTEP;
@@ -172,6 +170,12 @@ always_ff @(posedge aclk) begin
 				// Repeat until we process line 0xFF and go back to idle state
 				cachestate <= dccount == 8'hFF ? IDLE : CDATANOFLUSHBEGIN;
 			end
+			
+			CDATAFLUSHBEGIN: begin
+				// Switch cache address to use flush counter
+				flushing <= 1'b1;
+				cachestate <= CDATAFLUSHWAITCREAD;
+			end
 
 			CDATAFLUSHWAITCREAD: begin
 				// One clock delay to read cache value at {cacheid, dccount}
@@ -180,20 +184,21 @@ always_ff @(posedge aclk) begin
 
 			CDATAFLUSH: begin
 				// Nothing to write from cache for next time around
-				// We keep the tag since we only want to make sure data is written back, not evicted
-				cachelinevalid[{cacheid, dccount}] <= 1'b1;
+				cachelinenowb[{cacheid, dccount}] <= 1'b1;
 
-				// Determine flush state
-				if ((~cachelinevalid[{cacheid, dccount}])) begin // Write back to memory if line is dirty
+				// We keep the tag same, since we only want to make sure data is written back, not evicted
+
+				// Either write back to memory or skip
+				if (cachelinenowb[{cacheid, dccount}]) begin
+					// Skip this line if it doesn't need a write back operation
+					cachestate <= CDATAFLUSHSKIP;
+				end else begin // Otherwise, skip write back
 					// Write current line back to RAM
 					cacheaddress <= {1'b0, cachelinetags[{cacheid, dccount}], dccount, 6'd0};
 					cachedout <= {cdout[127:0], cdout[255:128], cdout[383:256], cdout[511:384]};
 					memwritestrobe <= 1'b1;
 					// We're done if this Was the last write
 					cachestate <= CDATAFLUSHWAIT;
-				end else begin // Otherwise, skip write back
-					// Skip this line if it doesn't need a write back operation
-					cachestate <= CDATAFLUSHSKIP;
 				end
 			end
 
@@ -277,12 +282,12 @@ always_ff @(posedge aclk) begin
 						4'b1110:  cachewe <= { 4'd0,  bsel, 56'd0 };
 						default:  cachewe <= {        bsel, 60'd0 }; // 4'b1111
 					endcase
-					// This cacbe line needs eviction next time we miss
-					cachelinevalid[cline] <= 1'b0;
+					// This cacbe line needs to be written back to memory on next miss
+					cachelinenowb[cline] <= 1'b0;
 					wready <= 1'b1;
 					cachestate <= IDLE;
 				end else begin
-					cachestate <= ~cachelinevalid[cline] ? CWBACK : CPOPULATE;
+					cachestate <= cachelinenowb[cline] ? CPOPULATE : CWBACK;
 				end
 			end
 
@@ -310,7 +315,7 @@ always_ff @(posedge aclk) begin
 					rready <= 1'b1;
 					cachestate <= IDLE;
 				end else begin // Cache miss when ctag != ptag
-					cachestate <= ~cachelinevalid[cline] ? CWBACK : CPOPULATE;
+					cachestate <= cachelinenowb[cline] ? CPOPULATE : CWBACK;
 				end
 			end
 
@@ -346,7 +351,8 @@ always_ff @(posedge aclk) begin
 			default: begin // CUPDATEDELAY
 				ptag <= ctag;
 				cachelinetags[cline] <= ctag;
-				cachelinevalid[cline] <= 1'b1;
+				// No need to write back since contents are valid and unmodifed
+				cachelinenowb[cline] <= 1'b1;
 				cachestate <= (rwmode == 2'b01) ? CWRITE : CREAD;
 			end
 		endcase
