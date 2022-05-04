@@ -85,7 +85,7 @@ always @(posedge aclk) begin
 					raddrstate <= 2'b01;
 				end
 			end
-			2'b01: begin
+			default/*2'b01*/: begin
 				// Only lsb is returned
 				// NOTE: Need to repeat the byte at each offset due to address alignment picking the right one from inside the word (this device is byte aligned with 16 viable offsets)
 				s_axi.rdata[31:0] <= {7'd0,hartIRQState[s_axi.araddr[3:0]], 7'd0,hartIRQState[s_axi.araddr[3:0]], 7'd0,hartIRQState[s_axi.araddr[3:0]], 7'd0,hartIRQState[s_axi.araddr[3:0]]};

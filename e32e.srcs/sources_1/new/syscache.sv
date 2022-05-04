@@ -37,7 +37,7 @@ wire ucwritedone;
 wire ucreaddone;
 
 logic [3:0] bsel = 4'h0;			// copy of wstrobe
-logic [1:0] rwmode = 2'b00;			// R/W mode bits
+logic [1:0] rwmode = 2'b00;			// r/w mode bits
 logic [16:0] ptag;					// previous cache tag (17 bits)
 logic [16:0] ctag;					// current cache tag (17 bits)
 logic [3:0] coffset;				// current word offset 0..15
@@ -50,23 +50,30 @@ logic [63:0] cachewe = 64'd0;		// byte select for 64 byte cache line
 logic [511:0] cdin;					// input data to write to cache
 wire [511:0] cdout;					// output data read from cache
 
-logic flushing = 1'b0;				// High during cache flush operation
-logic cacheid = 1'b0;				// 0: D$ 1: I$
-logic [7:0] dccount = 8'h00;		// Line counter for cache flush
+logic flushing = 1'b0;				// high during cache flush operation
+logic cacheid = 1'b0;				// 0: D$, 1: I$
+logic [7:0] dccount = 8'h00;		// line counter for cache flush/invalidate ops
+
+logic [8:0] cacheaccess;
+always_comb begin
+	if (flushing)
+		cacheaccess = {cacheid, dccount};
+	else
+		cacheaccess = {ifetch, line};
+end
 
 cachemem CacheMemory512(
-	.addra(flushing ? {cacheid, dccount} : {ifetch, line}),		// current cache line (cline)
-	.clka(aclk),												// cache clock
-	.dina(cdin),												// updated cache data to write
-	.wea(cachewe),												// write strobe for current cache line
-	.douta(cdout) );											// output of currently selected cache line
+	.addra(cacheaccess),	// current cache line
+	.clka(aclk),			// cache clock
+	.dina(cdin),			// updated cache data to write
+	.wea(cachewe),			// write strobe for current cache line
+	.douta(cdout) );		// output of currently selected cache line
 
 initial begin
 	integer i;
-	// all pages are 'clean', all tags are invalid and cache is zeroed out by default
-	for (int i=0; i<512; i=i+1) begin	// 512 lines (256 I$, 256 D$)
+	for (int i=0; i<512; i=i+1) begin	// 512 lines total (0..255 D$, 256..511 I$)
 		cachelinenowb[i] = 1'b1;		// cache lines do not require write-back for initial cache-miss
-		cachelinetags[i]  = 17'h1ffff;	// all bits set for default tag
+		cachelinetags[i] = 17'h1ffff;	// point at the very end of cacheable space
 	end
 end
 
@@ -138,7 +145,7 @@ always_ff @(posedge aclk) begin
 				coffset <= offset;							// Cache offset 0..15
 				cline <= {ifetch, line};					// Cache line
 				ctag <= tag;								// Cache tag 00000..1ffff
-				ptag <= cachelinetags[{ifetch,line}];		// Previous cache tag
+				ptag <= cachelinetags[{ifetch, line}];		// Previous cache tag
 
 				if (dcacheop[0]) begin
 					// Start cache flush / invalidate op
@@ -207,25 +214,25 @@ always_ff @(posedge aclk) begin
 				dccount <= dccount + 8'd1;
 				// Stop 'flushing' mode if we're done
 				flushing <= dccount != 8'hFF;
-				// Finish our mock 'write' operation
+				// Finish our mock 'write' operation if we're done
 				wready <= dccount == 8'hFF;
 				// Repeat until we process line 0xFF and go back to idle state
 				cachestate <= dccount == 8'hFF ? IDLE : CDATAFLUSHWAITCREAD;
 			end
 
 			CDATAFLUSHWAIT: begin
-				if (~wdone) begin
-					// Memory write didn't complete yet
-					cachestate <= CDATAFLUSHWAIT;
-				end else begin
+				if (wdone) begin
 					// Go to next line
 					dccount <= dccount + 8'd1;
 					// Stop 'flushing' mode if we're done
 					flushing <= dccount != 8'hFF;
-					// Finish our mock 'write' operation
+					// Finish our mock 'write' operation if we're done
 					wready <= dccount == 8'hFF;
 					// Repeat until we process line 0xFF and go back to idle state
 					cachestate <= dccount == 8'hFF ? IDLE : CDATAFLUSHWAITCREAD;
+				end else begin
+					// Memory write didn't complete yet
+					cachestate <= CDATAFLUSHWAIT;
 				end
 			end
 

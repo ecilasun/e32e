@@ -27,6 +27,7 @@ module audio_init(
     inout sda,
     inout scl,
     output initDone );
+
     parameter stRegAddr1 = 4'b0000;
     parameter stRegAddr2 =   4'b0001;
     parameter stData1 = 4'b0010;
@@ -44,7 +45,7 @@ module audio_init(
     
     reg [3:0] state=stIdle;//State machine
     reg [32:0] initWord;
-    reg initFbWe;
+    //reg initFbWe;
     reg initEn;
     reg [6:0]initA=0;
 
@@ -144,7 +145,7 @@ always @(posedge(clk))begin
         stb <= 0;
         msg <= 0;
         
-        initFbWe <= 0;
+        //initFbWe <= 0;
         case (state) 
             stRegAddr1: begin// Sends x40
                 if (done == 1)begin
@@ -194,7 +195,7 @@ always @(posedge(clk))begin
                         state <= stError;
                     else begin
                         initEn<=1;
-                        if (initWord[32] == 1) initFbWe <= 1;
+                        //if (initWord[32] == 1) initFbWe <= 1;
                         if (initWord[23:16]== 8'h02)begin//If its the PLL register
                             initA<=initA+1;//Move initWord to the remaining PLL config bits
                             state <= stPLLsecond;//And send them
