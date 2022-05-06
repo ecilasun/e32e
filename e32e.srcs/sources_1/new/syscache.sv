@@ -62,12 +62,15 @@ always_comb begin
 		cacheaccess = {ifetch, line};
 end
 
+wire rsta_busy;
 cachemem CacheMemory512(
-	.addra(cacheaccess),	// current cache line
-	.clka(aclk),			// cache clock
-	.dina(cdin),			// updated cache data to write
-	.wea(cachewe),			// write strobe for current cache line
-	.douta(cdout) );		// output of currently selected cache line
+	.addra(cacheaccess),		// current cache line
+	.clka(aclk),				// cache clock
+	.dina(cdin),				// updated cache data to write
+	.wea(cachewe),				// write strobe for current cache line
+	.douta(cdout),				// output of currently selected cache line
+	.rsta(~aresetn),			// Reset
+	.rsta_busy(rsta_busy) );	// Reset busy
 
 initial begin
 	integer i;
