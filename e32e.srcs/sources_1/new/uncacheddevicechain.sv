@@ -28,7 +28,8 @@ module uncacheddevicechain(
     output wire ac_bclk,
     output wire ac_lrclk,
     output wire ac_dac_sdata,
-    input wire ac_adc_sdata );
+    input wire ac_adc_sdata,
+    output wire [7:0] led);
 
 // ------------------------------------------------------------------------------------
 // Memory mapped hardware
@@ -38,8 +39,8 @@ logic validwaddr_mailbox = 1'b0, validraddr_mailbox = 1'b0;
 logic validwaddr_uart = 1'b0, validraddr_uart = 1'b0;
 logic validwaddr_spi = 1'b0, validraddr_spi = 1'b0;
 logic validwaddr_ps2 = 1'b0, validraddr_ps2 = 1'b0;
+logic validwaddr_leds = 1'b0, validraddr_leds = 1'b0;
 //logic validwaddr_buttons = 1'b0, validraddr_buttons = 1'b0;
-//logic validwaddr_leds = 1'b0, validraddr_leds = 1'b0;
 logic validwaddr_hart = 1'b0, validraddr_hart = 1'b0;
 logic validwaddr_gpu = 1'b0, validraddr_gpu = 1'b0;
 logic validwaddr_audio = 1'b0, validraddr_audio = 1'b0;
@@ -50,9 +51,9 @@ always_comb begin
 		validwaddr_uart			= (axi4if.awaddr[27:0]>=28'h0001000) && (axi4if.awaddr[27:0]<28'h0001010);
 		validwaddr_spi			= (axi4if.awaddr[27:0]>=28'h0001010) && (axi4if.awaddr[27:0]<28'h0001020);
 		validwaddr_ps2			= (axi4if.awaddr[27:0]>=28'h0001020) && (axi4if.awaddr[27:0]<28'h0001030);
-		//validwaddr_buttons	= (axi4if.awaddr[27:0]>=28'h0001030) && (axi4if.awaddr[27:0]<28'h0001040);
-		//validwaddr_leds		= (axi4if.awaddr[27:0]>=28'h0001040) && (axi4if.awaddr[27:0]<28'h0001050);
-		validwaddr_hart			= (axi4if.awaddr[27:0]>=28'h0001050) && (axi4if.awaddr[27:0]<28'h0001060);
+		validwaddr_leds			= (axi4if.awaddr[27:0]>=28'h0001030) && (axi4if.awaddr[27:0]<28'h0001040);
+		validwaddr_hart			= (axi4if.awaddr[27:0]>=28'h0001040) && (axi4if.awaddr[27:0]<28'h0001050);
+		//validwaddr_buttons	= (axi4if.awaddr[27:0]>=28'h0001050) && (axi4if.awaddr[27:0]<28'h0001060);
 		validwaddr_gpu			= (axi4if.awaddr[27:0]>=28'h1000000) && (axi4if.awaddr[27:0]<28'h1080000);
 		validwaddr_audio		= (axi4if.awaddr[27:0]>=28'h2000000) && (axi4if.awaddr[27:0]<28'h2000010);
 	end else begin
@@ -60,8 +61,8 @@ always_comb begin
 		validwaddr_uart			= 1'b0;
 		validwaddr_spi			= 1'b0;
 		validwaddr_ps2			= 1'b0;
+		validwaddr_leds			= 1'b0;
 		//validwaddr_buttons	= 1'b0;
-		//validwaddr_leds		= 1'b0;
 		validwaddr_hart			= 1'b0;
 		validwaddr_gpu			= 1'b0;
 		validwaddr_audio		= 1'b0;
@@ -74,9 +75,9 @@ always_comb begin
 		validraddr_uart			= (axi4if.araddr[27:0]>=28'h0001000) && (axi4if.araddr[27:0]<28'h0001010);
 		validraddr_spi			= (axi4if.araddr[27:0]>=28'h0001010) && (axi4if.araddr[27:0]<28'h0001020);
 		validraddr_ps2			= (axi4if.araddr[27:0]>=28'h0001020) && (axi4if.araddr[27:0]<28'h0001030);
-		//validraddr_buttons	= (axi4if.araddr[27:0]>=28'h0001030) && (axi4if.araddr[27:0]<28'h0001040);
-		//validraddr_leds		= (axi4if.araddr[27:0]>=28'h0001040) && (axi4if.araddr[27:0]<28'h0001050);
-		validraddr_hart			= (axi4if.araddr[27:0]>=28'h0001050) && (axi4if.araddr[27:0]<28'h0001060);
+		validraddr_leds			= (axi4if.araddr[27:0]>=28'h0001030) && (axi4if.araddr[27:0]<28'h0001040);
+		validraddr_hart			= (axi4if.araddr[27:0]>=28'h0001040) && (axi4if.araddr[27:0]<28'h0001050);
+		//validraddr_buttons	= (axi4if.araddr[27:0]>=28'h0001050) && (axi4if.araddr[27:0]<28'h0001060);
 		validraddr_gpu			= (axi4if.araddr[27:0]>=28'h1000000) && (axi4if.araddr[27:0]<28'h1080000);
 		validraddr_audio		= (axi4if.araddr[27:0]>=28'h2000000) && (axi4if.araddr[27:0]<28'h2000010);
 	end else begin
@@ -85,7 +86,7 @@ always_comb begin
 		validraddr_spi			= 1'b0;
 		validraddr_ps2			= 1'b0;
 		//validraddr_buttons	= 1'b0;
-		//validraddr_leds		= 1'b0;
+		validraddr_leds			= 1'b0;
 		validraddr_hart			= 1'b0;
 		validraddr_gpu			= 1'b0;
 		validraddr_audio		= 1'b0;
@@ -139,6 +140,13 @@ axi4hartirq hartirq(
 	.s_axi(hartif),
 	.hirq(hirq) );
 
+axi_if ledif();
+axi4ledctl ledctl(
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.s_axi(ledif),
+	.led(led) );
+
 /*
 axi_if buttonif();
 wire buttonfifoempty;
@@ -178,14 +186,16 @@ a4i2saudio APU(
 // ------------------------------------------------------------------------------------
 
 // TODO: Also add wires.spi_cd != oldcd as an interrupt trigger here, preferably debounced
-//assign irq = {1'b0, ~ps2fifoempty, ~buttonfifoempty, ~uartrcvempty};
-// Top 8 bits are used to wake up corresponding HART
-// Writint one to byte pointer 80001050[hartid] will hold the IRQ high
-// Writing zero to the same address by the responder HART by its own HARTID in the ISR will stop the IRQ
+// Top 8 bits are used to wake up the corresponding HART
+// Writing one to byte pointer 80001050[hartid] will hold the IRQ high
+// Writing zero to the same address by the responder HART (using its own HARTID as index) in the ISR will stop the IRQ
+// PS2 fifo empty is used to detect if there are any pending PS/2 keyboard bytes (responder has to drain all data)
+// UART rcv empty are used to detect if there are waiting bytes in UART buffer (responder has to drain all data)
+// Unused bits are reserved for future hardware
 assign irq = {hirq[7:0], 1'b0, ~ps2fifoempty, 1'b0, ~uartrcvempty};
 
 // ------------------------------------------------------------------------------------
-// write router
+// Uncached device write router
 // ------------------------------------------------------------------------------------
 
 wire [31:0] waddr = {3'b000, axi4if.awaddr[28:0]};
@@ -246,21 +256,16 @@ always_comb begin
 	hartif.bready = validwaddr_hart ? axi4if.bready : 1'b0;
 	hartif.wlast = validwaddr_hart ? axi4if.wlast : 1'b0;
 
-	/*ledif.awaddr = validwaddr_led ? waddr : 32'd0;
-	ledif.awvalid = validwaddr_led ? axi4if.awvalid : 1'b0;
-	ledif.wdata = validwaddr_led ? axi4if.wdata : 0;
-	ledif.wstrb = validwaddr_led ? axi4if.wstrb : 4'h0;
-	ledif.wvalid = validwaddr_led ? axi4if.wvalid : 1'b0;
-	ledif.bready = validwaddr_led ? axi4if.bready : 1'b0;
-	ledif.wlast = validwaddr_led ? axi4if.wlast : 1'b0;*/
-
-	/*ddr3if.awaddr = validwaddr_ddr3 ? waddr : 32'd0;
-	ddr3if.awvalid = validwaddr_ddr3 ? axi4if.awvalid : 1'b0;
-	ddr3if.wdata = validwaddr_ddr3 ? axi4if.wdata : 0;
-	ddr3if.wstrb = validwaddr_ddr3 ? axi4if.wstrb : 4'h0;
-	ddr3if.wvalid = validwaddr_ddr3 ? axi4if.wvalid : 1'b0;
-	ddr3if.bready = validwaddr_ddr3 ? axi4if.bready : 1'b0;
-	ddr3if.wlast = validwaddr_ddr3 ? axi4if.wlast : 1'b0;*/
+	ledif.awaddr = validwaddr_leds ? waddr : 32'd0;
+	ledif.awvalid = validwaddr_leds ? axi4if.awvalid : 1'b0;
+	ledif.awlen = validwaddr_leds ? axi4if.awlen : 0;
+	ledif.awsize = validwaddr_leds ? axi4if.awsize : 0;
+	ledif.awburst = validwaddr_leds ? axi4if.awburst : 0;
+	ledif.wdata = validwaddr_leds ? axi4if.wdata : 0;
+	ledif.wstrb = validwaddr_leds ? axi4if.wstrb : 4'h0;
+	ledif.wvalid = validwaddr_leds ? axi4if.wvalid : 1'b0;
+	ledif.bready = validwaddr_leds ? axi4if.bready : 1'b0;
+	ledif.wlast = validwaddr_leds ? axi4if.wlast : 1'b0;
 
 	gpuif.awaddr = validwaddr_gpu ? waddr : 32'd0;
 	gpuif.awvalid = validwaddr_gpu ? axi4if.awvalid : 1'b0;
@@ -317,21 +322,11 @@ always_comb begin
 		axi4if.bresp = hartif.bresp;
 		axi4if.bvalid = hartif.bvalid;
 		axi4if.wready = hartif.wready;
-	/*end else if (validwaddr_led) begin
+	end else if (validwaddr_leds) begin
 		axi4if.awready = ledif.awready;
 		axi4if.bresp = ledif.bresp;
 		axi4if.bvalid = ledif.bvalid;
-		axi4if.wready = ledif.wready;*/
-	/*end else if (validwaddr_bram) begin
-		axi4if.awready = bramif.awready;
-		axi4if.bresp = bramif.bresp;
-		axi4if.bvalid = bramif.bvalid;
-		axi4if.wready = bramif.wready;*/
-	/*end else if (validwaddr_ddr3) begin
-		axi4if.awready = ddr3if.awready;
-		axi4if.bresp = ddr3if.bresp;
-		axi4if.bvalid = ddr3if.bvalid;
-		axi4if.wready = ddr3if.wready;*/
+		axi4if.wready = ledif.wready;
 	end else if (validwaddr_gpu) begin
 		axi4if.awready = gpuif.awready;
 		axi4if.bresp = gpuif.bresp;
@@ -356,7 +351,7 @@ always_comb begin
 end
 
 // ------------------------------------------------------------------------------------
-// read router
+// Uncached device read router
 // ------------------------------------------------------------------------------------
 
 wire [31:0] raddr = {3'b000, axi4if.araddr[28:0]};
@@ -398,13 +393,12 @@ always_comb begin
 	hartif.arvalid = validraddr_hart ? axi4if.arvalid : 1'b0;
 	hartif.rready = validraddr_hart ? axi4if.rready : 1'b0;
 
-	/*ledif.araddr = validraddr_led ? raddr : 32'd0;
-	ledif.arvalid = validraddr_led ? axi4if.arvalid : 1'b0;
-	ledif.rready = validraddr_led ? axi4if.rready : 1'b0;*/
-
-	/*ddr3if.araddr = validraddr_ddr3 ? raddr : 32'd0;
-	ddr3if.arvalid = validraddr_ddr3 ? axi4if.arvalid : 1'b0;
-	ddr3if.rready = validraddr_ddr3 ? axi4if.rready : 1'b0;*/
+	ledif.araddr = validraddr_leds ? raddr : 32'd0;
+	ledif.arlen = validraddr_leds ? axi4if.arlen : 0;
+	ledif.arsize = validraddr_leds ? axi4if.arsize : 0;
+	ledif.arburst = validraddr_leds ? axi4if.arburst : 0;
+	ledif.arvalid = validraddr_leds ? axi4if.arvalid : 1'b0;
+	ledif.rready = validraddr_leds ? axi4if.rready : 1'b0;
 
 	gpuif.araddr = validraddr_gpu ? raddr : 32'd0;
 	gpuif.arlen = validraddr_gpu ? axi4if.arlen : 0;
@@ -454,24 +448,12 @@ always_comb begin
 		axi4if.rresp = hartif.rresp;
 		axi4if.rvalid = hartif.rvalid;
 		axi4if.rlast = hartif.rlast;
-	/*end else if (validraddr_led) begin
+	end else if (validraddr_leds) begin
 		axi4if.arready = ledif.arready;
 		axi4if.rdata = ledif.rdata;
 		axi4if.rresp = ledif.rresp;
 		axi4if.rvalid = ledif.rvalid;
-		axi4if.rlast = ledif.rlast;*/
-	/*end else if (validraddr_bram) begin
-		axi4if.arready = bramif.arready;
-		axi4if.rdata = bramif.rdata;
-		axi4if.rresp = bramif.rresp;
-		axi4if.rvalid = bramif.rvalid;
-		axi4if.rlast = bramif.rlast;*/
-	/*end else if (validraddr_ddr3) begin
-		axi4if.arready = ddr3if.arready;
-		axi4if.rdata = ddr3if.rdata;
-		axi4if.rresp = ddr3if.rresp;
-		axi4if.rvalid = ddr3if.rvalid;
-		axi4if.rlast = ddr3if.rlast;*/
+		axi4if.rlast = ledif.rlast;
 	end else if (validraddr_gpu) begin
 		axi4if.arready = gpuif.arready;
 		axi4if.rdata = gpuif.rdata;

@@ -46,7 +46,9 @@ module tophat(
     input wire ac_adc_sdata,
     output wire ac_dac_sdata,
     output wire ac_bclk,
-    output wire ac_lrclk );
+    output wire ac_lrclk,
+    // Debug LEDs
+    output wire [7:0] led );
 
 wire audioInitDone;
 assign sd_poweron_n = 1'b0; // always grounded to keep sdcard powered
@@ -57,16 +59,16 @@ assign sd_poweron_n = 1'b0; // always grounded to keep sdcard powered
 
 // Address space is arranged so that device
 // addresses below 0x80000000 are cached
-//  DDR3: 00000000..20000000 : [+] cached r/w
+//  DDR3: 00000000..1FFFFFFF : [+] cached r/w
 //  BRAM: 20000000..2000FFFF : [+] cached r/w
 // ...  : 20010000..7FFFFFFF : [ ] unused
 //  MAIL: 80000000..80000FFF : [+] uncached r/w
 //  UART: 80001000..8000100F : [+] uncached r/w
 //   SPI: 80001010..8000101F : [+] uncached r/w
 //  PS/2: 80001020..8000102F : [+] uncached r/w
-//   BTN: 80001030..8000103F : [ ] uncached r/w
-//   LED: 80001040..8000104F : [ ] uncached r/w
-//  HART: 80001050..8000105F : [ ] uncached w
+//   LED: 80001030..8000103F : [ ] uncached r/w
+//  HART: 80001040..8000104F : [ ] uncached w
+//   BTN: 80001050..8000105F : [ ] uncached r/w
 // ...  : 80001060..80FFFFFF : [ ] unused
 // FB0/1: 81000000..8101FFFF : [+] uncached w
 // ...  : 81020000..8103FFFF : [ ] unused
@@ -320,6 +322,7 @@ uncacheddevicechain UCDEVICECHAIN(
     .ac_bclk(ac_bclk),
     .ac_lrclk(ac_lrclk),
     .ac_dac_sdata(ac_dac_sdata),
-    .ac_adc_sdata(ac_adc_sdata) );
+    .ac_adc_sdata(ac_adc_sdata),
+    .led(led) );
 
 endmodule
