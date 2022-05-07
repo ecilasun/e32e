@@ -22,7 +22,7 @@ module cachedmemorycontroller (
 	typedef enum logic [2:0] {IDLE, RADDR, RDATA, WADDR, WDATA, WRESP} state_type;
 	state_type state = IDLE;
 
-	logic [1:0] len_cnt;
+	logic [1:0] wdata_cnt;
 	logic [1:0] rdata_cnt;
 	assign m_axi.arlen = burstlen - 1;
 	assign m_axi.arsize = SIZE_16_BYTE; // 128bit read bus
@@ -33,19 +33,6 @@ module cachedmemorycontroller (
 
 	always_ff @(posedge aclk) begin
 		if (~areset_n) begin
-			rdata_cnt <= 0;
-		end else begin
-			if (state == RDATA && m_axi.rvalid /* && m_axi.rready*/) begin
-				dout[rdata_cnt] <= m_axi.rdata;
-				rdata_cnt <= rdata_cnt + 1;
-			end else begin
-				rdata_cnt <= 2'd0;
-			end
-		end
-	end
-
-	always_ff @(posedge aclk) begin
-		if (~areset_n) begin
 			m_axi.arvalid <= 0;
 			m_axi.awvalid <= 0;
 			m_axi.rready <= 0;
@@ -53,9 +40,11 @@ module cachedmemorycontroller (
 			m_axi.wstrb <= 16'h0000;
 			m_axi.wlast <= 0;
 			m_axi.bready <= 0;
-			len_cnt <= 0;
+			rdata_cnt <= 0;
+			wdata_cnt <= 0;
 			state <= IDLE;
 		end else begin
+
 			rdone <= 1'b0;
 			wdone <= 1'b0;
 
@@ -83,10 +72,12 @@ module cachedmemorycontroller (
 				end
 
 				RDATA : begin
-					if (m_axi.rvalid  /*&& m_axi.rready*/ && m_axi.rlast) begin
-						m_axi.rready <= 0;
-						rdone <= 1'b1;
-						state <= IDLE;
+					if (m_axi.rvalid  /*&& m_axi.rready*/) begin
+						dout[rdata_cnt] <= m_axi.rdata;
+						rdata_cnt <= rdata_cnt + 1;
+						m_axi.rready <= ~m_axi.rlast;
+						rdone <= m_axi.rlast;
+						state <= m_axi.rlast ? IDLE : RDATA;
 					end else begin
 						state <= RDATA;
 					end
@@ -95,6 +86,13 @@ module cachedmemorycontroller (
 				WADDR : begin
 					if (/*m_axi.awvalid &&*/ m_axi.awready) begin
 						m_axi.awvalid <= 0;
+
+						m_axi.wdata <= din[wdata_cnt];
+						m_axi.wstrb <= 16'hFFFF;
+						m_axi.wvalid <= 1;
+						m_axi.wlast <= (wdata_cnt == (burstlen-1)) ? 1 : 0;
+						wdata_cnt <= wdata_cnt + 1;
+
 						state <= WDATA;
 					end else begin
 						state <= WADDR;
@@ -102,18 +100,13 @@ module cachedmemorycontroller (
 				end
 
 				WDATA : begin
-					m_axi.wdata <= din[len_cnt];
-					m_axi.wstrb <= 16'hFFFF;
-					m_axi.wvalid <= 1;
-					m_axi.wlast <= (len_cnt == (burstlen-1)) ? 1 : 0;
-					if (/*m_axi.wvalid &&*/ m_axi.wready)
-						len_cnt <= len_cnt + 1;
-					if (/*m_axi.wvalid &&*/ m_axi.wready && (len_cnt == (burstlen-1))/*m_axi.wlast*/) begin
-						m_axi.bready <= 1;
-						state <= WRESP;
-					end else begin
-						state <= WDATA;
+					if (/*m_axi.wvalid &&*/ m_axi.wready) begin
+						m_axi.wdata <= din[wdata_cnt];
+						m_axi.wlast <= (wdata_cnt == (burstlen-1)) ? 1 : 0;
+						wdata_cnt <= wdata_cnt + 1;
 					end
+					m_axi.bready <= (wdata_cnt == (burstlen-1));
+					state <= (wdata_cnt == (burstlen-1)) ? WRESP : WDATA;
 				end
 
 				default/*WRESP*/ : begin
