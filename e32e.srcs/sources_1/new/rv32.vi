@@ -1,4 +1,14 @@
 
+// Handle CDC for signals from non-aclk domains
+(* async_reg = "true" *) logic [63:0] wc1, wallclocktime;
+(* async_reg = "true" *) logic [63:0] cc1, cpuclocktime;
+always @(posedge aclk) begin
+	wc1 <= wc0;
+	wallclocktime <= wc1;
+	cc1 <= cc0;
+	cpuclocktime <= cc1;
+end
+
 // Memory wires
 logic ifetch = 1'b0;			// I$/D$ select
 addr_t addr = RESETVECTOR;		// Memory address

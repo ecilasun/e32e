@@ -164,8 +164,8 @@ wire [11:0] irq;
 
 rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 	.aclk(aclk),
-	.wallclocktime(wallclocktime),
-	.cpuclocktime(cpuclocktime),
+	.wc0(wallclocktime),
+	.cc0(cpuclocktime),
 	.aresetn(aresetn),
 	.irq({irq[4], irq[3:0]}),	// H0 unused PS2 unused UART
 	.a4buscached(A4CH0),
@@ -173,8 +173,8 @@ rv32cpu #(.RESETVECTOR(32'h20000000), .HARTID(0)) HART0 (
 
 rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.aclk(aclk),
-	.wallclocktime(wallclocktime),
-	.cpuclocktime(cpuclocktime),
+	.wc0(wallclocktime),
+	.cc0(cpuclocktime),
 	.aresetn(aresetn),
 	.irq({irq[5], irq[3:0]}),	// H1 unused PS2 unused UART
 	.a4buscached(A4CH1),
@@ -182,8 +182,8 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 
 rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 	.aclk(aclk),
-	.wallclocktime(wallclocktime),
-	.cpuclocktime(cpuclocktime),
+	.wc0(wallclocktime),
+	.cc0(cpuclocktime),
 	.aresetn(aresetn),
 	.irq({irq[6], irq[3:0]}),	// H2 unused PS2 unused UART
 	.a4buscached(A4CH2),
@@ -191,8 +191,8 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 
 rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.aclk(aclk),
-	.wallclocktime(wallclocktime),
-	.cpuclocktime(cpuclocktime),
+	.wc0(wallclocktime),
+	.cc0(cpuclocktime),
 	.aresetn(aresetn),
 	.irq({irq[7], irq[3:0]}),	// H3 unused PS2 unused UART
 	.a4buscached(A4CH3),
@@ -200,8 +200,8 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 
 rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 	.aclk(aclk),
-	.wallclocktime(wallclocktime),
-	.cpuclocktime(cpuclocktime),
+	.wc0(wallclocktime),
+	.cc0(cpuclocktime),
 	.aresetn(aresetn),
 	.irq({irq[8], irq[3:0]}),	// H4 unused PS2 unused UART
 	.a4buscached(A4CH4),
@@ -209,8 +209,8 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
 
 rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 	.aclk(aclk),
-	.wallclocktime(wallclocktime),
-	.cpuclocktime(cpuclocktime),
+	.wc0(wallclocktime),
+	.cc0(cpuclocktime),
 	.aresetn(aresetn),
 	.irq({irq[9], irq[3:0]}),	// H5 unused PS2 unused UART
 	.a4buscached(A4CH5),
@@ -218,8 +218,8 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
 
 rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
 	.aclk(aclk),
-	.wallclocktime(wallclocktime),
-	.cpuclocktime(cpuclocktime),
+	.wc0(wallclocktime),
+	.cc0(cpuclocktime),
 	.aresetn(aresetn),
 	.irq({irq[10], irq[3:0]}),	// H6 unused PS2 unused UART
 	.a4buscached(A4CH6),
@@ -227,8 +227,8 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
 
 rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
 	.aclk(aclk),
-	.wallclocktime(wallclocktime),
-	.cpuclocktime(cpuclocktime),
+	.wc0(wallclocktime),
+	.cc0(cpuclocktime),
 	.aresetn(aresetn),
 	.irq({irq[11], irq[3:0]}),	// H7 unused PS2 unused UART
 	.a4buscached(A4CH7),

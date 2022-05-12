@@ -378,6 +378,7 @@ set_property CONFIG_MODE SPIx4 [current_design]
 
 # Reset is a false path
 set_false_path -from [get_pins ClockAndResetGen/selfresetn_reg/C]
+set_false_path -from [get_pins ClockAndResetGen/aresetn_reg/C]
 # set_false_path -to [get_pins ClockAndResetGen/calib_done]
 # CSR register mapped times are not that critical and are false paths
 set_false_path -from [get_pins {wallclocktime_reg[*]/C}]

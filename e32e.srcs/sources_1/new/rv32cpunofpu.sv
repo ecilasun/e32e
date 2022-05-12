@@ -15,8 +15,8 @@ module rv32cpunofpu #(
 	input wire aclk,
 	input wire aresetn,
 	wire [4:0] irq, // Top bit is HART IRQ
-	input wire [63:0] wallclocktime,
-	input wire [63:0] cpuclocktime,
+	input wire [63:0] wc0,
+	input wire [63:0] cc0,
 	axi_if.master a4buscached,
 	axi_if.master a4busuncached );
 
