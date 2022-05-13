@@ -47,15 +47,15 @@ logic validwaddr_audio = 1'b0, validraddr_audio = 1'b0;
 
 always_comb begin
 	if (axi4if.awaddr[31]) begin
-		validwaddr_mailbox		= (axi4if.awaddr[27:0]>=28'h0000000) && (axi4if.awaddr[27:0]<28'h0001000);
-		validwaddr_uart			= (axi4if.awaddr[27:0]>=28'h0001000) && (axi4if.awaddr[27:0]<28'h0001010);
-		validwaddr_spi			= (axi4if.awaddr[27:0]>=28'h0001010) && (axi4if.awaddr[27:0]<28'h0001020);
-		validwaddr_ps2			= (axi4if.awaddr[27:0]>=28'h0001020) && (axi4if.awaddr[27:0]<28'h0001030);
-		validwaddr_leds			= (axi4if.awaddr[27:0]>=28'h0001030) && (axi4if.awaddr[27:0]<28'h0001040);
-		validwaddr_hart			= (axi4if.awaddr[27:0]>=28'h0001040) && (axi4if.awaddr[27:0]<28'h0001050);
-		//validwaddr_buttons	= (axi4if.awaddr[27:0]>=28'h0001050) && (axi4if.awaddr[27:0]<28'h0001060);
-		validwaddr_gpu			= (axi4if.awaddr[27:0]>=28'h1000000) && (axi4if.awaddr[27:0]<28'h1080000);
-		validwaddr_audio		= (axi4if.awaddr[27:0]>=28'h2000000) && (axi4if.awaddr[27:0]<28'h2000010);
+		validwaddr_mailbox		= (axi4if.awaddr[25:0]>=26'h0000000) && (axi4if.awaddr[25:0]<26'h0001000);
+		validwaddr_uart			= (axi4if.awaddr[25:0]>=26'h0001000) && (axi4if.awaddr[25:0]<26'h0001010);
+		validwaddr_spi			= (axi4if.awaddr[25:0]>=26'h0001010) && (axi4if.awaddr[25:0]<26'h0001020);
+		validwaddr_ps2			= (axi4if.awaddr[25:0]>=26'h0001020) && (axi4if.awaddr[25:0]<26'h0001030);
+		validwaddr_leds			= (axi4if.awaddr[25:0]>=26'h0001030) && (axi4if.awaddr[25:0]<26'h0001040);
+		validwaddr_hart			= (axi4if.awaddr[25:0]>=26'h0001040) && (axi4if.awaddr[25:0]<26'h0001050);
+		//validwaddr_buttons	= (axi4if.awaddr[25:0]>=26'h0001050) && (axi4if.awaddr[25:0]<26'h0001060);
+		validwaddr_gpu			= (axi4if.awaddr[25:0]>=26'h1000000) && (axi4if.awaddr[25:0]<26'h1080000);
+		validwaddr_audio		= (axi4if.awaddr[25:0]>=26'h2000000) && (axi4if.awaddr[25:0]<26'h2000010);
 	end else begin
 		validwaddr_mailbox		= 1'b0;
 		validwaddr_uart			= 1'b0;
@@ -71,15 +71,15 @@ end
 
 always_comb begin
 	if (axi4if.araddr[31]) begin
-		validraddr_mailbox		= (axi4if.araddr[27:0]>=28'h0000000) && (axi4if.araddr[27:0]<28'h0001000);
-		validraddr_uart			= (axi4if.araddr[27:0]>=28'h0001000) && (axi4if.araddr[27:0]<28'h0001010);
-		validraddr_spi			= (axi4if.araddr[27:0]>=28'h0001010) && (axi4if.araddr[27:0]<28'h0001020);
-		validraddr_ps2			= (axi4if.araddr[27:0]>=28'h0001020) && (axi4if.araddr[27:0]<28'h0001030);
-		validraddr_leds			= (axi4if.araddr[27:0]>=28'h0001030) && (axi4if.araddr[27:0]<28'h0001040);
-		validraddr_hart			= (axi4if.araddr[27:0]>=28'h0001040) && (axi4if.araddr[27:0]<28'h0001050);
-		//validraddr_buttons	= (axi4if.araddr[27:0]>=28'h0001050) && (axi4if.araddr[27:0]<28'h0001060);
-		validraddr_gpu			= (axi4if.araddr[27:0]>=28'h1000000) && (axi4if.araddr[27:0]<28'h1080000);
-		validraddr_audio		= (axi4if.araddr[27:0]>=28'h2000000) && (axi4if.araddr[27:0]<28'h2000010);
+		validraddr_mailbox		= (axi4if.araddr[25:0]>=26'h0000000) && (axi4if.araddr[25:0]<26'h0001000);
+		validraddr_uart			= (axi4if.araddr[25:0]>=26'h0001000) && (axi4if.araddr[25:0]<26'h0001010);
+		validraddr_spi			= (axi4if.araddr[25:0]>=26'h0001010) && (axi4if.araddr[25:0]<26'h0001020);
+		validraddr_ps2			= (axi4if.araddr[25:0]>=26'h0001020) && (axi4if.araddr[25:0]<26'h0001030);
+		validraddr_leds			= (axi4if.araddr[25:0]>=26'h0001030) && (axi4if.araddr[25:0]<26'h0001040);
+		validraddr_hart			= (axi4if.araddr[25:0]>=26'h0001040) && (axi4if.araddr[25:0]<26'h0001050);
+		//validraddr_buttons	= (axi4if.araddr[25:0]>=26'h0001050) && (axi4if.araddr[25:0]<26'h0001060);
+		validraddr_gpu			= (axi4if.araddr[25:0]>=26'h1000000) && (axi4if.araddr[25:0]<26'h1080000);
+		validraddr_audio		= (axi4if.araddr[25:0]>=26'h2000000) && (axi4if.araddr[25:0]<26'h2000010);
 	end else begin
 		validraddr_mailbox		= 1'b0;
 		validraddr_uart			= 1'b0;
