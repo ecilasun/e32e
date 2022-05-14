@@ -60,15 +60,15 @@ framebuffer FB0(
 	.clka(aclk),
 	.dina(fbdin),
 	.douta(fbdouta),
-	.ena( (|fbwe0) & (~cpupage_d) ),
+	.ena( ~cpupage_d ),		// Always accessible when selected
 	.wea(fbwe0),
-	// Scan-out and DMA access channel
+	// Scan-out and spare write access channel
 	.addrb(fbscana),
 	.clkb(pixelclock),
-	.dinb(),				// TODO: Reserved for DMA
+	.dinb(),				// TODO: Reserved
 	.doutb(fbscanout0),
 	.enb((~blank_d) & (~scanpage_d)),
-	.web(4'h0) );			// TODO: Reserved for DMA
+	.web(4'h0) );			// TODO: Reserved
 
 framebuffer FB1(
 	// CPU read/write channel
@@ -76,15 +76,15 @@ framebuffer FB1(
 	.clka(aclk),
 	.dina(fbdin),
 	.douta(fbdoutb),
-	.ena( (|fbwe1) & cpupage_d ),
+	.ena( cpupage_d ),		// Always accessible when selected
 	.wea(fbwe1),
-	// Scan-out and DMA access channel
+	// Scan-out and spare write access channel
 	.addrb(fbscana),
 	.clkb(pixelclock),
-	.dinb(),				// TODO: Reserved for DMA
+	.dinb(),				// TODO: Reserved
 	.doutb(fbscanout1),
 	.enb((~blank_d) & scanpage_d),
-	.web(4'h0) );			// TODO: Reserved for DMA
+	.web(4'h0) );			// TODO: Reserved
 
 // ----------------------------------------------------------------------------
 // Color palette
