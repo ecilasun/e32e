@@ -64,13 +64,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="510"/>
-    <Option Name="WTModelSimExportSim" Val="510"/>
-    <Option Name="WTQuestaExportSim" Val="510"/>
+    <Option Name="WTXSimExportSim" Val="512"/>
+    <Option Name="WTModelSimExportSim" Val="512"/>
+    <Option Name="WTQuestaExportSim" Val="512"/>
     <Option Name="WTIesExportSim" Val="442"/>
-    <Option Name="WTVcsExportSim" Val="510"/>
-    <Option Name="WTRivieraExportSim" Val="510"/>
-    <Option Name="WTActivehdlExportSim" Val="509"/>
+    <Option Name="WTVcsExportSim" Val="512"/>
+    <Option Name="WTRivieraExportSim" Val="512"/>
+    <Option Name="WTActivehdlExportSim" Val="511"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -713,6 +713,13 @@
         <FileInfo>
           <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/new/decoder.sv"/>
           <Attr Name="ImportTime" Val="1645741470"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/devicewires_if.sv">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>

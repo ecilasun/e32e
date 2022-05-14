@@ -50,8 +50,37 @@ module tophat(
     // Debug LEDs
     output wire [7:0] led );
 
-wire audioInitDone;
-assign sd_poweron_n = 1'b0; // always grounded to keep sdcard powered
+// ----------------------------------------------------------------------------
+// External device connections
+// ----------------------------------------------------------------------------
+
+// Always grounded to keep sdcard powered
+// TODO: Should be software controlled
+assign sd_poweron_n = 1'b0;
+
+devicewires_if wires(
+	.uart_rxd_out(uart_rxd_out),
+	.uart_txd_in(uart_txd_in),
+	.ps2_clk(ps2_clk),
+	.ps2_data(ps2_data),
+	.spi_cs_n(spi_cs_n),
+	.spi_mosi(spi_mosi),
+	.spi_miso(spi_miso),
+	.spi_sck(spi_sck),
+	.spi_cd(spi_cd),
+	.scl(scl),
+	.sda(sda),
+	.ac_bclk(ac_bclk),
+	.ac_lrclk(ac_lrclk),
+	.ac_dac_sdata(ac_dac_sdata),
+	.ac_adc_sdata(ac_adc_sdata),
+	.led(led) );
+
+gpudataoutput gpudata(
+	.tmdsp(hdmi_tx_p),
+	.tmdsn(hdmi_tx_n),
+	.tmdsclkp(hdmi_tx_clk_p ),
+	.tmdsclkn(hdmi_tx_clk_n) );
 
 // ----------------------------------------------------------------------------
 // Device address map
@@ -256,13 +285,6 @@ arbiter UCARB(
 // Cached devices (unrouted for now)
 // ----------------------------------------------------------------------------
 
-// GPU output signals
-gpudataoutput gpudata(
-	.tmdsp(hdmi_tx_p),
-	.tmdsn(hdmi_tx_n),
-	.tmdsclkp(hdmi_tx_clk_p ),
-	.tmdsclkn(hdmi_tx_clk_n) );
-
 // DDR3 in/out signals
 ddr3devicewires ddr3wires(
 	.ddr3_reset_n(ddr3_reset_n),
@@ -297,32 +319,19 @@ cacheddevicechain CDEVICECHAIN(
 
 // Uncached devices and wires
 uncacheddevicechain UCDEVICECHAIN(
+	// Clocks
 	.aclk(aclk),
 	.pixelclock(pixelclock),
 	.videoclock(videoclock),
 	.uartbaseclock(uartbaseclock),
 	.spibaseclock(spibaseclock),
 	.hidclock(hidclock),
+	// Bus/IRQ/Init
 	.aresetn(aresetn),
-	.uart_rxd_out(uart_rxd_out),
-	.uart_txd_in(uart_txd_in),
-    .ps2_clk(ps2_clk),
-    .ps2_data(ps2_data),
-	.spi_cs_n(spi_cs_n),
-	.spi_mosi(spi_mosi),
-	.spi_miso(spi_miso),
-	.spi_sck(spi_sck),
-	.spi_cd(spi_cd),
 	.axi4if(A4UCH),
-	.gpudata(gpudata),
 	.irq(irq),
-	.initDone(audioInitDone),
-	.scl(scl),
-	.sda(sda),
-    .ac_bclk(ac_bclk),
-    .ac_lrclk(ac_lrclk),
-    .ac_dac_sdata(ac_dac_sdata),
-    .ac_adc_sdata(ac_adc_sdata),
-    .led(led) );
+	// Device wires
+	.gpudata(gpudata),
+	.wires(wires) );
 
 endmodule

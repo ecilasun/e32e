@@ -16,17 +16,23 @@ wire hsync, vsync, blank;
 wire [10:0] video_x;
 wire [10:0] video_y;
 
-logic [14:0] fbwa;
-logic [31:0] fbdin;
+logic [14:0] fbra = 0;
+logic [14:0] fbwa = 0;
+logic [31:0] fbdin = 0;
+wire [31:0] fbdouta;
+wire [31:0] fbdoutb;
 logic [3:0] fbwe0 = 4'h0;
 logic [3:0] fbwe1 = 4'h0;
 
 logic hsync_d, vsync_d, blank_d;
 logic [23:0] paletteout_d;
 
-// Framebuffer select
-logic writepage = 1'b0;
-logic writepage_d = 1'b0;
+// CPU/GPU framebuffer select
+// By default, CPU can r/w to page #0, and GPU scans out from page #1
+logic cpupage = 1'b0;
+logic cpupage_d = 1'b0;
+logic scanpage = 1'b1;
+logic scanpage_d = 1'b1;
 
 wire out_tmds_red;
 wire out_tmds_green;
@@ -38,41 +44,47 @@ wire [9:0] pix_x = video_x[10:1];
 wire [9:0] pix_y = video_y[10:1];
 
 // Byte address of current pixel
-wire [16:0] fbra = pix_y[7:0]*320 + pix_x[8:0]; // y*320 + x
+wire [16:0] fbscana = pix_y[7:0]*320 + pix_x[8:0]; // y*320 + x
 
 // Scan-out from the page we're not writing to
-wire [7:0] fbdout0;
-wire [7:0] fbdout1;
+wire [7:0] fbscanout0;
+wire [7:0] fbscanout1;
 
 // ----------------------------------------------------------------------------
 // Framebuffer
 // ----------------------------------------------------------------------------
 
 framebuffer FB0(
-	// Input from uncached bus
-	.addra(fbwa),
+	// CPU read/write channel
+	.addra((|fbwe0) ? fbwa : fbra),
 	.clka(aclk),
 	.dina(fbdin),
+	.douta(fbdouta),
+	.ena( (|fbwe0) & (~cpupage_d) ),
 	.wea(fbwe0),
-	.ena( (|fbwe0) ),
-	// Output to scanline fifo
-	.addrb(fbra),
+	// Scan-out and DMA access channel
+	.addrb(fbscana),
 	.clkb(pixelclock),
-	.doutb(fbdout0),
-	.enb((~blank_d) & writepage_d) );
+	.dinb(),				// TODO: Reserved for DMA
+	.doutb(fbscanout0),
+	.enb((~blank_d) & (~scanpage_d)),
+	.web(4'h0) );			// TODO: Reserved for DMA
 
 framebuffer FB1(
-	// Input from uncached bus
-	.addra(fbwa),
+	// CPU read/write channel
+	.addra((|fbwe1) ? fbwa : fbra),
 	.clka(aclk),
 	.dina(fbdin),
+	.douta(fbdoutb),
+	.ena( (|fbwe1) & cpupage_d ),
 	.wea(fbwe1),
-	.ena( (|fbwe1) ),
-	// Output to scanline fifo
-	.addrb(fbra),
+	// Scan-out and DMA access channel
+	.addrb(fbscana),
 	.clkb(pixelclock),
-	.doutb(fbdout1),
-	.enb((~blank_d) & (~writepage_d)) );
+	.dinb(),				// TODO: Reserved for DMA
+	.doutb(fbscanout1),
+	.enb((~blank_d) & scanpage_d),
+	.web(4'h0) );			// TODO: Reserved for DMA
 
 // ----------------------------------------------------------------------------
 // Color palette
@@ -82,8 +94,8 @@ logic palettewe = 1'b0;
 logic [7:0] palettewa = 8'h00;
 logic [23:0] palettedin = 24'h000000;
 
-// Look up the palette data with based on which framebuffer has scanout
-wire [7:0] palettera = writepage_d ? fbdout0 : fbdout1;
+// CPU r/w and scan-out pages are controlled individually
+wire [7:0] palettera = scanpage_d ? fbscanout1 : fbscanout0;
 
 logic [23:0] paletteentries[0:255];
 
@@ -108,7 +120,8 @@ always @(posedge pixelclock) begin
 	hsync_d <= hsync;
 	vsync_d <= vsync;
 	blank_d <= blank;
-	writepage_d <= writepage;
+	cpupage_d <= cpupage;
+	scanpage_d <= scanpage;
 	paletteout_d <= paletteout;
 end
 
@@ -186,9 +199,9 @@ always @(posedge aclk) begin
 					// pal:   @81020000 // s_axi.awaddr[19:16] == 2 [+]
 					// ctl:   @81040000 // s_axi.awaddr[19:16] == 4 [+]
 					case (s_axi.awaddr[19:16])
-						default/*4'h0*/: begin // fb0 / fb1 depending on writepage
+						default/*4'h0*/: begin // fb0 / fb1 depending on cpupage
 							fbdin <= s_axi.wdata[31:0];
-							if (writepage) // Write to FB1
+							if (cpupage) // Write to FB1
 								fbwe1 <= s_axi.wstrb[3:0];
 							else // Write to FB0
 								fbwe0 <= s_axi.wstrb[3:0];
@@ -197,8 +210,9 @@ always @(posedge aclk) begin
 							palettedin <= s_axi.wdata[23:0];
 							palettewe <= 1'b1;
 						end
-						4'h4: begin // ctl
-							writepage <= s_axi.wdata[0];
+						4'h4: begin // ctl: write and read page selection
+							cpupage <= s_axi.wdata[0];	// 0: FB0, 1: FB1
+							scanpage <= s_axi.wdata[1];	// 0: FB0, 1: FB1
 						end
 					endcase
 					s_axi.wready <= 1'b1;
@@ -228,13 +242,17 @@ always @(posedge aclk) begin
 		case (raddrstate)
 			2'b00: begin
 				if (s_axi.arvalid) begin
+					fbra <= s_axi.araddr[16:2];
 					s_axi.arready <= 1'b1;
 					raddrstate <= 2'b01;
 				end
 			end
 			default/*2'b01*/: begin
 				if (s_axi.rready) begin
-					s_axi.rdata[31:0] <= 32'd0; // Nothing to read here
+					if (cpupage) // Read from FB1
+						s_axi.rdata[31:0] <= fbdouta;
+					else // Read from FB0
+						s_axi.rdata[31:0] <= fbdoutb;
 					s_axi.rvalid <= 1'b1;
 					raddrstate <= 2'b00;
 				end

@@ -10,26 +10,11 @@ module uncacheddevicechain(
 	input wire hidclock,
 	input wire uartbaseclock,
 	input wire spibaseclock,
-	output wire uart_rxd_out,
-	input wire uart_txd_in,
-    input wire ps2_clk,
-    input wire ps2_data,
-	output wire spi_cs_n,
-	output wire spi_mosi,
-	input wire spi_miso,
-	output wire spi_sck,
-	input wire spi_cd, // TODO: Wire this to IRQ line
     axi_if.slave axi4if,
 	gpudataoutput.def gpudata,
 	output wire [11:0] irq,
 	output wire initDone, // Audio init done, might want an IRQ from this (or negative of this) to notify OS?
-    inout scl,
-    inout sda,
-    output wire ac_bclk,
-    output wire ac_lrclk,
-    output wire ac_dac_sdata,
-    input wire ac_adc_sdata,
-    output wire [7:0] led);
+	devicewires_if.device wires );
 
 // ------------------------------------------------------------------------------------
 // Memory mapped hardware
@@ -106,8 +91,8 @@ axi4uart UART(
 	.aresetn(aresetn),
 	.s_axi(uartif),
 	.uartbaseclock(uartbaseclock),
-	.uart_rxd_out(uart_rxd_out),
-	.uart_txd_in(uart_txd_in),
+	.uart_rxd_out(wires.uart_rxd_out),
+	.uart_txd_in(wires.uart_txd_in),
 	.uartrcvempty(uartrcvempty) );
 
 axi_if spiif();
@@ -115,10 +100,10 @@ axi4spi spimaster(
 	.aclk(aclk),
 	.spibaseclock(spibaseclock),
 	.aresetn(aresetn),
-	.spi_cs_n(spi_cs_n),
-	.spi_mosi(spi_mosi),
-	.spi_miso(spi_miso),
-	.spi_sck(spi_sck),
+	.spi_cs_n(wires.spi_cs_n),
+	.spi_mosi(wires.spi_mosi),
+	.spi_miso(wires.spi_miso),
+	.spi_sck(wires.spi_sck),
 	.s_axi(spiif) );
 
 axi_if ps2if();
@@ -127,8 +112,8 @@ axi4ps2keyboard ps2keyboard(
 	.aclk(aclk),
 	.hidclock(hidclock),
 	.aresetn(aresetn),
-    .ps2_clk(ps2_clk),
-    .ps2_data(ps2_data),
+    .ps2_clk(wires.ps2_clk),
+    .ps2_data(wires.ps2_data),
 	.ps2fifoempty(ps2fifoempty),
 	.s_axi(ps2if) );
 
@@ -145,7 +130,7 @@ axi4ledctl ledctl(
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.s_axi(ledif),
-	.led(led) );
+	.led(wires.led) );
 
 /*
 axi_if buttonif();
@@ -176,10 +161,10 @@ a4i2saudio APU(
     .scl(scl),
     .sda(sda),
     .initDone(initDone),
-    .ac_bclk(ac_bclk),
-    .ac_lrclk(ac_lrclk),
-    .ac_dac_sdata(ac_dac_sdata),
-    .ac_adc_sdata(ac_adc_sdata) );
+    .ac_bclk(wires.ac_bclk),
+    .ac_lrclk(wires.ac_lrclk),
+    .ac_dac_sdata(wires.ac_dac_sdata),
+    .ac_adc_sdata(wires.ac_adc_sdata) );
 
 // ------------------------------------------------------------------------------------
 // interrupt setup
