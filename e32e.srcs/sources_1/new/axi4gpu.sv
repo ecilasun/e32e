@@ -67,7 +67,7 @@ framebuffer FB0(
 	.clkb(pixelclock),
 	.dinb(),				// TODO: Reserved
 	.doutb(fbscanout0),
-	.enb((~blank_d) & (~scanpage_d)),
+	.enb( ~scanpage_d ),	// Always accessible when selected
 	.web(4'h0) );			// TODO: Reserved
 
 framebuffer FB1(
@@ -83,7 +83,7 @@ framebuffer FB1(
 	.clkb(pixelclock),
 	.dinb(),				// TODO: Reserved
 	.doutb(fbscanout1),
-	.enb((~blank_d) & scanpage_d),
+	.enb( scanpage_d ),		// Always accessible when selected
 	.web(4'h0) );			// TODO: Reserved
 
 // ----------------------------------------------------------------------------

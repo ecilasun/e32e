@@ -13,8 +13,7 @@ module uncacheddevicechain(
     axi_if.slave axi4if,
 	gpudataoutput.def gpudata,
 	output wire [11:0] irq,
-	output wire initDone, // Audio init done, might want an IRQ from this (or negative of this) to notify OS?
-	devicewires_if.device wires );
+	devicewires.def wires );
 
 // ------------------------------------------------------------------------------------
 // Memory mapped hardware
@@ -160,7 +159,6 @@ a4i2saudio APU(
 	.s_axi(audioif),
     .scl(scl),
     .sda(sda),
-    .initDone(initDone),
     .ac_bclk(wires.ac_bclk),
     .ac_lrclk(wires.ac_lrclk),
     .ac_dac_sdata(wires.ac_dac_sdata),

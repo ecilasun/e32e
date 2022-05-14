@@ -7,7 +7,6 @@ module a4i2saudio (
     axi_if.slave s_axi,
     inout scl,					// I2C SCL for audio chip
     inout sda,					// I2C SDA for audio chip
-    output wire initDone,		// I2C initialization is done
     output wire ac_bclk,		// Audio bus
     output wire ac_lrclk,		// L/R sample clock
     output wire ac_dac_sdata,	// DAC output (i.e. playback)
@@ -17,6 +16,7 @@ module a4i2saudio (
 // Audio Init
 // ------------------------------------------------------------------------------------
 
+wire initDone;		// I2C initialization is done
 audio_init AudioI2CInit(
     .clk(hidclock),
     .rst(~aresetn),
@@ -55,7 +55,7 @@ logic [15:0] rightchannel = 0;
 
 i2s_ctl I2SController(
 	.CLK_I(aclk),
-	.RST_I(~aresetn),		 
+	.RST_I(~(aresetn | initDone)), // Hold until I2C initialization is done
 	.EN_TX_I(1'b1),
 	.EN_RX_I(1'b0),
 	.FS_I(4'b0101), 
