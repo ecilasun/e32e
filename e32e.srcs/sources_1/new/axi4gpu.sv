@@ -30,7 +30,6 @@ logic [23:0] paletteout_d;
 // CPU/GPU framebuffer select
 // By default, CPU can r/w to page #0, and GPU scans out from page #1
 logic cpupage = 1'b0;
-logic cpupage_d = 1'b0;
 logic scanpage = 1'b1;
 logic scanpage_d = 1'b1;
 
@@ -60,7 +59,7 @@ framebuffer FB0(
 	.clka(aclk),
 	.dina(fbdin),
 	.douta(fbdouta),
-	.ena( ~cpupage_d ),		// Always accessible when selected
+	.ena( ~cpupage ),		// Always accessible when selected
 	.wea(fbwe0),
 	// Scan-out and spare write access channel
 	.addrb(fbscana),
@@ -76,7 +75,7 @@ framebuffer FB1(
 	.clka(aclk),
 	.dina(fbdin),
 	.douta(fbdoutb),
-	.ena( cpupage_d ),		// Always accessible when selected
+	.ena( cpupage ),		// Always accessible when selected
 	.wea(fbwe1),
 	// Scan-out and spare write access channel
 	.addrb(fbscana),
@@ -120,7 +119,6 @@ always @(posedge pixelclock) begin
 	hsync_d <= hsync;
 	vsync_d <= vsync;
 	blank_d <= blank;
-	cpupage_d <= cpupage;
 	scanpage_d <= scanpage;
 	paletteout_d <= paletteout;
 end

@@ -55,7 +55,7 @@ logic [15:0] rightchannel = 0;
 
 i2s_ctl I2SController(
 	.CLK_I(aclk),
-	.RST_I(~(aresetn | initDone)), // Hold until I2C initialization is done
+	.RST_I((~aresetn) | (~initDone)), // Hold until I2C initialization is done
 	.EN_TX_I(1'b1),
 	.EN_RX_I(1'b0),
 	.FS_I(4'b0101), 
