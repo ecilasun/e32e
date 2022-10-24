@@ -30,15 +30,6 @@ always_comb begin
 	reqcomplete = (axi_m.rvalid && axi_m.rlast) || axi_m.bvalid;
 end
 
-always_ff @(posedge aclk) begin
-	if (~aresetn) begin
-		grant <= 0;
-	end else begin
-		// Grant access to the lowest device index requesting (lowest bit)
-		grant <= (arbiterstate == ARBITRATE) ? ((~req+1)&req) : grant;
-	end
-end
-
 genvar gnt;
 generate
 for (gnt=0; gnt<8; gnt++) begin
@@ -216,25 +207,23 @@ end
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
 		arbiterstate <= INIT;
+		grant <= 0;
 	end else begin
-		arbiterstate <= nextarbiterstate;
+		case (arbiterstate)
+			default: begin // INIT
+				arbiterstate <= ARBITRATE;
+			end
+
+			ARBITRATE: begin
+				arbiterstate <= (|req) ? GRANTED : ARBITRATE;
+				grant <= ((~req+1) & req);
+			end
+
+			GRANTED: begin
+				arbiterstate <= reqcomplete ? ARBITRATE : GRANTED;
+			end
+		endcase
 	end
-end
-
-always_comb begin
-	case (arbiterstate)
-		INIT: begin
-			nextarbiterstate = ARBITRATE;
-		end
-
-		ARBITRATE: begin
-			nextarbiterstate = (|req) ? GRANTED : ARBITRATE;
-		end
-
-		default/*GRANTED*/: begin
-			nextarbiterstate = reqcomplete ? ARBITRATE : GRANTED;
-		end
-	endcase
 end
 
 endmodule

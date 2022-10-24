@@ -13,10 +13,21 @@ module clockandreset(
 	output wire clk_sys_i,
 	output wire clk_ref_i,
 	output wire audioclock,
-	output logic selfresetn,
-	output logic aresetn );
+	output wire selfresetn,
+	output wire aresetn );
 
 wire centralclocklocked, peripheralclklocked, ddr3clklocked;
+
+(* async_reg = "true" *) logic calibA = 1'b0;
+(* async_reg = "true" *) logic calibB = 1'b0;
+always @(posedge wallclock) begin
+	calibA <= calib_done;
+	calibB <= calibA;
+end
+
+(* async_reg = "true" *) logic regaresetn = 1'b0;
+assign aresetn = regaresetn ? calibB : 1'b0;
+assign selfresetn = regaresetn;
 
 centralclockgen centralclock(
 	.clk_in1(sys_clock_i),
@@ -42,21 +53,23 @@ videoclockgen peripheralclock(
 
 // Hold reset until clocks are locked
 wire internalreset = ~(centralclocklocked & peripheralclklocked & ddr3clklocked);
+(* async_reg = "true" *) logic resettrigA = 1'b1;
+(* async_reg = "true" *) logic resettrigB = 1'b1;
 
-// delayed reset post-clock-lock
-logic [3:0] resetcountdown = 4'hf;
-always @(posedge wallclock) begin // using slowest clock
-	if (internalreset) begin
-		resetcountdown <= 4'hf;
-		selfresetn <= 1'b0;
-		aresetn <= 1'b0;
+// Delayed reset post-clock-lock
+logic [15:0] resetcountdown = 16'h0001;
+
+always @(posedge wallclock) begin
+	if (resettrigB) begin
+		resetcountdown <= 16'h0001;
+		regaresetn <= 1'b0;
 	end else begin
-		if (/*busready &&*/ (resetcountdown == 4'h0))
-			selfresetn <= 1'b1;
-		else
-			resetcountdown <= resetcountdown - 4'h1;
-		aresetn <= selfresetn ? calib_done : 1'b0;
+		resetcountdown <= {resetcountdown[14:0], 1'b1};
+		regaresetn <= resetcountdown[15];
 	end
+	// DC
+	resettrigA <= internalreset;
+	resettrigB <= resettrigA;
 end
 
 endmodule
