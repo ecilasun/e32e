@@ -19,7 +19,7 @@ What's available
 - There is a PS/2 keyboard interface for keyboard entry (used by the current ROM image)
 - FENCE.I, CFLUSH.D.L1 and CDISCARD.D.L1 instructions supported
 - SDCard file access available via SPIMaster and SDK helpers (ROM has a small commandline to help load/run ELF executables)
-- HART#0 contains an FPU, other cores do not (might share/add one if/when FPU gets smaller to be reasonable)
+- HART#0's FPU might be shared if it fits onto the AXI4 bus
 
 Work in progress
 - Make cost of cache hit less than 3 clocks (2 clocks experimented with, works properly)
