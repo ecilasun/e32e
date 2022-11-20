@@ -828,7 +828,7 @@ module ddr3_model (
 
         begin
 
-            tmp_model_dir = "F:\\FPGA\\e32e\\tmp";
+            tmp_model_dir = "G:\\e32e\\tmp";
 
             $display(
 

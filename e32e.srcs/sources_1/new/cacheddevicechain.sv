@@ -22,23 +22,19 @@ logic validwaddr_ddr3 = 1'b0, validraddr_ddr3 = 1'b0;
 logic validwaddr_bram = 1'b0, validraddr_bram = 1'b0;
 
 always_comb begin
-	if(axi4if.awaddr[31] == 1'b0) begin
-		validwaddr_ddr3 = (axi4if.awaddr[29:0]>=30'h00000000) && (axi4if.awaddr[29:0]<30'h20000000);
-		validwaddr_bram = (axi4if.awaddr[29:0]>=30'h20000000) && (axi4if.awaddr[29:0]<30'h20010000);
-	end else begin
-		validwaddr_ddr3 = 1'b0;
-		validwaddr_bram = 1'b0;
-	end
+	casex (axi4if.awaddr)
+		32'b000x_xxxx_xxxx_xxxx_xxxx_xxxx_xxxx_xxxx :	{validwaddr_ddr3, validwaddr_bram} = 2'b10;
+		32'b0010_0000_0000_0000_xxxx_xxxx_xxxx_xxxx :	{validwaddr_ddr3, validwaddr_bram} = 2'b01;
+		default :										{validwaddr_ddr3, validwaddr_bram} = 2'b00;
+	endcase
 end
 
 always_comb begin
-	if(axi4if.araddr[31] == 1'b0) begin
-		validraddr_ddr3 = (axi4if.araddr[29:0]>=30'h00000000) && (axi4if.araddr[29:0]<30'h20000000);
-		validraddr_bram = (axi4if.araddr[29:0]>=30'h20000000) && (axi4if.araddr[29:0]<30'h20010000);
-	end else begin
-		validraddr_ddr3 = 1'b0;
-		validraddr_bram = 1'b0;
-	end
+	casex (axi4if.araddr)
+		32'b000x_xxxx_xxxx_xxxx_xxxx_xxxx_xxxx_xxxx :	{validraddr_ddr3, validraddr_bram} = 2'b10;
+		32'b0010_0000_0000_0000_xxxx_xxxx_xxxx_xxxx :	{validraddr_ddr3, validraddr_bram} = 2'b01;
+		default :										{validraddr_ddr3, validraddr_bram} = 2'b00;
+	endcase
 end
 
 axi_if ddr3if();

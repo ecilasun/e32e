@@ -179,17 +179,13 @@ axi_if A4CH0(), A4UCH0();
 axi_if A4CH1(), A4UCH1();
 axi_if A4CH2(), A4UCH2();
 axi_if A4CH3(), A4UCH3();
-axi_if A4CH4(), A4UCH4();
-axi_if A4CH5(), A4UCH5();
-axi_if A4CH6(), A4UCH6();
-axi_if A4CH7(), A4UCH7();
 
 // Arbitrated cached and uncached busses
 axi_if A4CH(), A4UCH();
 
 // IRQs in descending bit order
 //  11 10 9  8  7  6  5  4  3      2   1      0
-// [H7 H6 H5 H4 H3 H2 H1 H0 unused PS2 unused UART]
+// [-- -- -- -- H3 H2 H1 H0 unused PS2 unused UART]
 wire [11:0] irq;
 
 // ----------------------------------------------------------------------------
@@ -243,42 +239,6 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 	.a4buscached(A4CH3),
 	.a4busuncached(A4UCH3) );
 
-rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(4)) HART4 (
-	.aclk(aclk),
-	.wc0(wallclocktime),
-	.cc0(cpuclocktime),
-	.aresetn(aresetn),
-	.irq({irq[8], irq[3:0]}),	// H4 unused PS2 unused UART
-	.a4buscached(A4CH4),
-	.a4busuncached(A4UCH4) );
-
-rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(5)) HART5 (
-	.aclk(aclk),
-	.wc0(wallclocktime),
-	.cc0(cpuclocktime),
-	.aresetn(aresetn),
-	.irq({irq[9], irq[3:0]}),	// H5 unused PS2 unused UART
-	.a4buscached(A4CH5),
-	.a4busuncached(A4UCH5) );
-
-rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(6)) HART6 (
-	.aclk(aclk),
-	.wc0(wallclocktime),
-	.cc0(cpuclocktime),
-	.aresetn(aresetn),
-	.irq({irq[10], irq[3:0]}),	// H6 unused PS2 unused UART
-	.a4buscached(A4CH6),
-	.a4busuncached(A4UCH6) );
-
-rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
-	.aclk(aclk),
-	.wc0(wallclocktime),
-	.cc0(cpuclocktime),
-	.aresetn(aresetn),
-	.irq({irq[11], irq[3:0]}),	// H7 unused PS2 unused UART
-	.a4buscached(A4CH7),
-	.a4busuncached(A4UCH7) );
-
 // ----------------------------------------------------------------------------
 // HART arbiters for cached and uncached busses
 // ----------------------------------------------------------------------------
@@ -287,14 +247,14 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(7)) HART7 (
 arbiter CARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.axi_s({A4CH7, A4CH6, A4CH5, A4CH4, A4CH3, A4CH2, A4CH1, A4CH0}),
+	.axi_s({A4CH3, A4CH2, A4CH1, A4CH0}),
 	.axi_m(A4CH) );
 
 // Uncached bus arbiter
 arbiter UCARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.axi_s({A4UCH7, A4UCH6, A4UCH5, A4UCH4, A4UCH3, A4UCH2, A4UCH1, A4UCH0}),
+	.axi_s({A4UCH3, A4UCH2, A4UCH1, A4UCH0}),
 	.axi_m(A4UCH) );
 
 // ----------------------------------------------------------------------------

@@ -30,51 +30,31 @@ logic validwaddr_gpu = 1'b0, validraddr_gpu = 1'b0;
 logic validwaddr_audio = 1'b0, validraddr_audio = 1'b0;
 
 always_comb begin
-	if (axi4if.awaddr[31]) begin
-		validwaddr_mailbox		= (axi4if.awaddr[28:0]>=29'h0000000) && (axi4if.awaddr[28:0]<29'h0001000);
-		validwaddr_uart			= (axi4if.awaddr[28:0]>=29'h0001000) && (axi4if.awaddr[28:0]<29'h0001010);
-		validwaddr_spi			= (axi4if.awaddr[28:0]>=29'h0001010) && (axi4if.awaddr[28:0]<29'h0001020);
-		validwaddr_ps2			= (axi4if.awaddr[28:0]>=29'h0001020) && (axi4if.awaddr[28:0]<29'h0001030);
-		validwaddr_leds			= (axi4if.awaddr[28:0]>=29'h0001030) && (axi4if.awaddr[28:0]<29'h0001040);
-		validwaddr_hart			= (axi4if.awaddr[28:0]>=29'h0001040) && (axi4if.awaddr[28:0]<29'h0001050);
-		//validwaddr_buttons	= (axi4if.awaddr[28:0]>=29'h0001050) && (axi4if.awaddr[28:0]<29'h0001060);
-		validwaddr_gpu			= (axi4if.awaddr[28:0]>=29'h1000000) && (axi4if.awaddr[28:0]<29'h1080000);
-		validwaddr_audio		= (axi4if.awaddr[28:0]>=29'h2000000) && (axi4if.awaddr[28:0]<29'h2000010);
-	end else begin
-		validwaddr_mailbox		= 1'b0;
-		validwaddr_uart			= 1'b0;
-		validwaddr_spi			= 1'b0;
-		validwaddr_ps2			= 1'b0;
-		validwaddr_leds			= 1'b0;
-		//validwaddr_buttons	= 1'b0;
-		validwaddr_hart			= 1'b0;
-		validwaddr_gpu			= 1'b0;
-		validwaddr_audio		= 1'b0;
-	end
+	casex (axi4if.awaddr)
+		32'b1000_0000_0000_0000_0000_xxxx_xxxx_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b10000000;
+		32'b1000_0000_0000_0000_0001_0000_0000_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b01000000;
+		32'b1000_0000_0000_0000_0001_0000_0001_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00100000;
+		32'b1000_0000_0000_0000_0001_0000_0010_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00010000;
+		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00001000;
+		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000100;
+		32'b1000_0001_0000_0xxx_xxxx_xxxx_xxxx_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000010;
+		32'b1000_0010_0000_0000_0000_0000_0000_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000001;
+		default :										{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000000;
+	endcase
 end
 
 always_comb begin
-	if (axi4if.araddr[31]) begin
-		validraddr_mailbox		= (axi4if.araddr[28:0]>=29'h0000000) && (axi4if.araddr[28:0]<29'h0001000);
-		validraddr_uart			= (axi4if.araddr[28:0]>=29'h0001000) && (axi4if.araddr[28:0]<29'h0001010);
-		validraddr_spi			= (axi4if.araddr[28:0]>=29'h0001010) && (axi4if.araddr[28:0]<29'h0001020);
-		validraddr_ps2			= (axi4if.araddr[28:0]>=29'h0001020) && (axi4if.araddr[28:0]<29'h0001030);
-		validraddr_leds			= (axi4if.araddr[28:0]>=29'h0001030) && (axi4if.araddr[28:0]<29'h0001040);
-		validraddr_hart			= (axi4if.araddr[28:0]>=29'h0001040) && (axi4if.araddr[28:0]<29'h0001050);
-		//validraddr_buttons	= (axi4if.araddr[28:0]>=29'h0001050) && (axi4if.araddr[28:0]<29'h0001060);
-		validraddr_gpu			= (axi4if.araddr[28:0]>=29'h1000000) && (axi4if.araddr[28:0]<29'h1080000);
-		validraddr_audio		= (axi4if.araddr[28:0]>=29'h2000000) && (axi4if.araddr[28:0]<29'h2000010);
-	end else begin
-		validraddr_mailbox		= 1'b0;
-		validraddr_uart			= 1'b0;
-		validraddr_spi			= 1'b0;
-		validraddr_ps2			= 1'b0;
-		//validraddr_buttons	= 1'b0;
-		validraddr_leds			= 1'b0;
-		validraddr_hart			= 1'b0;
-		validraddr_gpu			= 1'b0;
-		validraddr_audio		= 1'b0;
-	end
+	casex (axi4if.araddr)
+		32'b1000_0000_0000_0000_0000_xxxx_xxxx_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b10000000;
+		32'b1000_0000_0000_0000_0001_0000_0000_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b01000000;
+		32'b1000_0000_0000_0000_0001_0000_0001_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00100000;
+		32'b1000_0000_0000_0000_0001_0000_0010_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00010000;
+		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00001000;
+		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000100;
+		32'b1000_0001_0000_0xxx_xxxx_xxxx_xxxx_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000010;
+		32'b1000_0010_0000_0000_0000_0000_0000_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000001;
+		default :										{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000000;
+	endcase
 end
 
 axi_if mailboxif();

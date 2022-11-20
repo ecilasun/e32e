@@ -13,15 +13,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 ns"></ZoomStartTime>
-      <ZoomEndTime time="8,785.000001 ns"></ZoomEndTime>
-      <Cursor1Time time="0.000000 ns"></Cursor1Time>
+      <ZoomStartTime time="266,329.000000 ns"></ZoomStartTime>
+      <ZoomEndTime time="266,778.200001 ns"></ZoomEndTime>
+      <Cursor1Time time="266,435.200000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="206"></NameColumnWidth>
+      <NameColumnWidth column_width="200"></NameColumnWidth>
       <ValueColumnWidth column_width="90"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="156" />
+   <WVObjectSize size="152" />
    <wave_markers>
       <marker time="149955000000" label="" />
       <marker time="139545000000" label="" />
@@ -224,28 +224,16 @@
       <obj_property name="ObjectShortName">aresetn</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CARB/req" type="array">
-      <obj_property name="ElementShortName">req[7:0]</obj_property>
-      <obj_property name="ObjectShortName">req[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CARB/shiftreq" type="array">
-      <obj_property name="ElementShortName">shiftreq[7:0]</obj_property>
-      <obj_property name="ObjectShortName">shiftreq[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CARB/shiftgrant" type="array">
-      <obj_property name="ElementShortName">shiftgrant[7:0]</obj_property>
-      <obj_property name="ObjectShortName">shiftgrant[7:0]</obj_property>
+      <obj_property name="ElementShortName">req[3:0]</obj_property>
+      <obj_property name="ObjectShortName">req[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CARB/grant" type="array">
-      <obj_property name="ElementShortName">grant[7:0]</obj_property>
-      <obj_property name="ObjectShortName">grant[7:0]</obj_property>
+      <obj_property name="ElementShortName">grant[3:0]</obj_property>
+      <obj_property name="ObjectShortName">grant[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CARB/reqcomplete" type="logic">
       <obj_property name="ElementShortName">reqcomplete</obj_property>
       <obj_property name="ObjectShortName">reqcomplete</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CARB/roll" type="array">
-      <obj_property name="ElementShortName">roll[2:0]</obj_property>
-      <obj_property name="ObjectShortName">roll[2:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CARB/arbiterstate" type="array">
       <obj_property name="ElementShortName">arbiterstate[3:0]</obj_property>
@@ -268,28 +256,16 @@
       <obj_property name="ObjectShortName">aresetn</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/req" type="array">
-      <obj_property name="ElementShortName">req[7:0]</obj_property>
-      <obj_property name="ObjectShortName">req[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCARB/shiftreq" type="array">
-      <obj_property name="ElementShortName">shiftreq[7:0]</obj_property>
-      <obj_property name="ObjectShortName">shiftreq[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCARB/shiftgrant" type="array">
-      <obj_property name="ElementShortName">shiftgrant[7:0]</obj_property>
-      <obj_property name="ObjectShortName">shiftgrant[7:0]</obj_property>
+      <obj_property name="ElementShortName">req[3:0]</obj_property>
+      <obj_property name="ObjectShortName">req[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/grant" type="array">
-      <obj_property name="ElementShortName">grant[7:0]</obj_property>
-      <obj_property name="ObjectShortName">grant[7:0]</obj_property>
+      <obj_property name="ElementShortName">grant[3:0]</obj_property>
+      <obj_property name="ObjectShortName">grant[3:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/reqcomplete" type="logic">
       <obj_property name="ElementShortName">reqcomplete</obj_property>
       <obj_property name="ObjectShortName">reqcomplete</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/UCARB/roll" type="array">
-      <obj_property name="ElementShortName">roll[2:0]</obj_property>
-      <obj_property name="ObjectShortName">roll[2:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/UCARB/arbiterstate" type="array">
       <obj_property name="ElementShortName">arbiterstate[3:0]</obj_property>
@@ -668,5 +644,14 @@
    <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3instance/sys_rst" type="logic">
       <obj_property name="ElementShortName">sys_rst</obj_property>
       <obj_property name="ObjectShortName">sys_rst</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider469">
+      <obj_property name="label">UART</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/UCDEVICECHAIN/UART/datatotransmit" type="array">
+      <obj_property name="ElementShortName">datatotransmit[7:0]</obj_property>
+      <obj_property name="ObjectShortName">datatotransmit[7:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
    </wvobject>
 </wave_config>
