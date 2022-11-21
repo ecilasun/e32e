@@ -1,6 +1,6 @@
 # E32E
 
-This system contains four RISC-V (3*RV32IMZicsr + 1*RV32IMFZicsr) hardware threads clocked at 100MHz with the following features:
+This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware threads clocked at 100MHz with the following features:
 
 - Each core tries to conform to minimal feature set of rv32imzicsr (DIV/MUL, base integer, CSR registers)
   - The first core has an FPU which is currently not shared with other cores
@@ -19,6 +19,8 @@ This system contains four RISC-V (3*RV32IMZicsr + 1*RV32IMFZicsr) hardware threa
 - Video output provided via DVI over HDMI, with a single uncached framebuffer
 - A sample ROM image (source here: https://github.com/ecilasun/riscvtool/tree/main/e32e) which shows how to set up a basic environment to load and run user programs from micro-SD card
   - Current ROM image supports a user timer interrupt handler to be installed via MAILBOX/HARTIRQ memory mapped writes
+- A simple GPU and a dynamic framebuffer pointer
+  - Does 128bit burst-reads from any cached memory including DDR3 into a scanline cache (20 bursts == 320 pixels in 8bit indexed color mode)
 
 Work in progress
 - Make cost of cache hit less than 3 clocks (2 clocks experimented with, works properly)
@@ -27,4 +29,3 @@ Work in progress
 - Experiment with _even more_ cores
 - Need terminal output over DVI to be able to retire TTY at one point (i.e. fonts)
 - Perhaps retire TTY to utilize it as a debug port instead
-- Get rid of 'GPU' and move everything over to software using all other cores instead

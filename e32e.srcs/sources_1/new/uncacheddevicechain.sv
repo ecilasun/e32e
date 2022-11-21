@@ -11,7 +11,12 @@ module uncacheddevicechain(
 	input wire uartbaseclock,
 	input wire spibaseclock,
     axi_if.slave axi4if,
-	gpudataoutput.def gpudata,
+	// GPU
+	output wire gpufifoempty,
+	output wire [31:0] gpufifodout,
+	input wire gpufifore,
+	output wire gpufifovalid,
+	// IRQ
 	output wire [11:0] irq,
 	devicewires.def wires );
 
@@ -37,7 +42,7 @@ always_comb begin
 		32'b1000_0000_0000_0000_0001_0000_0010_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00010000;
 		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00001000;
 		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000100;
-		32'b1000_0001_0000_0xxx_xxxx_xxxx_xxxx_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000010;
+		32'b1000_0000_0000_0000_0001_0000_0101_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000010;
 		32'b1000_0010_0000_0000_0000_0000_0000_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000001;
 		default :										{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000000;
 	endcase
@@ -51,7 +56,7 @@ always_comb begin
 		32'b1000_0000_0000_0000_0001_0000_0010_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00010000;
 		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00001000;
 		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000100;
-		32'b1000_0001_0000_0xxx_xxxx_xxxx_xxxx_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000010;
+		32'b1000_0000_0000_0000_0001_0000_0101_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000010;
 		32'b1000_0010_0000_0000_0000_0000_0000_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000001;
 		default :										{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000000;
 	endcase
@@ -123,13 +128,14 @@ axi4buttons devicebuttons(
 	.buttonfifoempty(buttonfifoempty) );*/
 
 axi_if gpuif();
-axi4gpu GPU(
+gpucommanddevice gpucmdinst(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.pixelclock(pixelclock),
-	.videoclock(videoclock),
 	.s_axi(gpuif),
-	.gpudata(gpudata) );
+	.fifoempty(gpufifoempty),
+	.fifodout(gpufifodout),
+	.fifore(gpufifore),
+	.fifovalid(gpufifovalid) );
 
 axi_if audioif();
 a4i2saudio APU(

@@ -104,24 +104,19 @@ gpudataoutput gpudata(
 
 // Address space is arranged so that device
 // addresses below 0x80000000 are cached
-//  DDR3: 00000000..1FFFFFFF : [+] cached r/w
-//  BRAM: 20000000..2000FFFF : [+] cached r/w
-// ...  : 20010000..7FFFFFFF : [ ] unused
-//  MAIL: 80000000..80000FFF : [+] uncached r/w
-//  UART: 80001000..8000100F : [+] uncached r/w
-//   SPI: 80001010..8000101F : [+] uncached r/w
-//  PS/2: 80001020..8000102F : [+] uncached r/w
-//   LED: 80001030..8000103F : [ ] uncached r/w
-//  HART: 80001040..8000104F : [ ] uncached w
-//   BTN: 80001050..8000105F : [ ] uncached r/w
-// ...  : 80001060..80FFFFFF : [ ] unused
-// FB0/1: 81000000..8101FFFF : [+] uncached w
-// ...  : 81020000..8103FFFF : [ ] unused
-//   PAL: 81040000..810400FF : [+] uncached w
-//   GPU: 81040100..8104FFFF : [ ] uncached w
-// ...  : 81050000..81FFFFFF : [ ] unused
-//   APU: 82000000..8200000F : [+] uncached w
-// ...  : 82000010..FFFFFFFF : [ ] unused
+//    DDR3: 00000000..1FFFFFFF : [+] cached r/w
+//    BRAM: 20000000..2000FFFF : [+] cached r/w
+//   ...  : 20010000..7FFFFFFF : [ ] unused
+//    MAIL: 80000000..80000FFF : [+] uncached r/w
+//    UART: 80001000..8000100F : [+] uncached r/w
+//     SPI: 80001010..8000101F : [+] uncached r/w
+//    PS/2: 80001020..8000102F : [+] uncached r/w
+//     LED: 80001030..8000103F : [ ] uncached r/w
+//    HART: 80001040..8000104F : [ ] uncached w
+//  GPUCMD: 81001050..8100105F : [ ] uncached w
+//   ...  : 80001060..81FFFFFF : [ ] unused
+//     APU: 82000000..8200000F : [+] uncached w
+//   ...  : 82000010..FFFFFFFF : [ ] unused
 
 // ----------------------------------------------------------------------------
 // Clock / Reset generator
@@ -178,14 +173,13 @@ end
 axi_if A4CH0(), A4UCH0();
 axi_if A4CH1(), A4UCH1();
 axi_if A4CH2(), A4UCH2();
-axi_if A4CH3(), A4UCH3();
 
 // Arbitrated cached and uncached busses
 axi_if A4CH(), A4UCH();
 
 // IRQs in descending bit order
-//  11 10 9  8  7  6  5  4  3      2   1      0
-// [-- -- -- -- H3 H2 H1 H0 unused PS2 unused UART]
+//  11 10 9  8  7   6  5  4  3      2   1      0
+// [-- -- -- -- GPU H2 H1 H0 unused PS2 unused UART]
 wire [11:0] irq;
 
 // ----------------------------------------------------------------------------
@@ -230,14 +224,23 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
 	.a4buscached(A4CH2),
 	.a4busuncached(A4UCH2) );
 
-rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
+// GPU + SCANOUT
+axi_if gpubus();
+wire gpufifoempty;
+wire [31:0] gpufifodout;
+wire gpufifore;
+wire gpufifovalid;
+gpu gpuinst(
 	.aclk(aclk),
-	.wc0(wallclocktime),
-	.cc0(cpuclocktime),
+	.clk25(pixelclock),
+	.clk250(videoclock),
 	.aresetn(aresetn),
-	.irq({irq[7], irq[3:0]}),	// H3 unused PS2 unused UART
-	.a4buscached(A4CH3),
-	.a4busuncached(A4UCH3) );
+	.m_axi(gpubus),
+	.gpudata(gpudata),
+	.gpufifoempty(gpufifoempty),
+	.gpufifodout(gpufifodout),
+	.gpufifore(gpufifore),
+	.gpufifovalid(gpufifovalid) );
 
 // ----------------------------------------------------------------------------
 // HART arbiters for cached and uncached busses
@@ -247,14 +250,14 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(3)) HART3 (
 arbiter CARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.axi_s({A4CH3, A4CH2, A4CH1, A4CH0}),
+	.axi_s({gpubus, A4CH2, A4CH1, A4CH0}),
 	.axi_m(A4CH) );
 
 // Uncached bus arbiter
-arbiter UCARB(
+ucarbiter UCARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.axi_s({A4UCH3, A4UCH2, A4UCH1, A4UCH0}),
+	.axi_s({A4UCH2, A4UCH1, A4UCH0}),
 	.axi_m(A4UCH) );
 
 // ----------------------------------------------------------------------------
@@ -289,8 +292,12 @@ uncacheddevicechain UCDEVICECHAIN(
 	.aresetn(aresetn),
 	.axi4if(A4UCH),
 	.irq(irq),
+	// GPU
+	.gpufifoempty(gpufifoempty),
+	.gpufifodout(gpufifodout),
+	.gpufifore(gpufifore),
+	.gpufifovalid(gpufifovalid),
 	// Device wires
-	.gpudata(gpudata),
 	.wires(wires) );
 
 endmodule
