@@ -48,7 +48,7 @@ always_ff @(posedge aclk) begin
 					b <= {1'b0, multiplier};
 				end
 			endcase
-			n <= 7; // Match this to the latency of the DSP multiplier
+			n <= 2; // Match this to the latency of the DSP multiplier
 			busy <= 1'b1;
 		end else begin
 			if (busy) begin

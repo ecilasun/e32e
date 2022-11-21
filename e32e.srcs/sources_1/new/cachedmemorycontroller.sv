@@ -1,7 +1,5 @@
 `timescale 1ns / 1ps
 
-import axi_pkg::*;
-
 module cachedmemorycontroller (
 	// Clock/reset
 	input wire aclk,
@@ -19,83 +17,48 @@ module cachedmemorycontroller (
 
 	localparam burstlen = 4; // x4 128 bit reads or writes
 
-	typedef enum logic [2:0] {IDLE, RADDR, RDATA, WADDR, WDATA, WRESP} state_type;
-	state_type state = IDLE;
-
+	// Write
 	logic [1:0] wdata_cnt;
-	logic [1:0] rdata_cnt;
-	assign m_axi.arlen = burstlen - 1;
-	assign m_axi.arsize = SIZE_16_BYTE; // 128bit read bus
-	assign m_axi.arburst = BURST_INCR;
 	assign m_axi.awlen = burstlen - 1;
 	assign m_axi.awsize = SIZE_16_BYTE; // 128bit write bus
 	assign m_axi.awburst = BURST_INCR;
 
+	typedef enum logic [1:0] {WIDLE, WADDR, WDATA, WRESP} writestate_type;
+	writestate_type writestate = WIDLE;
+
 	always_ff @(posedge aclk) begin
 		if (~areset_n) begin
-			m_axi.arvalid <= 0;
 			m_axi.awvalid <= 0;
-			m_axi.rready <= 0;
 			m_axi.wvalid <= 0;
 			m_axi.wstrb <= 16'h0000;
 			m_axi.wlast <= 0;
 			m_axi.bready <= 0;
-			rdata_cnt <= 0;
-			wdata_cnt <= 0;
-			state <= IDLE;
+			writestate <= WIDLE;
 		end else begin
 
-			rdone <= 1'b0;
 			wdone <= 1'b0;
 
-			case (state)
-				IDLE : begin
-					if (start_read) begin
-						m_axi.araddr  <= addr; // NOTE: MUST be 32 byte aligned! [31:5]
-						m_axi.arvalid <= 1;
-					end
+			case (writestate)
+				WIDLE : begin
 					if (start_write) begin
-						m_axi.awaddr <= addr; // NOTE: MUST be 32 byte aligned! [31:5]
+						wdata_cnt <= 0;
+						m_axi.awaddr <= addr; // NOTE: MUST be 64 byte aligned! {[31:7], 6'd0}
 						m_axi.awvalid <= 1;
 					end
-					state <= (start_read) ? RADDR : ((start_write) ? WADDR : IDLE);
-				end
-
-				RADDR : begin
-					if (/*m_axi.arvalid && */m_axi.arready) begin
-						m_axi.arvalid <= 0;
-						m_axi.rready <= 1;
-						state <= RDATA;
-					end else begin
-						state <= RADDR;
-					end
-				end
-
-				RDATA : begin
-					if (m_axi.rvalid  /*&& m_axi.rready*/) begin
-						dout[rdata_cnt] <= m_axi.rdata;
-						rdata_cnt <= rdata_cnt + 1;
-						m_axi.rready <= ~m_axi.rlast;
-						rdone <= m_axi.rlast;
-						state <= m_axi.rlast ? IDLE : RDATA;
-					end else begin
-						state <= RDATA;
-					end
+					writestate <= start_write ? WADDR : WIDLE;
 				end
 
 				WADDR : begin
 					if (/*m_axi.awvalid &&*/ m_axi.awready) begin
 						m_axi.awvalid <= 0;
-
 						m_axi.wdata <= din[wdata_cnt];
 						m_axi.wstrb <= 16'hFFFF;
 						m_axi.wvalid <= 1;
 						m_axi.wlast <= (wdata_cnt == (burstlen-1)) ? 1 : 0;
 						wdata_cnt <= wdata_cnt + 1;
-
-						state <= WDATA;
+						writestate <= WDATA;
 					end else begin
-						state <= WADDR;
+						writestate <= WADDR;
 					end
 				end
 
@@ -106,7 +69,7 @@ module cachedmemorycontroller (
 						wdata_cnt <= wdata_cnt + 1;
 					end
 					m_axi.bready <= (wdata_cnt == (burstlen-1));
-					state <= (wdata_cnt == (burstlen-1)) ? WRESP : WDATA;
+					writestate <= (wdata_cnt == (burstlen-1)) ? WRESP : WDATA;
 				end
 
 				default/*WRESP*/ : begin
@@ -116,9 +79,62 @@ module cachedmemorycontroller (
 					if (m_axi.bvalid /*&& m_axi.bready*/) begin
 						m_axi.bready <= 0;
 						wdone <= 1'b1;
-						state <= IDLE;
+						writestate <= WIDLE;
 					end else begin
-						state <= WRESP;
+						writestate <= WRESP;
+					end
+				end
+			endcase
+		end
+	end
+
+	// Read
+	logic [1:0] rdata_cnt;
+	assign m_axi.arlen = burstlen - 1;
+	assign m_axi.arsize = SIZE_16_BYTE; // 128bit read bus
+	assign m_axi.arburst = BURST_INCR;
+
+	typedef enum logic [2:0] {RIDLE, RADDR, RDATA} readstate_type;
+	readstate_type readstate = RIDLE;
+
+	always_ff @(posedge aclk) begin
+		if (~areset_n) begin
+			m_axi.arvalid <= 0;
+			m_axi.rready <= 0;
+			readstate <= RIDLE;
+		end else begin
+
+			rdone <= 1'b0;
+
+			case (readstate)
+				RIDLE : begin
+					if (start_read) begin
+						rdata_cnt <= 0;
+						m_axi.araddr <= addr; // NOTE: MUST be 64 byte aligned! {[31:7], 6'd0}
+						m_axi.arvalid <= 1;
+					end
+					readstate <= start_read ? RADDR : RIDLE;
+				end
+
+				RADDR : begin
+					if (/*m_axi.arvalid && */m_axi.arready) begin
+						m_axi.arvalid <= 0;
+						m_axi.rready <= 1;
+						readstate <= RDATA;
+					end else begin
+						readstate <= RADDR;
+					end
+				end
+
+				RDATA : begin
+					if (m_axi.rvalid  /*&& m_axi.rready*/) begin
+						dout[rdata_cnt] <= m_axi.rdata;
+						rdata_cnt <= rdata_cnt + 1;
+						m_axi.rready <= ~m_axi.rlast;
+						rdone <= m_axi.rlast;
+						readstate <= m_axi.rlast ? RIDLE : RDATA;
+					end else begin
+						readstate <= RDATA;
 					end
 				end
 			endcase
