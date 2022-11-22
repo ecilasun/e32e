@@ -104,10 +104,12 @@ gpudataoutput gpudata(
 
 // Address space is arranged so that device
 // addresses below 0x80000000 are cached
-//    DDR3: 00000000..1FFFFFFF : [+] cached r/w
-//    BRAM: 20000000..2000FFFF : [+] cached r/w
+// ---- CACHED ----
+//    DDR3: 00000000..1FFFFFFF : [+] cached r/w - 512 Mbytes
+//    BRAM: 20000000..2000FFFF : [+] cached r/w - 64 KBytes
 //   ...  : 20010000..7FFFFFFF : [ ] unused
-//    MAIL: 80000000..80000FFF : [+] uncached r/w
+// ---- UNCACHED ----
+//    MAIL: 80000000..80000FFF : [+] uncached r/w - 4 Kbytes
 //    UART: 80001000..8000100F : [+] uncached r/w
 //     SPI: 80001010..8000101F : [+] uncached r/w
 //    PS/2: 80001020..8000102F : [+] uncached r/w
