@@ -16,6 +16,7 @@ module uncacheddevicechain(
 	output wire [31:0] gpufifodout,
 	input wire gpufifore,
 	output wire gpufifovalid,
+	input wire [31:0] vblankcount,
 	// IRQ
 	output wire [11:0] irq,
 	devicewires.def wires );
@@ -135,7 +136,8 @@ gpucommanddevice gpucmdinst(
 	.fifoempty(gpufifoempty),
 	.fifodout(gpufifodout),
 	.fifore(gpufifore),
-	.fifovalid(gpufifovalid) );
+	.fifovalid(gpufifovalid),
+	.vblankcount(vblankcount));
 
 axi_if audioif();
 a4i2saudio APU(

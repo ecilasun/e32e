@@ -82,9 +82,11 @@ always @(posedge aclk) begin
 			end
 			default/*2'b01*/: begin
 				// Only the lower byte contains valid data
-				s_axi.rdata[31:0] <= {24'd0, ledstate};
-				s_axi.rvalid <= 1'b1;
-				raddrstate <= 2'b00;
+				if (s_axi.rready) begin
+					s_axi.rdata[31:0] <= {24'd0, ledstate};
+					s_axi.rvalid <= 1'b1;
+					raddrstate <= 2'b00;
+				end
 			end
 		endcase
 	end

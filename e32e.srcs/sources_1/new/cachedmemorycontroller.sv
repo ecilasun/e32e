@@ -40,11 +40,9 @@ module cachedmemorycontroller (
 
 			case (writestate)
 				WIDLE : begin
-					if (start_write) begin
-						wdata_cnt <= 0;
-						m_axi.awaddr <= addr; // NOTE: MUST be 64 byte aligned! {[31:7], 6'd0}
-						m_axi.awvalid <= 1;
-					end
+					wdata_cnt <= 0;
+					m_axi.awaddr <= addr; // NOTE: MUST be 64 byte aligned! {[31:7], 6'd0}
+					m_axi.awvalid <= start_write;
 					writestate <= start_write ? WADDR : WIDLE;
 				end
 
@@ -108,11 +106,9 @@ module cachedmemorycontroller (
 
 			case (readstate)
 				RIDLE : begin
-					if (start_read) begin
-						rdata_cnt <= 0;
-						m_axi.araddr <= addr; // NOTE: MUST be 64 byte aligned! {[31:7], 6'd0}
-						m_axi.arvalid <= 1;
-					end
+					rdata_cnt <= 0;
+					m_axi.araddr <= addr; // NOTE: MUST be 64 byte aligned! {[31:7], 6'd0}
+					m_axi.arvalid <= start_read;
 					readstate <= start_read ? RADDR : RIDLE;
 				end
 

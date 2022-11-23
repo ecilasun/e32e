@@ -8,7 +8,8 @@ module gpucommanddevice(
 	output wire fifoempty,
 	output wire [31:0] fifodout,
 	input wire fifore,
-	output wire fifovalid );
+	output wire fifovalid,
+	input wire [31:0] vblankcount);
 
 wire fifofull;
 logic fifowe = 1'b0;
@@ -77,11 +78,35 @@ always @(posedge aclk) begin
 	end
 end
 
-// GPU command fifo is write-only
-assign s_axi.rlast = 1'b1;
-assign s_axi.arready = 1'b1;
-assign s_axi.rvalid = 1'b1;
-assign s_axi.rresp = 2'b11;
-assign s_axi.rdata = 'd0;
+// Reads from GPU command fifo will return vblankcount
+// This can be used to implement a vsync mechanism by
+// comparing a first read to successive reads until they differ.
+
+always @(posedge aclk) begin
+	if (~aresetn) begin
+		s_axi.rlast <= 1'b1;
+		s_axi.arready <= 1'b0;
+		s_axi.rvalid <= 1'b0;
+		s_axi.rresp <= 2'b00;
+	end else begin
+		s_axi.rvalid <= 1'b0;
+		s_axi.arready <= 1'b0;
+		case (raddrstate)
+			2'b00: begin
+				if (s_axi.arvalid) begin
+					s_axi.arready <= 1'b1;
+					raddrstate <= 2'b01;
+				end
+			end
+			default/*2'b01*/: begin
+				if (s_axi.rready) begin
+					s_axi.rdata[31:0] <= vblankcount;
+					s_axi.rvalid <= 1'b1;
+					raddrstate <= 2'b00;
+				end
+			end
+		endcase
+	end
+end
 
 endmodule

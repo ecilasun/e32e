@@ -15,8 +15,10 @@ module uncachedmemorycontroller (
 	// Memory mapped device bus
 	axi_if.master m_axi );
 
-	typedef enum logic [2 : 0] {IDLE, RADDR, RDATA, WADDR, WDATA, WRESP} state_type;
-	state_type state = IDLE;
+	typedef enum logic [1 : 0] {RIDLE, RADDR, RDATA } read_state_type;
+	typedef enum logic [1 : 0] {WIDLE, WADDR, WDATA, WRESP} write_state_type;
+	read_state_type readstate = RIDLE;
+	write_state_type writestate = WIDLE;
 
 	assign m_axi.arlen = 0;
 	assign m_axi.arsize = SIZE_4_BYTE;
@@ -26,86 +28,92 @@ module uncachedmemorycontroller (
 	assign m_axi.awsize = SIZE_4_BYTE;
 	assign m_axi.awburst = BURST_FIXED;
 
-	always_ff @(posedge aclk) begin
-		if (~areset_n) begin
-			//
-		end else begin
-			if (state == RDATA && m_axi.rvalid /* && m_axi.rready*/) dout <= m_axi.rdata[31:0];
-		end
-	end
-
 	logic [3:0] wbsel = 4'h0;
+	logic [31:0] datain = 32'd0;
 
 	always_ff @(posedge aclk) begin
 		if (~areset_n) begin
 			m_axi.arvalid <= 0;
-			m_axi.awvalid <= 0;
 			m_axi.rready <= 0;
-			m_axi.wvalid <= 0;
-			m_axi.wstrb <= 16'h0000;
-			m_axi.wlast <= 0;
-			m_axi.bready <= 0;
-			state <= IDLE;
+			readstate <= RIDLE;
 		end else begin
-			rdone <= 1'b0;
-			wdone <= 1'b0;
 
-			case (state)
-				IDLE : begin
-					if (re) begin
-						m_axi.araddr  <= addr;
-						m_axi.arvalid <= 1;
-					end
-					if (|wstrb) begin
-						wbsel <= wstrb;
-						m_axi.awaddr <= addr;
-						m_axi.awvalid <= 1;
-					end
-					state <= (re) ? RADDR : ((|wstrb) ? WADDR : IDLE);
+			rdone <= 1'b0;
+
+			case (readstate)
+				RIDLE : begin
+					m_axi.araddr  <= addr;
+					m_axi.arvalid <= re;
+					readstate <= re ? RADDR : RIDLE;
 				end
 
 				RADDR : begin
 					if (/*m_axi.arvalid && */m_axi.arready) begin
 						m_axi.arvalid <= 0;
 						m_axi.rready <= 1;
-						state <= RDATA;
+						readstate <= RDATA;
 					end else begin
-						state <= RADDR;
+						readstate <= RADDR;
 					end
 				end
 
 				RDATA : begin
 					if (m_axi.rvalid  /*&& m_axi.rready*/ && m_axi.rlast) begin
 						m_axi.rready <= 0;
+						dout <= m_axi.rdata[31:0];
 						rdone <= 1'b1;
-						state <= IDLE;
+						readstate <= RIDLE;
 					end else begin
-						state <= RDATA;
+						readstate <= RDATA;
 					end
+				end
+			endcase
+		end
+	end
+
+	always_ff @(posedge aclk) begin
+		if (~areset_n) begin
+			m_axi.awvalid <= 0;
+			m_axi.wvalid <= 0;
+			m_axi.wstrb <= 16'h0000;
+			m_axi.wlast <= 0;
+			m_axi.bready <= 0;
+			writestate <= WIDLE;
+		end else begin
+
+			wdone <= 1'b0;
+
+			case (writestate)
+				WIDLE : begin
+					wbsel <= wstrb;
+					datain <= din;
+					m_axi.awaddr <= addr;
+					m_axi.awvalid <= (|wstrb);
+					writestate <= (|wstrb) ? WADDR : WIDLE;
 				end
 
 				WADDR : begin
 					if (/*m_axi.awvalid &&*/ m_axi.awready) begin
 						m_axi.awvalid <= 0;
-						m_axi.wdata <= {96'd0, din};
+						m_axi.wdata <= {96'd0, datain};
 						m_axi.wstrb <= {12'd0, wbsel};
 						m_axi.wvalid <= 1;
 						m_axi.wlast <= 1;
-						state <= WDATA;
+						writestate <= WDATA;
 					end else begin
-						state <= WADDR;
+						writestate <= WADDR;
 					end
 				end
 
 				WDATA : begin
 					if (/*m_axi.wvalid &&*/ m_axi.wready) begin
-						m_axi.bready <= 1;
 						m_axi.wvalid <= 0;
 						m_axi.wstrb <= 16'h0000;
 						m_axi.wlast <= 0;
-						state <= WRESP;
+						m_axi.bready <= 1;
+						writestate <= WRESP;
 					end else begin
-						state <= WDATA;
+						writestate <= WDATA;
 					end
 				end
 
@@ -113,12 +121,13 @@ module uncachedmemorycontroller (
 					if (m_axi.bvalid /*&& m_axi.bready*/) begin
 						m_axi.bready <= 0;
 						wdone <= 1'b1;
-						state <= IDLE;
+						writestate <= WIDLE;
 					end else begin
-						state <= WRESP;
+						writestate <= WRESP;
 					end
 				end
 			endcase
 		end
 	end
+
 endmodule

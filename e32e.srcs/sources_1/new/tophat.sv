@@ -232,7 +232,8 @@ wire gpufifoempty;
 wire [31:0] gpufifodout;
 wire gpufifore;
 wire gpufifovalid;
-gpu gpuinst(
+wire [31:0] vblankcount;
+gpucore GPU(
 	.aclk(aclk),
 	.clk25(pixelclock),
 	.clk250(videoclock),
@@ -242,7 +243,8 @@ gpu gpuinst(
 	.gpufifoempty(gpufifoempty),
 	.gpufifodout(gpufifodout),
 	.gpufifore(gpufifore),
-	.gpufifovalid(gpufifovalid) );
+	.gpufifovalid(gpufifovalid),
+	.vblankcount(vblankcount));
 
 // ----------------------------------------------------------------------------
 // HART arbiters for cached and uncached busses
@@ -299,6 +301,7 @@ uncacheddevicechain UCDEVICECHAIN(
 	.gpufifodout(gpufifodout),
 	.gpufifore(gpufifore),
 	.gpufifovalid(gpufifovalid),
+	.vblankcount(vblankcount),
 	// Device wires
 	.wires(wires) );
 

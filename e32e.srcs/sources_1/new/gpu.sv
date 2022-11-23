@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module gpu(
+module gpucore(
 	input wire aclk,
 	input wire clk25,
 	input wire clk250,
@@ -10,7 +10,8 @@ module gpu(
 	input wire gpufifoempty,
 	input wire [31:0] gpufifodout,
 	output wire gpufifore,
-	input wire gpufifovalid );
+	input wire gpufifovalid,
+	output wire [31:0] vblankcount);
 
 wire hsync, vsync, blank;
 wire [10:0] video_x;
@@ -188,20 +189,20 @@ always_ff @(posedge aclk) begin
 
 			DISPATCH: begin
 				case (gpucmd)
-					32'h00000000:	cmdmode <= SETVPAGE;	// Set the scanout start address (followed by 32bit cached memory address, 64 byte aligned)
+					32'h00000000:	cmdmode <= SETVPAGE;	// Set the scanout start address (followed by 32bit cached memory address, 64 byte cache aligned)
 					32'h00000001:	cmdmode <= SETPAL;		// Set 24 bit color palette entry (followed by 8bit address+24bit color in next word)
 					32'h00000002:	cmdmode <= VMODE;		// Set up video mode or turn off scan logic (default is 320x240*8bit paletted)
 					// TODO: Primitive binning/setup, sprite draw, LBVH hit tests or anything else that makes sense to have here
-					//32'h00000003:	cmdmode <= DMASOURCE;	// Set up source address for DMA
-					//32'h00000004:	cmdmode <= DMATARGET;	// Set up target address for DMA
-					//32'h00000005:	cmdmode <= DMAKICK;		// Queue up a DMA operation (optionally zero-masked)
+					//32'h000000??:	cmdmode <= DMASOURCE;	// Set up source address for DMA
+					//32'h000000??:	cmdmode <= DMATARGET;	// Set up target address for DMA
+					//32'h000000??:	cmdmode <= DMAKICK;		// Queue up a DMA operation (optionally zero-masked)
 					default:		cmdmode <= FINALIZE;	// Invalid command, wait one clock and try next
 				endcase
 			end
 
 			SETVPAGE: begin
 				if (gpufifovalid && ~gpufifoempty) begin
-					scanaddr <= gpufifodout;	// Set new video scanout address (16 byte aligned, as we read in bursts)
+					scanaddr <= gpufifodout;	// Set new video scanout address (64 byte cache aligned, as we read in bursts)
 					// Advance FIFO
 					cmdre <= 1'b1;
 					cmdmode <= FINALIZE;
@@ -229,7 +230,7 @@ always_ff @(posedge aclk) begin
 					cmdmode <= FINALIZE;
 				end
 			end
-			
+
 			/*DMASOURCE: begin
 			end
 			DMATARGET: begin
@@ -254,6 +255,7 @@ end
 (* async_reg = "true" *) logic [8:0] scanline = 'd0;
 (* async_reg = "true" *) logic [9:0] scanpixelpre = 'd0;
 (* async_reg = "true" *) logic [9:0] scanpixel = 'd0;
+logic [31:0] blankcounter = 'd0;
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
 		//
@@ -262,8 +264,11 @@ always_ff @(posedge aclk) begin
 		scanline <= scanlinepre;
 		scanpixelpre <= video_x[9:0];
 		scanpixel <= scanpixelpre;
+		// Increment vertical blank counter (mapped to word reads from gpu fifo address)
+		blankcounter <= blankcounter + (scanline == 480 ? 32'd1 : 32'd0);
 	end
 end
+assign vblankcount = blankcounter;
 
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
@@ -287,7 +292,8 @@ always_ff @(posedge aclk) begin
 			end
 			STARTLOAD: begin
 				rdata_cnt <= 0;
-				// This has to be a 16 byte aligned address to match cache reads we're running
+				// This has to be a 64 byte cache aligned address to match cache burst reads we're running
+				// At 320x240 resolution, each 320 pixel scanline is a multiple of 64 bytes, so no need to further align here just yet.
 				m_axi.araddr <= scanaddr + scanoffset;
 				m_axi.arvalid <= 1;
 				scanstate <= TRIGGERBURST;

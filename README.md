@@ -1,5 +1,6 @@
 # E32E
 
+## Features
 This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware threads clocked at 100MHz with the following features:
 
 - Each core tries to conform to minimal feature set of rv32imzicsr (DIV/MUL, base integer, CSR registers)
@@ -16,16 +17,27 @@ This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware thre
   - A very simple device chain; one UART (with built-in FIFOs) and one shared MAILBOX memory (4KBytes)
   - A PS/2 keyboard interface for keyboard entry is also provided
   - SDCard file access available via SPIMaster and SDK helpers (ROM has a small commandline to help load/run ELF executables)
-- Video output provided via DVI over HDMI, with a single uncached framebuffer
 - A sample ROM image (source here: https://github.com/ecilasun/riscvtool/tree/main/e32e) which shows how to set up a basic environment to load and run user programs from micro-SD card
   - Current ROM image supports a user timer interrupt handler to be installed via MAILBOX/HARTIRQ memory mapped writes
 - A simple GPU and a dynamic framebuffer pointer
+  - Video output is set to 8bit paletted at 320x240 resolution, signal is DVI over HDMI
   - Does 128bit burst-reads from any cached memory including DDR3 into a scanline cache (20 bursts == 320 pixels in 8bit indexed color mode)
 
-Work in progress
-- Make cost of cache hit less than 3 clocks (2 clocks experimented with, works properly)
-- Need to move framebuffer to cached memory region, but reads can be only 32 bits when writes are 128 bits, fix scan-out hardware to accept 32bits for this
-- Start looking at BVH8 tracing, and tools to generate BVH8 data offline
-- Experiment with _even more_ cores
-- Need terminal output over DVI to be able to retire TTY at one point (i.e. fonts)
-- Perhaps retire TTY to utilize it as a debug port instead
+## Work in progress
+- Investigate overlapped AXI4 transactions
+  - Already have reads & writes overlap
+  - Check write-write and read-read overlaps and how to handle out-of-order transactions using IDs
+- Need to work on the OS a bit, task system and debugging still very experimental
+- Might be interesting to check legacy rasterization or sprite support on the GPU
+- Start looking at BVH8 tracing now that the GPU has independent access to RAM
+  - Some tools to generate BVH8 data offline already done, alongside with a previewer
+- Figure out why SPI-SDCard communications frequently break
+  - Is this a memory controller issue on uncached bus?
+- Use terminal output over video screen instead of UART
+  - Need UART for debugging support
+
+## Notes
+The idea here is to build a console-like apparatus for folks to experiment with using software, and cutting the need for an expensive development system.
+To that end, I'm building an add-on board for the QMTECH Artix-7 board which currently provides DVI output (over HDMI pin).
+The board itself can be purchased for about 80USD currently which compared to Digilent boards is quite a bargain.
+The files for the addon board will be part of the git repo that hosts the final project files (this one is a placeholder as I'm developing on the more capable Nexys Video board)
