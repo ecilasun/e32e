@@ -30,7 +30,6 @@ logic validwaddr_uart = 1'b0, validraddr_uart = 1'b0;
 logic validwaddr_spi = 1'b0, validraddr_spi = 1'b0;
 logic validwaddr_ps2 = 1'b0, validraddr_ps2 = 1'b0;
 logic validwaddr_leds = 1'b0, validraddr_leds = 1'b0;
-//logic validwaddr_buttons = 1'b0, validraddr_buttons = 1'b0;
 logic validwaddr_hart = 1'b0, validraddr_hart = 1'b0;
 logic validwaddr_gpu = 1'b0, validraddr_gpu = 1'b0;
 logic validwaddr_audio = 1'b0, validraddr_audio = 1'b0;
@@ -44,7 +43,7 @@ always_comb begin
 		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00001000;
 		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000100;
 		32'b1000_0000_0000_0000_0001_0000_0101_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000010;
-		32'b1000_0010_0000_0000_0000_0000_0000_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000001;
+		32'b1000_0000_0000_0000_0001_0000_0110_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000001;
 		default :										{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000000;
 	endcase
 end
@@ -58,7 +57,7 @@ always_comb begin
 		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00001000;
 		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000100;
 		32'b1000_0000_0000_0000_0001_0000_0101_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000010;
-		32'b1000_0010_0000_0000_0000_0000_0000_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000001;
+		32'b1000_0000_0000_0000_0001_0000_0110_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000001;
 		default :										{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000000;
 	endcase
 end
@@ -117,17 +116,6 @@ axi4ledctl ledctl(
 	.s_axi(ledif),
 	.led(wires.led) );
 
-/*
-axi_if buttonif();
-wire buttonfifoempty;
-axi4buttons devicebuttons(
-	.aclk(aclk),
-	.aresetn(aresetn),
-	.s_axi(buttonif),
-	.clocks(clocks),
-	.wires(wires),
-	.buttonfifoempty(buttonfifoempty) );*/
-
 axi_if gpuif();
 gpucommanddevice gpucmdinst(
 	.aclk(aclk),
@@ -158,12 +146,12 @@ a4i2saudio APU(
 
 // TODO: Also add wires.spi_cd != oldcd as an interrupt trigger here, preferably debounced
 // Top 8 bits are used to wake up the corresponding HART
-// Writing one to byte pointer 80001050[hartid] will hold the IRQ high
+// Writing one to byte pointer 80001040[hartid] will hold the IRQ high
 // Writing zero to the same address by the responder HART (using its own HARTID as index) in the ISR will stop the IRQ
 // PS2 fifo empty is used to detect if there are any pending PS/2 keyboard bytes (responder has to drain all data)
 // UART rcv empty are used to detect if there are waiting bytes in UART buffer (responder has to drain all data)
 // Unused bits are reserved for future hardware
-assign irq = {hirq[7:0], 1'b0, ~ps2fifoempty, 1'b0, ~uartrcvempty};
+assign irq = {hirq[7:0], 2'b00, ~ps2fifoempty, ~uartrcvempty};
 
 // ------------------------------------------------------------------------------------
 // Uncached device write router
@@ -249,14 +237,6 @@ always_comb begin
 	gpuif.bready = validwaddr_gpu ? axi4if.bready : 1'b0;
 	gpuif.wlast = validwaddr_gpu ? axi4if.wlast : 1'b0;
 
-	/*buttonif.awaddr = validwaddr_button ? waddr : 32'd0;
-	buttonif.awvalid = validwaddr_button ? axi4if.awvalid : 1'b0;
-	buttonif.wdata = validwaddr_button ? axi4if.wdata : 0;
-	buttonif.wstrb = validwaddr_button ? axi4if.wstrb : 4'h0;
-	buttonif.wvalid = validwaddr_button ? axi4if.wvalid : 1'b0;
-	buttonif.bready = validwaddr_button ? axi4if.bready : 1'b0;
-	buttonif.wlast = validwaddr_button ? axi4if.wlast : 1'b0;*/
-
 	audioif.awaddr = validwaddr_audio ? waddr : 32'd0;
 	audioif.awvalid = validwaddr_audio ? axi4if.awvalid : 1'b0;
 	audioif.awlen = validwaddr_audio ? axi4if.awlen : 0;
@@ -303,11 +283,6 @@ always_comb begin
 		axi4if.bresp = gpuif.bresp;
 		axi4if.bvalid = gpuif.bvalid;
 		axi4if.wready = gpuif.wready;
-	/*end else begin //if (validwaddr_button) begin
-		axi4if.awready = buttonif.awready;
-		axi4if.bresp = buttonif.bresp;
-		axi4if.bvalid = buttonif.bvalid;
-		axi4if.wready = buttonif.wready;*/
 	end else if (validwaddr_audio) begin
 		axi4if.awready = audioif.awready;
 		axi4if.bresp = audioif.bresp;
@@ -378,10 +353,6 @@ always_comb begin
 	gpuif.arvalid = validraddr_gpu ? axi4if.arvalid : 1'b0;
 	gpuif.rready = validraddr_gpu ? axi4if.rready : 1'b0;
 
-	/*buttonif.araddr = validraddr_button ? raddr : 32'd0;
-	buttonif.arvalid = validraddr_button ? axi4if.arvalid : 1'b0;
-	buttonif.rready = validraddr_button ? axi4if.rready : 1'b0;*/
-
 	audioif.araddr = validraddr_audio ? raddr : 32'd0;
 	audioif.arlen = validraddr_audio ? axi4if.arlen : 0;
 	audioif.arsize = validraddr_audio ? axi4if.arsize : 0;
@@ -431,12 +402,6 @@ always_comb begin
 		axi4if.rresp = gpuif.rresp;
 		axi4if.rvalid = gpuif.rvalid;
 		axi4if.rlast = gpuif.rlast;
-	/*end else begin //if (validraddr_button) begin
-		axi4if.arready = buttonif.arready;
-		axi4if.rdata = buttonif.rdata;
-		axi4if.rresp = buttonif.rresp;
-		axi4if.rvalid = buttonif.rvalid;
-		axi4if.rlast = buttonif.rlast;*/
 	end else if (validraddr_audio) begin
 		axi4if.arready = audioif.arready;
 		axi4if.rdata = audioif.rdata;

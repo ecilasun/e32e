@@ -279,8 +279,7 @@ always_ff @(posedge aclk) begin
 	end else begin
 		case (scanstate)
 			DETECTSCANLINEEND: begin
-				// NOTE: when scanpixel is at 638, the scan beam is at 640
-				if (scanpixel == 638 && scanline < 480 && ~scanline[0]) begin // Only at right edge of screen, at even lines, and above bottommost pixel
+				if (scanpixel == 638 && scanline <= 480 && ~scanline[0]) begin // Only at right edge of screen, at even lines, and above bottommost pixel
 					// Starting at 640, we have 160 pixels worth of time to load the scanline cache for next row
 					// It currently takes approximately 5 pixels worth of time to load 320 pixels from block ram into scanline cache and reach here
 					// For example, if we wanted to read 64 32 pixel wide sprites per scanline that'd take 30 pixels worth of time as a burst

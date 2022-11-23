@@ -104,21 +104,20 @@ gpudataoutput gpudata(
 
 // Address space is arranged so that device
 // addresses below 0x80000000 are cached
-// ---- CACHED ----
-//    DDR3: 00000000..1FFFFFFF : [+] cached r/w - 512 Mbytes
-//    BRAM: 20000000..2000FFFF : [+] cached r/w - 64 KBytes
-//   ...  : 20010000..7FFFFFFF : [ ] unused
-// ---- UNCACHED ----
-//    MAIL: 80000000..80000FFF : [+] uncached r/w - 4 Kbytes
-//    UART: 80001000..8000100F : [+] uncached r/w
-//     SPI: 80001010..8000101F : [+] uncached r/w
-//    PS/2: 80001020..8000102F : [+] uncached r/w
-//     LED: 80001030..8000103F : [ ] uncached r/w
-//    HART: 80001040..8000104F : [ ] uncached w
-//  GPUCMD: 81001050..8100105F : [ ] uncached w
-//   ...  : 80001060..81FFFFFF : [ ] unused
-//     APU: 82000000..8200000F : [+] uncached w
-//   ...  : 82000010..FFFFFFFF : [ ] unused
+//          ----- CACHED -----
+//    DDR3: 00000000..1FFFFFFF : cached r/w - 512 Mbytes
+//    BRAM: 20000000..2000FFFF : cached r/w - 64 KBytes
+//   ...  : 20010000..7FFFFFFF : unused
+//          ---- UNCACHED ----
+// MAILBOX: 80000000..80000FFF : uncached r/w - 4 Kbytes
+//    UART: 80001000..8000100F : uncached r/w
+//     SPI: 80001010..8000101F : uncached r/w
+//    PS/2: 80001020..8000102F : uncached r/w
+//     LED: 80001030..8000103F : uncached r/w
+// HARTIRQ: 80001040..8000104F : uncached w
+//   GPUIO: 81001050..8100105F : uncached w
+//     APU: 80001060..8000106F : uncached w
+//   ...  : 80001070..FFFFFFFF : unused
 
 // ----------------------------------------------------------------------------
 // Clock / Reset generator
