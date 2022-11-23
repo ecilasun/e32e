@@ -12,6 +12,11 @@ module a4i2saudio (
     output wire ac_dac_sdata,	// DAC output (i.e. playback)
     input wire ac_adc_sdata );	// ADC input is set up but not used yet
 
+// TODO: Allow sample rate and volume control from CPU side
+// TODO: Tie to memory bus instead of internal FIFO (same as GPU, scan out at own pace)
+// TODO: Experiment with ADSR with wave generator or audio samples as input
+// TODO: Make the above multi-channel
+
 // ------------------------------------------------------------------------------------
 // Audio Init
 // ------------------------------------------------------------------------------------
@@ -81,8 +86,15 @@ always@(posedge aclk) begin
 	// Stop pending reads from last clock
 	abre <= 1'b0;
 
-	// Time to attempt to load another sample
-	if (lrclkcnt==8 && (~abempty))begin
+	// Load next sample
+	if (lrclkcnt==8 && (~abempty) && abvalid)begin
+		// TODO: If APU has its own burst read bus (as with GPU)
+		// it can essentially use RAM instead of FIFO
+		// That allows for playback by simply setting up a read
+		// pointer, and sample length.
+		leftchannel <= abdout[31:16];
+		rightchannel <= abdout[15:0]; 
+		// Advance FIFO
 		abre <= 1'b1;
 		lrclkcnt <= 0;
 	end
@@ -90,12 +102,6 @@ always@(posedge aclk) begin
 	// ac_lrclk trigger high
 	if (lrclkD1 & (~lrclkD2))
 		lrclkcnt <= lrclkcnt + 4'd1;
-
-	// Data pending from FIFO, set it as current sample
-	if (abvalid) begin
-		leftchannel <= abdout[31:16];
-		rightchannel <= abdout[15:0]; 
-	end
 end
 
 // ------------------------------------------------------------------------------------
@@ -156,30 +162,10 @@ always @(posedge aclk) begin
 	end
 end
 
-always @(posedge aclk) begin
-	if (~aresetn) begin
-		s_axi.rlast <= 1'b1;
-		s_axi.arready <= 1'b0;
-		s_axi.rvalid <= 1'b0;
-		s_axi.rresp <= 2'b00;
-	end else begin
-		s_axi.rvalid <= 1'b0;
-		s_axi.arready <= 1'b0;
-		case (raddrstate)
-			2'b00: begin
-				if (s_axi.arvalid) begin
-					s_axi.arready <= 1'b1;
-					raddrstate <= 2'b01;
-				end
-			end
-			default/*2'b01*/: begin
-				// Cannot read from audio output FIFO, return 0
-				s_axi.rdata[31:0] <= 32'd0;
-				s_axi.rvalid <= 1'b1;
-				raddrstate <= 2'b00;
-			end
-		endcase
-	end
-end
+// Can't read from the APU just yet
+assign s_axi.rlast = 1'b1;
+assign s_axi.arready = 1'b1;
+assign s_axi.rvalid = 1'b1;
+assign s_axi.rresp = 2'b00;
 
 endmodule
