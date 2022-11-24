@@ -46,9 +46,14 @@ logic [7:0] palettewa = 8'h00;
 logic [23:0] palettedin = 24'h000000;
 
 // localindex is the 16 pixel pixel index counter, which can move either at 1:2 (pixel doubling) or 1:1 the scan rate (no doubling)
-wire [3:0] localindex = scanmode ? video_x[3:0] : video_x[4:1];
+logic [3:0] localindex;
 // cacheindex is the 16 pixel wide block index across a scanline
-wire [5:0] cacheindex = scanmode ? video_x[9:4] : video_x[10:5];
+logic [5:0] cacheindex;
+
+always_comb begin
+	localindex = scanmode ? video_x[3:0] : video_x[4:1];
+	cacheindex = scanmode ? video_x[9:4] : video_x[10:5];
+end
 
 // Generate palette read address from current pixel's color index
 logic [7:0] palettera;
@@ -156,8 +161,7 @@ scanstatetype scanstate = DETECTSCANLINEEND;
 
 // NOTE: First, set up the scanout address, then enable video scanout
 logic [31:0] scanaddr = 32'h00000000;
-logic [31:0] scanoffsetA = 0;
-logic [31:0] scanoffsetB = 0;
+logic [31:0] scanoffset = 0;
 logic scanenable = 1'b0;
 
 logic [5:0] rdata_cnt = 'd0;
@@ -294,8 +298,7 @@ always_ff @(posedge aclk) begin
 				if (scanpixel == 638 && scanline <= 480 && (~scanline[0] || scanmode)) begin
 					// Starting at pixel 640 (638 due to DC delay), we have 160 pixels worth of time to cache the next scanline
 					// This usually completes within 5 to 10 pixel's worth of time, way before the next scanline starts scanning
-					scanoffsetA <= scanline[8:0]*640;
-					scanoffsetB <= scanline[8:1]*320;
+					scanoffset <= scanmode ? scanline[8:0] : {1'b0,scanline[8:1]};
 					scanstate <= scanenable ? STARTLOAD : DETECTSCANLINEEND;
 				end else
 					// NOTE: Below scanline 480 is a good time for pending raster write work to run
@@ -305,7 +308,7 @@ always_ff @(posedge aclk) begin
 				// This has to be a 64 byte cache aligned address to match cache burst reads we're running
 				// Each scanline is a multiple of 64 bytes, so no need to further align here unless we have an odd output size (320 and 640 work just fine)
 				m_axi.arlen <= burstlen - 8'd1;
-				m_axi.araddr <= scanaddr + (scanmode ? scanoffsetA : scanoffsetB);
+				m_axi.araddr <= scanaddr + ( scanmode ? scanoffset*640 : scanoffset*320);
 				m_axi.arvalid <= 1;
 				scanstate <= TRIGGERBURST;
 			end
