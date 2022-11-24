@@ -29,34 +29,47 @@ logic cmdre = 1'b0;
 assign gpufifore = cmdre;
 
 // ------------------------------------------------------------------------------------
+// Setup
+// ------------------------------------------------------------------------------------
+
+logic [7:0] burstlen = 'd20;	// 20 reads for 320*240, 40 reads for 640*480 in paletted mode (each read is 128bits)
+logic scanmode = 1'b0;			// 320 pixel mode (640 when high)
+
+// ------------------------------------------------------------------------------------
 // Scanline cache and output address selection
 // ------------------------------------------------------------------------------------
 
-logic [127:0] scanlinecache [0:31]; // scanline cache (only 20 128bits used)
+logic [127:0] scanlinecache [0:63]; // 63 blocks of 16 pixels worth of scanline cache (20 used in index color 320*240 mode)
 
 logic palettewe = 1'b0;
 logic [7:0] palettewa = 8'h00;
 logic [23:0] palettedin = 24'h000000;
 
+// localindex is the 16 pixel pixel index counter, which can move either at 1:2 (pixel doubling) or 1:1 the scan rate (no doubling)
+wire [3:0] localindex = scanmode ? video_x[3:0] : video_x[4:1];
+// cacheindex is the 16 pixel wide block index across a scanline
+wire [5:0] cacheindex = scanmode ? video_x[9:4] : video_x[10:5];
+
+// Generate palette read address from current pixel's color index
 logic [7:0] palettera;
 always_comb begin
-	case (video_x[4:1])
-		4'b0000: palettera = scanlinecache[video_x[9:5]][7 : 0];
-		4'b0001: palettera = scanlinecache[video_x[9:5]][15 : 8];
-		4'b0010: palettera = scanlinecache[video_x[9:5]][23 : 16];
-		4'b0011: palettera = scanlinecache[video_x[9:5]][31 : 24];
-		4'b0100: palettera = scanlinecache[video_x[9:5]][39 : 32];
-		4'b0101: palettera = scanlinecache[video_x[9:5]][47 : 40];
-		4'b0110: palettera = scanlinecache[video_x[9:5]][55 : 48];
-		4'b0111: palettera = scanlinecache[video_x[9:5]][63 : 56];
-		4'b1000: palettera = scanlinecache[video_x[9:5]][71 : 64];
-		4'b1001: palettera = scanlinecache[video_x[9:5]][79 : 72];
-		4'b1010: palettera = scanlinecache[video_x[9:5]][87 : 80];
-		4'b1011: palettera = scanlinecache[video_x[9:5]][95 : 88];
-		4'b1100: palettera = scanlinecache[video_x[9:5]][103 : 96];
-		4'b1101: palettera = scanlinecache[video_x[9:5]][111 : 104];
-		4'b1110: palettera = scanlinecache[video_x[9:5]][119 : 112];
-		4'b1111: palettera = scanlinecache[video_x[9:5]][127 : 120];
+	case (localindex)
+		4'b0000: palettera = scanlinecache[cacheindex][7 : 0];
+		4'b0001: palettera = scanlinecache[cacheindex][15 : 8];
+		4'b0010: palettera = scanlinecache[cacheindex][23 : 16];
+		4'b0011: palettera = scanlinecache[cacheindex][31 : 24];
+		4'b0100: palettera = scanlinecache[cacheindex][39 : 32];
+		4'b0101: palettera = scanlinecache[cacheindex][47 : 40];
+		4'b0110: palettera = scanlinecache[cacheindex][55 : 48];
+		4'b0111: palettera = scanlinecache[cacheindex][63 : 56];
+		4'b1000: palettera = scanlinecache[cacheindex][71 : 64];
+		4'b1001: palettera = scanlinecache[cacheindex][79 : 72];
+		4'b1010: palettera = scanlinecache[cacheindex][87 : 80];
+		4'b1011: palettera = scanlinecache[cacheindex][95 : 88];
+		4'b1100: palettera = scanlinecache[cacheindex][103 : 96];
+		4'b1101: palettera = scanlinecache[cacheindex][111 : 104];
+		4'b1110: palettera = scanlinecache[cacheindex][119 : 112];
+		4'b1111: palettera = scanlinecache[cacheindex][127 : 120];
 	endcase
 end
 
@@ -121,22 +134,19 @@ OBUFDS OBUFDS_red    (.I(out_tmds_red),    .O(gpudata.tmdsp[2]), .OB(gpudata.tmd
 OBUFDS OBUFDS_green  (.I(out_tmds_green),  .O(gpudata.tmdsp[1]), .OB(gpudata.tmdsn[1]));
 OBUFDS OBUFDS_blue   (.I(out_tmds_blue),   .O(gpudata.tmdsp[0]), .OB(gpudata.tmdsn[0]));
 
-localparam burstlen = 20; // need to do 20x128bit reads per row, times 240 rows, 4800 reads total
-
-assign m_axi.arlen = burstlen - 1;
 assign m_axi.arsize = SIZE_16_BYTE; // 128bit read bus
 assign m_axi.arburst = BURST_INCR;
 
-assign m_axi.awlen = burstlen - 1;
+assign m_axi.awlen = 0;				// one burst
 assign m_axi.awsize = SIZE_16_BYTE; // 128bit write bus
 assign m_axi.awburst = BURST_INCR;
 
 // NOTE: This unit does not write to memory yet
-// TODO: Will do so when raster unit is online
+// TODO: Will do so when raster or DMA unit is online
 assign m_axi.awvalid = 0;
 assign m_axi.awaddr = 'd0;
 assign m_axi.wvalid = 0;
-assign m_axi.wstrb = 16'h0000; // For raster unit, this will be the write mask
+assign m_axi.wstrb = 16'h0000; // For raster unit or DMA, this will be the byte write mask for a 16 pixel horizontal tile
 assign m_axi.wlast = 0;
 assign m_axi.wdata = 'd0;
 assign m_axi.bready = 0;
@@ -146,10 +156,11 @@ scanstatetype scanstate = DETECTSCANLINEEND;
 
 // NOTE: First, set up the scanout address, then enable video scanout
 logic [31:0] scanaddr = 32'h00000000;
-logic [31:0] scanoffset = 0;
+logic [31:0] scanoffsetA = 0;
+logic [31:0] scanoffsetB = 0;
 logic scanenable = 1'b0;
 
-logic [4:0] rdata_cnt = 0;
+logic [5:0] rdata_cnt = 'd0;
 
 // ------------------------------------------------------------------------------------
 // Command FIFO
@@ -222,9 +233,11 @@ always_ff @(posedge aclk) begin
 
 			VMODE: begin
 				if (gpufifovalid && ~gpufifoempty) begin
-					scanenable <= gpufifodout[0]; // [0]: video output enabled when high
-					// rgb_vs_pal <= gpufifodout[1]; // select 16bit RGB mode when high vs 8bit paletted mode when low
-					// ? <= gpufifodout[31:2] unused for now
+					scanenable <= gpufifodout[0]; // [0]: video output enabled when high, otherwise contents of scanline cache repeats across screen
+					burstlen <= gpufifodout[1] ? 'd40 : 'd20;		// [1]: 40 bursts when high, otherwise 20 bursts
+					scanmode <= gpufifodout[1];
+					// rgb_vs_pal <= gpufifodout[2]; // select 16bit BGR mode (5:6:5) when high vs 8bit paletted mode when low
+					// ? <= gpufifodout[31:3] unused for now
 					// Advance FIFO
 					cmdre <= 1'b1;
 					cmdmode <= FINALIZE;
@@ -272,33 +285,33 @@ assign vblankcount = blankcounter;
 
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
-		// Read
 		m_axi.arvalid <= 0;
 		m_axi.rready <= 0;
 		scanstate <= DETECTSCANLINEEND;
 	end else begin
 		case (scanstate)
 			DETECTSCANLINEEND: begin
-				if (scanpixel == 638 && scanline <= 480 && ~scanline[0]) begin // Only at right edge of screen, at even lines, and above bottommost pixel
-					// Starting at 640, we have 160 pixels worth of time to load the scanline cache for next row
-					// It currently takes approximately 5 pixels worth of time to load 320 pixels from block ram into scanline cache and reach here
-					// For example, if we wanted to read 64 32 pixel wide sprites per scanline that'd take 30 pixels worth of time as a burst
-					// which could be held by a sprite composite buffer for a scanline (excluding composite offset)
-					scanoffset <= scanline[8:1]*320; // y*320 + 0, actually should be (y+1)*320 but it doesn't really matter TODO: 320 comes from videomode
+				if (scanpixel == 638 && scanline <= 480 && (~scanline[0] || scanmode)) begin
+					// Starting at pixel 640 (638 due to DC delay), we have 160 pixels worth of time to cache the next scanline
+					// This usually completes within 5 to 10 pixel's worth of time, way before the next scanline starts scanning
+					scanoffsetA <= scanline[8:0]*640;
+					scanoffsetB <= scanline[8:1]*320;
 					scanstate <= scanenable ? STARTLOAD : DETECTSCANLINEEND;
 				end else
+					// NOTE: Below scanline 480 is a good time for pending raster write work to run
 					scanstate <= DETECTSCANLINEEND;
 			end
 			STARTLOAD: begin
-				rdata_cnt <= 0;
 				// This has to be a 64 byte cache aligned address to match cache burst reads we're running
-				// At 320x240 resolution, each 320 pixel scanline is a multiple of 64 bytes, so no need to further align here just yet.
-				m_axi.araddr <= scanaddr + scanoffset;
+				// Each scanline is a multiple of 64 bytes, so no need to further align here unless we have an odd output size (320 and 640 work just fine)
+				m_axi.arlen <= burstlen - 8'd1;
+				m_axi.araddr <= scanaddr + (scanmode ? scanoffsetA : scanoffsetB);
 				m_axi.arvalid <= 1;
 				scanstate <= TRIGGERBURST;
 			end
 			TRIGGERBURST: begin
 				if (/*m_axi.arvalid && */m_axi.arready) begin
+					rdata_cnt <= 0;
 					m_axi.arvalid <= 0;
 					m_axi.rready <= 1;
 					scanstate <= DATABURST;
@@ -311,7 +324,7 @@ always_ff @(posedge aclk) begin
 					// Load data into scanline cache in 128bit chunks (16 pixels at 8bpp, 20 of them)
 					// TODO: video mode control should set up burst length
 					scanlinecache[rdata_cnt] <= m_axi.rdata;
-					rdata_cnt <= rdata_cnt + 1;
+					rdata_cnt <= rdata_cnt + 'd1;
 					m_axi.rready <= ~m_axi.rlast;
 					scanstate <= m_axi.rlast ? DETECTSCANLINEEND : DATABURST;
 				end else begin
