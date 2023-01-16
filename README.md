@@ -12,16 +12,17 @@ This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware thre
 - Only a few of the CSRs are implemented (time/cycle/retired instruction counters, exception trap vectors, trap cause and a few more)
 - Hardware interrupts, timer interrupts and illegal instruction exceptions supported, in addition to a memory mapped hardware interrupt trigger bit per core
   - Each hart can get a hardware interrupt triggered by writes to a special HARTIRQ memory mapped device
-- Two very simple arbiters exist on the system
-  - One for cached, one for uncached device access
+- Two very simple round-robin arbiters exist on the system
+  - One for cached (4x1), one for uncached (3x1) device access
   - A very simple device chain; one UART (with built-in FIFOs) and one shared MAILBOX memory (4KBytes)
   - A PS/2 keyboard interface for keyboard entry is also provided
   - SDCard file access available via SPIMaster and SDK helpers (ROM has a small commandline to help load/run ELF executables)
 - A sample ROM image (source here: https://github.com/ecilasun/riscvtool/tree/main/e32e) which shows how to set up a basic environment to load and run user programs from micro-SD card
   - Current ROM image supports a user timer interrupt handler to be installed via MAILBOX/HARTIRQ memory mapped writes
-- A simple GPU and a dynamic framebuffer pointer
-  - Video output is set to 8bit paletted at 320x240 resolution, signal is DVI over HDMI
-  - Does 128bit burst-reads from any cached memory including DDR3 into a scanline cache (20 bursts == 320 pixels in 8bit indexed color mode)
+- A simple GPU and a dynamic framebuffer pointer to anywhere in addressible memory
+  - Video output is set to 8bit paletted 320x240 or 640x480 resolution
+  - Video scanout hardware burst reads from memory at end of each scanline and outputs DVI signal over HDMI
+  - Each scanline consists of either 20 (320x240) or 40 (640x480) bursts, read into a scanline cache for output
 
 ## Work in progress
 - Investigate overlapped AXI4 transactions
