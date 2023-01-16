@@ -14,17 +14,17 @@ arbiterstatetype rarbstate = ARBITRATE0;
 arbiterstatetype writestate = INIT;
 arbiterstatetype warbstate = ARBITRATE0;
 
-logic [2:0] rreq;
-logic [2:0] rgrant;
-logic [2:0] wreq;
-logic [2:0] wgrant;
+logic [3:0] rreq;
+logic [3:0] rgrant;
+logic [3:0] wreq;
+logic [3:0] wgrant;
 logic rreqcomplete = 0;
 logic wreqcomplete = 0;
 
 // A request is considered only when an incoming read or write address is valid
 genvar reqgen;
 generate
-for (reqgen=0; reqgen<3; reqgen++) begin
+for (reqgen=0; reqgen<4; reqgen++) begin
 	always_comb begin
 		rreq[reqgen] = axi_s[reqgen].arvalid;
 		wreq[reqgen] = axi_s[reqgen].awvalid;
@@ -41,7 +41,7 @@ end
 // Read grants
 genvar rgnt;
 generate
-for (rgnt=0; rgnt<3; rgnt++) begin
+for (rgnt=0; rgnt<4; rgnt++) begin
 	always_comb begin
 		axi_s[rgnt].arready = rgrant[rgnt] ? axi_m.arready : 0;
 		axi_s[rgnt].rdata   = rgrant[rgnt] ? axi_m.rdata : 'dz;
@@ -55,7 +55,7 @@ endgenerate
 // Write grants
 genvar wgnt;
 generate
-for (wgnt=0; wgnt<3; wgnt++) begin
+for (wgnt=0; wgnt<4; wgnt++) begin
 	always_comb begin
 		axi_s[wgnt].awready = wgrant[wgnt] ? axi_m.awready : 0;
 		axi_s[wgnt].wready  = wgrant[wgnt] ? axi_m.wready : 0;
@@ -67,6 +67,14 @@ endgenerate
 
 always_comb begin
 	case (1'b1)
+		rgrant[3]: begin
+			axi_m.araddr	= axi_s[3].araddr;
+			axi_m.arvalid	= axi_s[3].arvalid;
+			axi_m.arlen		= axi_s[3].arlen;
+			axi_m.arsize	= axi_s[3].arsize;
+			axi_m.arburst	= axi_s[3].arburst;
+			axi_m.rready	= axi_s[3].rready;
+		end
 		rgrant[2]: begin
 			axi_m.araddr	= axi_s[2].araddr;
 			axi_m.arvalid	= axi_s[2].arvalid;
@@ -104,6 +112,18 @@ end
 
 always_comb begin
 	case (1'b1)
+		wgrant[3]: begin
+			axi_m.awaddr	= axi_s[3].awaddr;
+			axi_m.awvalid	= axi_s[3].awvalid;
+			axi_m.awlen		= axi_s[3].awlen;
+			axi_m.awsize	= axi_s[3].awsize;
+			axi_m.awburst	= axi_s[3].awburst;
+			axi_m.wdata		= axi_s[3].wdata;
+			axi_m.wstrb		= axi_s[3].wstrb;
+			axi_m.wvalid	= axi_s[3].wvalid;
+			axi_m.wlast		= axi_s[3].wlast;
+			axi_m.bready	= axi_s[3].bready;
+		end
 		wgrant[2]: begin
 			axi_m.awaddr	= axi_s[2].awaddr;
 			axi_m.awvalid	= axi_s[2].awvalid;
@@ -168,30 +188,44 @@ always_ff @(posedge aclk) begin
 			ARBITRATE0: begin
 				readstate <= (|rreq) ? GRANTED : ARBITRATE0;
 				priority case(1'b1)
-					rreq[1] : begin rgrant <= 3'b010; rarbstate <= ARBITRATE1; end
-					rreq[2] : begin rgrant <= 3'b100; rarbstate <= ARBITRATE2; end
-					rreq[0] : begin rgrant <= 3'b001; rarbstate <= ARBITRATE0; end
-					default : rgrant = 3'b000;
+					rreq[1] : begin rgrant <= 4'b0010; rarbstate <= ARBITRATE1; end
+					rreq[2] : begin rgrant <= 4'b0100; rarbstate <= ARBITRATE2; end
+					rreq[3] : begin rgrant <= 4'b1000; rarbstate <= ARBITRATE3; end
+					rreq[0] : begin rgrant <= 4'b0001; rarbstate <= ARBITRATE0; end
+					default : rgrant = 4'b000;
 				endcase
 			end
 
 			ARBITRATE1: begin
 				readstate <= (|rreq) ? GRANTED : ARBITRATE1;
 				priority case(1'b1)
-					rreq[2] : begin rgrant <= 3'b100; rarbstate <= ARBITRATE2; end
-					rreq[0] : begin rgrant <= 3'b001; rarbstate <= ARBITRATE0; end
-					rreq[1] : begin rgrant <= 3'b010; rarbstate <= ARBITRATE1; end
-					default : rgrant = 3'b000;
+					rreq[2] : begin rgrant <= 4'b0100; rarbstate <= ARBITRATE2; end
+					rreq[3] : begin rgrant <= 4'b1000; rarbstate <= ARBITRATE3; end
+					rreq[0] : begin rgrant <= 4'b0001; rarbstate <= ARBITRATE0; end
+					rreq[1] : begin rgrant <= 4'b0010; rarbstate <= ARBITRATE1; end
+					default : rgrant = 4'b000;
 				endcase
 			end
 
 			ARBITRATE2: begin
 				readstate <= (|rreq) ? GRANTED : ARBITRATE2;
 				priority case(1'b1)
-					rreq[0] : begin rgrant <= 3'b001; rarbstate <= ARBITRATE0; end
-					rreq[1] : begin rgrant <= 3'b010; rarbstate <= ARBITRATE1; end
-					rreq[2] : begin rgrant <= 3'b100; rarbstate <= ARBITRATE2; end
-					default : rgrant = 3'b000;
+					rreq[3] : begin rgrant <= 4'b1000; rarbstate <= ARBITRATE3; end
+					rreq[0] : begin rgrant <= 4'b0001; rarbstate <= ARBITRATE0; end
+					rreq[1] : begin rgrant <= 4'b0010; rarbstate <= ARBITRATE1; end
+					rreq[2] : begin rgrant <= 4'b0100; rarbstate <= ARBITRATE2; end
+					default : rgrant = 4'b000;
+				endcase
+			end
+
+			ARBITRATE3: begin
+				readstate <= (|rreq) ? GRANTED : ARBITRATE3;
+				priority case(1'b1)
+					rreq[0] : begin rgrant <= 4'b0001; rarbstate <= ARBITRATE0; end
+					rreq[1] : begin rgrant <= 4'b0010; rarbstate <= ARBITRATE1; end
+					rreq[2] : begin rgrant <= 4'b0100; rarbstate <= ARBITRATE2; end
+					rreq[3] : begin rgrant <= 4'b1000; rarbstate <= ARBITRATE3; end
+					default : rgrant = 4'b000;
 				endcase
 			end
 
@@ -215,30 +249,44 @@ always_ff @(posedge aclk) begin
 			ARBITRATE0: begin
 				writestate <= (|wreq) ? GRANTED : ARBITRATE0;
 				priority case(1'b1)
-					wreq[1] : begin wgrant <= 3'b010; warbstate <= ARBITRATE1; end
-					wreq[2] : begin wgrant <= 3'b100; warbstate <= ARBITRATE2; end
-					wreq[0] : begin wgrant <= 3'b001; warbstate <= ARBITRATE0; end
-					default : wgrant <= 3'b000;
+					wreq[1] : begin wgrant <= 4'b0010; warbstate <= ARBITRATE1; end
+					wreq[2] : begin wgrant <= 4'b0100; warbstate <= ARBITRATE2; end
+					wreq[3] : begin wgrant <= 4'b1000; warbstate <= ARBITRATE3; end
+					wreq[0] : begin wgrant <= 4'b0001; warbstate <= ARBITRATE0; end
+					default : wgrant <= 4'b000;
 				endcase
 			end
 
 			ARBITRATE1: begin
 				writestate <= (|wreq) ? GRANTED : ARBITRATE1;
 				priority case(1'b1)
-					wreq[2] : begin wgrant <= 3'b100; warbstate <= ARBITRATE2; end
-					wreq[0] : begin wgrant <= 3'b001; warbstate <= ARBITRATE0; end
-					wreq[1] : begin wgrant <= 3'b010; warbstate <= ARBITRATE1; end
-					default : wgrant <= 3'b000;
+					wreq[2] : begin wgrant <= 4'b0100; warbstate <= ARBITRATE2; end
+					wreq[3] : begin wgrant <= 4'b1000; warbstate <= ARBITRATE3; end
+					wreq[0] : begin wgrant <= 4'b0001; warbstate <= ARBITRATE0; end
+					wreq[1] : begin wgrant <= 4'b0010; warbstate <= ARBITRATE1; end
+					default : wgrant <= 4'b000;
 				endcase
 			end
 
 			ARBITRATE2: begin
 				writestate <= (|wreq) ? GRANTED : ARBITRATE2;
 				priority case(1'b1)
-					wreq[0] : begin wgrant <= 3'b001; warbstate <= ARBITRATE0; end
-					wreq[1] : begin wgrant <= 3'b010; warbstate <= ARBITRATE1; end
-					wreq[2] : begin wgrant <= 3'b100; warbstate <= ARBITRATE2; end
-					default : wgrant <= 3'b000;
+					wreq[3] : begin wgrant <= 4'b1000; warbstate <= ARBITRATE3; end
+					wreq[0] : begin wgrant <= 4'b0001; warbstate <= ARBITRATE0; end
+					wreq[1] : begin wgrant <= 4'b0010; warbstate <= ARBITRATE1; end
+					wreq[2] : begin wgrant <= 4'b0100; warbstate <= ARBITRATE2; end
+					default : wgrant <= 4'b000;
+				endcase
+			end
+
+			ARBITRATE3: begin
+				writestate <= (|wreq) ? GRANTED : ARBITRATE3;
+				priority case(1'b1)
+					wreq[0] : begin wgrant <= 4'b0001; warbstate <= ARBITRATE0; end
+					wreq[1] : begin wgrant <= 4'b0010; warbstate <= ARBITRATE1; end
+					wreq[2] : begin wgrant <= 4'b0100; warbstate <= ARBITRATE2; end
+					wreq[3] : begin wgrant <= 4'b1000; warbstate <= ARBITRATE3; end
+					default : wgrant <= 4'b000;
 				endcase
 			end
 
