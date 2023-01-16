@@ -1,7 +1,8 @@
 # E32E
 
 ## Features
-This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware threads clocked at 100MHz with the following features:
+This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware threads clocked at 100MHz.
+It is designed to work on Digilent's Nexys Video FPGA board, and has the following features:
 
 - Each core tries to conform to minimal feature set of rv32imzicsr (DIV/MUL, base integer, CSR registers)
   - The first core has an FPU which is currently not shared with other cores
@@ -19,6 +20,8 @@ This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware thre
   - SDCard file access available via SPIMaster and SDK helpers (ROM has a small commandline to help load/run ELF executables)
 - A sample ROM image (source here: https://github.com/ecilasun/riscvtool/tree/main/e32e) which shows how to set up a basic environment to load and run user programs from micro-SD card
   - Current ROM image supports a user timer interrupt handler to be installed via MAILBOX/HARTIRQ memory mapped writes
+- A Doom port is available at https://github.com/ecilasun/riscvtool/tree/main/doom
+  - Build the project at https://github.com/ecilasun/riscvtool/tree/main/doom/src/riscv via the Makefile to generate a doom.elf executable (you'll need a shareware doom wad file on the sdcard alongside doom.elf and a PS2 keyboard attached to the board to run it)
 - A simple GPU and a dynamic framebuffer pointer to anywhere in addressible memory
   - Video output is set to 8bit paletted 320x240 or 640x480 resolution
   - Video scanout hardware burst reads from memory at end of each scanline and outputs DVI signal over HDMI
@@ -26,19 +29,16 @@ This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware thre
 
 ## Work in progress
 - Investigate overlapped AXI4 transactions
-  - Already have reads & writes overlap
+  - Already have some reads & writes overlap
   - Check write-write and read-read overlaps and how to handle out-of-order transactions using IDs
 - Need to work on the OS a bit, task system and debugging still very experimental
+  - Will have to improve upon the mailbox idea
 - Might be interesting to check legacy rasterization or sprite support on the GPU
+  - GPU can burst read, trivial to do masked burst writes for sprites
+  - Rasterization is pretty straightforward, texturing complicates it a little but still not that hard
 - Start looking at BVH8 tracing now that the GPU has independent access to RAM
-  - Some tools to generate BVH8 data offline already done, alongside with a previewer
-- Figure out why SPI-SDCard communications frequently break
-  - Is this a memory controller issue on uncached bus?
-- Use terminal output over video screen instead of UART
-  - Need UART for debugging support
-
-## Notes
-The idea here is to build a console-like apparatus for folks to experiment with using software, and cutting the need for an expensive development system.
-To that end, I'm building an add-on board for the QMTECH Artix-7 board which currently provides DVI output (over HDMI pin).
-The board itself can be purchased for about 80USD currently which compared to Digilent boards is quite a bargain.
-The files for the addon board will be part of the git repo that hosts the final project files (this one is a placeholder as I'm developing on the more capable Nexys Video board)
+  - Some tools to generate BVH8 data offline already done, alongside with a previewer, available at https://github.com/ecilasun/lbvh-tool
+- Implement a bi-directional PS/2 keyboard interface
+  - Would be nice to be able to turn the caps lock light on and off
+- Work on non-indexed color video output modes
+- Eventually need to pipeline the CPUs, try the register busy bit list idea
