@@ -11,13 +11,17 @@ module axi4ps2keyboard(
 
 wire [15:0] scan_code;
 wire scan_code_ready;
+logic read_n = 1'b1;
 
-PS2Receiver ps2receiverinstance(
+ps2_keyboard ps2receiverinstance(
     .clk(hidclock),
-    .kclk(ps2_clk),
-    .kdata(ps2_data),
-    .keycode(scan_code),
-    .oflag(scan_code_ready) );
+    .clrn(aresetn),
+    .ps2_clk(ps2_clk),
+    .ps2_data(ps2_data),
+    .rdn(read_n),
+    .data(scan_code),
+    .ready(scan_code_ready),
+    .overflow());
 
 logic [1:0] raddrstate = 2'b00;
 
@@ -40,17 +44,28 @@ ps2infifo ps2inputfifo(
 
 	.rst(~aresetn) );
 
+logic keyreadstate = 1'b0;
 always @(posedge hidclock) begin
 	if (~aresetn) begin
 		//
 	end else begin
 		fifowe <= 1'b0;
-	
-		if (scan_code_ready & (~fifofull)) begin // make sure to drain the fifo!
-			// stash incoming byte in fifo
-			fifowe <= 1'b1;
-			fifodin <= scan_code;
-		end
+		read_n <= 1'b1;
+
+		case (keyreadstate)
+			1'b0: begin
+				if (scan_code_ready & (~fifofull)) begin // make sure to drain the fifo!
+					keyreadstate <= 1'b1;
+					read_n <= 1'b0;
+				end
+			end
+			1'b1: begin
+				// stash incoming byte in fifo
+				fifowe <= 1'b1;
+				fifodin <= scan_code;
+				keyreadstate <= 1'b0;
+			end
+		endcase
 	end
 end
 

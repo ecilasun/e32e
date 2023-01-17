@@ -1,88 +1,56 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: Digilent Inc.
-// Engineer: Thomas Kappenman
-// 
-// Create Date: 03/03/2015 09:33:36 PM
-// Design Name: 
-// Module Name: PS2Receiver
-// Project Name: Nexys4DDR Keyboard Demo
-// Target Devices: Nexys4DDR
-// Tool Versions: 
-// Description: PS2 Receiver module used to shift in keycodes from a keyboard plugged into the PS2 port
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
+/************************************************
+  The Verilog HDL code example is from the book
+  Computer Principles and Design in Verilog HDL
+  by Yamin Li, published by A JOHN WILEY & SONS
+************************************************/
+module ps2_keyboard (clk,clrn,ps2_clk,ps2_data,rdn,data,ready,overflow);
+    input        clk, clrn;                    // 50 MHz
+    input        ps2_clk;                      // ps2 clock
+    input        ps2_data;                     // ps2 data
+    input        rdn;                          // read, active low
+    output [15:0] data;                        // 8-bit code + 8-bit previous code
+    output       ready;                        // code ready
+    output reg   overflow;                     // fifo overflow
+    reg    [9:0] buffer;                       // ps2_data bits
+    reg    [7:0] fifo[0:7];                    // circular fifo
+    reg    [3:0] count;                        // count ps2_data bits
+    reg    [2:0] w_ptr,r_ptr;                  // fifo w/r pointers
+    reg    [1:0] ps2_clk_sync;                 // for detecting falling edge
+    reg    [7:0] dataprev;                     // previous data
 
-module PS2Receiver(
-    input clk,
-    input kclk,
-    input kdata,
-    output wire [15:0] keycode,
-    output wire oflag );
+    always @ (posedge clk) ps2_clk_sync <= {ps2_clk_sync[0], ps2_clk};
+    wire sampling = ps2_clk_sync[1] & ~ps2_clk_sync[0]; // had a falling edge
 
-    wire kclkf, kdataf;
-    logic [7:0]datacur=0;
-    logic [7:0]dataprev=0;
-    logic [3:0]cnt=0;
-    logic flag=0;
-
-debouncer #(
-    .COUNT_MAX(19),
-    .COUNT_WIDTH(5)
-) db_clk(
-    .clk(clk),
-    .I(kclk),
-    .O(kclkf)
-);
-debouncer #(
-   .COUNT_MAX(19),
-   .COUNT_WIDTH(5)
-) db_data(
-    .clk(clk),
-    .I(kdata),
-    .O(kdataf)
-);
-
-always@(negedge(kclkf))begin
-    case(cnt)
-     0:;//Start bit
-     1:datacur[0]<=kdataf;
-     2:datacur[1]<=kdataf;
-     3:datacur[2]<=kdataf;
-     4:datacur[3]<=kdataf;
-     5:datacur[4]<=kdataf;
-     6:datacur[5]<=kdataf;
-     7:datacur[6]<=kdataf;
-     8:datacur[7]<=kdataf;
-     9:flag<=1'b1;
-     10:flag<=1'b0;
-    endcase
-
-    if(cnt<=9) cnt<=cnt+1;
-    else if(cnt==10) cnt<=0;
-end
-
-logic pflag = 1'b0;
-logic oreg = 1'b0;
-logic [15:0] scancode = 16'd0;
-always@(posedge clk) begin
-    if (flag == 1'b1 && pflag == 1'b0) begin
-        scancode <= {dataprev, datacur};
-        oreg <= 1'b1;
-        dataprev <= datacur;
-    end else
-        oreg <= 'b0;
-    pflag <= flag;
-end
-
-assign keycode = scancode;
-assign oflag = oreg;
-
+    always @ (posedge clk) begin
+        if (!clrn) begin                       // on reset
+            count    <= 0;                     // clear count
+            w_ptr    <= 0;                     // clear w_ptr
+            r_ptr    <= 0;                     // clear r_ptr
+            overflow <= 0;                     // clear overflow
+        end else if (sampling) begin           // if sampling
+            if (count == 4'd10) begin          // if got one frame
+                if ((buffer[0] == 0) && (ps2_data) && (^buffer[9:1])) begin
+                    if ((w_ptr + 3'b1) != r_ptr) begin
+                        fifo[w_ptr] <= buffer[8:1];
+                        w_ptr <= w_ptr + 3'b1; // w_ptr++
+                    end else begin
+                        overflow <= 1;         // overflow
+                    end
+                end
+                count <= 0;                    // for next frame
+            end else begin                     // else
+                buffer[count] <= ps2_data;     // store ps2_data
+                count <= count + 4'b1;         // count++
+            end
+        end
+        if (!rdn && ready) begin               // on cpu read
+            dataprev <= fifo[r_ptr];           // save prev byte
+            r_ptr <= r_ptr + 3'b1;             // r_ptr++
+            overflow <= 0;                     // clear overflow
+        end
+    end
+    assign ready = (w_ptr != r_ptr);           // fifo is not empty
+    assign data  = {dataprev, fifo[r_ptr]};    // code byte + prev byte
 endmodule
