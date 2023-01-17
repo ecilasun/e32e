@@ -2,7 +2,7 @@
 
 // Round-robin arbiter for 3 master devices
 
-module ucarbiter(
+module arbiter3x1(
 	input wire aclk,
 	input wire aresetn,
 	axi_if.slave axi_s[2:0],	// To slave in ports of master devices

@@ -250,14 +250,14 @@ gpucore GPU(
 // ----------------------------------------------------------------------------
 
 // Cached bus arbiter
-arbiter CARB(
+arbiter4x1 CARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.axi_s({gpubus, A4CH2, A4CH1, A4CH0}),
 	.axi_m(A4CH) );
 
 // Uncached bus arbiter
-ucarbiter UCARB(
+arbiter3x1 UCARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
 	.axi_s({A4UCH2, A4UCH1, A4UCH0}),

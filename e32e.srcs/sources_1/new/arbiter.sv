@@ -2,7 +2,7 @@
 
 // Round-robin arbiter for 4 master devices
 
-module arbiter(
+module arbiter4x1(
 	input wire aclk,
 	input wire aresetn,
 	axi_if.slave axi_s[3:0],	// To slave in ports of master devices
