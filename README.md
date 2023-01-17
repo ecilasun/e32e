@@ -26,6 +26,7 @@ It is designed to work on Digilent's Nexys Video FPGA board, and has the followi
   - Video output is set to 8bit paletted 320x240 or 640x480 resolution
   - Video scanout hardware burst reads from memory at end of each scanline and outputs DVI signal over HDMI
   - Each scanline consists of either 20 (320x240) or 40 (640x480) bursts, read into a scanline cache for output
+- On startup, the ROM will transfer control to a 'boot.elf' executable at the root of the sdcard (sd:boot.elf) if one is found, before installing any interrupt handlers. Otherwise execution falls back to the default ROM image. This allows for swapping ROM software without having to rebuild the device
 
 ## Work in progress
 - Investigate overlapped AXI4 transactions
