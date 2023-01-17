@@ -64,13 +64,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="538"/>
-    <Option Name="WTModelSimExportSim" Val="538"/>
-    <Option Name="WTQuestaExportSim" Val="538"/>
+    <Option Name="WTXSimExportSim" Val="541"/>
+    <Option Name="WTModelSimExportSim" Val="541"/>
+    <Option Name="WTQuestaExportSim" Val="541"/>
     <Option Name="WTIesExportSim" Val="442"/>
-    <Option Name="WTVcsExportSim" Val="538"/>
-    <Option Name="WTRivieraExportSim" Val="538"/>
-    <Option Name="WTActivehdlExportSim" Val="537"/>
+    <Option Name="WTVcsExportSim" Val="541"/>
+    <Option Name="WTRivieraExportSim" Val="541"/>
+    <Option Name="WTActivehdlExportSim" Val="540"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -445,13 +445,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/ps2receiver.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PSRCDIR/sources_1/new/tmds_encoder.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -697,6 +690,13 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/new/integermultiplier.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/ps2receiver.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

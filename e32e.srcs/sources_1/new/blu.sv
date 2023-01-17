@@ -16,12 +16,12 @@ logic [31:0] v2 = 0;
 logic [2:0] op = 0;
 
 wire [5:0] aluonehot = {
-	op == `BLU_EQ  ? 1'b1 : 1'b0,
-	op == `BLU_NE  ? 1'b1 : 1'b0,
-	op == `BLU_L   ? 1'b1 : 1'b0,
-	op == `BLU_GE  ? 1'b1 : 1'b0,
-	op == `BLU_LU  ? 1'b1 : 1'b0,
-	op == `BLU_GEU ? 1'b1 : 1'b0 };
+	op == `BLU_EQ	? 1'b1 : 1'b0,
+	op == `BLU_NE	? 1'b1 : 1'b0,
+	op == `BLU_L	? 1'b1 : 1'b0,
+	op == `BLU_GE	? 1'b1 : 1'b0,
+	op == `BLU_LU	? 1'b1 : 1'b0,
+	op == `BLU_GEU	? 1'b1 : 1'b0 };
 
 always @(posedge aclk) begin
 	if (enable) begin
@@ -42,12 +42,12 @@ end
 always_comb begin
 	case (1'b1)
 		// branch alu
-		default:		branchout = eq; // aluonehot[5]
-		aluonehot[4]:	branchout = ~eq;
-		aluonehot[3]:	branchout = sless;
-		aluonehot[2]:	branchout = ~sless;
-		aluonehot[1]:	branchout = less;
 		aluonehot[0]:	branchout = ~less;
+		aluonehot[1]:	branchout = less;
+		aluonehot[2]:	branchout = ~sless;
+		aluonehot[3]:	branchout = sless;
+		aluonehot[4]:	branchout = ~eq;
+		default:		branchout = eq; // aluonehot[5]
 	endcase
 end
 

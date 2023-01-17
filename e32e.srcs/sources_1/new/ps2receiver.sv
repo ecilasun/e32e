@@ -24,14 +24,14 @@ module PS2Receiver(
     input clk,
     input kclk,
     input kdata,
-    output reg [15:0] keycode=0,
-    output reg oflag );
+    output wire [15:0] keycode,
+    output wire oflag );
 
     wire kclkf, kdataf;
-    reg [7:0]datacur=0;
-    reg [7:0]dataprev=0;
-    reg [3:0]cnt=0;
-    reg flag=0;
+    logic [7:0]datacur=0;
+    logic [7:0]dataprev=0;
+    logic [3:0]cnt=0;
+    logic flag=0;
 
 debouncer #(
     .COUNT_MAX(19),
@@ -69,15 +69,20 @@ always@(negedge(kclkf))begin
     else if(cnt==10) cnt<=0;
 end
 
-reg pflag;
+logic pflag = 1'b0;
+logic oreg = 1'b0;
+logic [15:0] scancode = 16'd0;
 always@(posedge clk) begin
     if (flag == 1'b1 && pflag == 1'b0) begin
-        keycode <= {dataprev, datacur};
-        oflag <= 1'b1;
+        scancode <= {dataprev, datacur};
+        oreg <= 1'b1;
         dataprev <= datacur;
     end else
-        oflag <= 'b0;
+        oreg <= 'b0;
     pflag <= flag;
 end
+
+assign keycode = scancode;
+assign oflag = oreg;
 
 endmodule

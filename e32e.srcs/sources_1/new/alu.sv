@@ -15,16 +15,16 @@ logic [31:0] v2 = 0;
 logic [3:0] op = 0;
 
 wire [9:0] aluonehot = {
-	op == `ALU_ADD  ? 1'b1 : 1'b0,
-	op == `ALU_SUB  ? 1'b1 : 1'b0,
-	op == `ALU_SLL  ? 1'b1 : 1'b0,
-	op == `ALU_SLT  ? 1'b1 : 1'b0,
-	op == `ALU_SLTU ? 1'b1 : 1'b0,
-	op == `ALU_XOR  ? 1'b1 : 1'b0,
-	op == `ALU_SRL  ? 1'b1 : 1'b0,
-	op == `ALU_SRA  ? 1'b1 : 1'b0,
-	op == `ALU_OR   ? 1'b1 : 1'b0,
-	op == `ALU_AND  ? 1'b1 : 1'b0 };
+	op == `ALU_ADD	? 1'b1 : 1'b0,
+	op == `ALU_SUB	? 1'b1 : 1'b0,
+	op == `ALU_SLL	? 1'b1 : 1'b0,
+	op == `ALU_SLT	? 1'b1 : 1'b0,
+	op == `ALU_SLTU	? 1'b1 : 1'b0,
+	op == `ALU_XOR	? 1'b1 : 1'b0,
+	op == `ALU_SRL	? 1'b1 : 1'b0,
+	op == `ALU_SRA	? 1'b1 : 1'b0,
+	op == `ALU_OR	? 1'b1 : 1'b0,
+	op == `ALU_AND	? 1'b1 : 1'b0 };
 
 always @(posedge aclk) begin
 	if (enable) begin
@@ -61,16 +61,16 @@ end
 always_comb begin
 	case (1'b1)
 		// integer ops
-		default:		aluout = vsum; // aluonehot[9]
-		aluonehot[8]:	aluout = vdiff;
-		aluonehot[7]:	aluout = vshl;
-		aluonehot[6]:	aluout = vsless;
-		aluonehot[5]:	aluout = vless;
-		aluonehot[4]:	aluout = vxor;
-		aluonehot[3]:	aluout = vshr;
-		aluonehot[2]:	aluout = vsra;
-		aluonehot[1]:	aluout = vor;
 		aluonehot[0]:	aluout = vand;
+		aluonehot[1]:	aluout = vor;
+		aluonehot[2]:	aluout = vsra;
+		aluonehot[3]:	aluout = vshr;
+		aluonehot[4]:	aluout = vxor;
+		aluonehot[5]:	aluout = vless;
+		aluonehot[6]:	aluout = vsless;
+		aluonehot[7]:	aluout = vshl;
+		aluonehot[8]:	aluout = vdiff;
+		default:		aluout = vsum; // aluonehot[9]
 	endcase
 end
 
