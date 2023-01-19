@@ -258,10 +258,10 @@ dmacore DMA(
 // ----------------------------------------------------------------------------
 
 // Cached bus arbiter
-arbiter3x1 CARB(
+arbiter4x1 CARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.axi_s({gpubus, A4CH1, A4CH0}),
+	.axi_s({dmabus, gpubus, A4CH1, A4CH0}),
 	.axi_m(A4CH) );
 
 // Uncached bus arbiter

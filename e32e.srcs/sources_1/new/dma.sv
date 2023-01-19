@@ -24,20 +24,13 @@ assign dmabusy = dmainprogress;
 logic [7:0] burstlen = 'd20;
 logic dmastrobe = 1'b0;
 
+assign m_axi.arlen = 0;	// one burst
 assign m_axi.arsize = SIZE_16_BYTE; // 128bit read bus
 assign m_axi.arburst = BURST_INCR;
 
 assign m_axi.awlen = 0;				// one burst
 assign m_axi.awsize = SIZE_16_BYTE; // 128bit write bus
 assign m_axi.awburst = BURST_INCR;
-
-assign m_axi.awvalid = 0;
-assign m_axi.awaddr = 'd0;
-assign m_axi.wvalid = 0;
-assign m_axi.wstrb = 16'h0000; // For raster unit or DMA, this will be the byte write mask for a 16 pixel horizontal tile
-assign m_axi.wlast = 0;
-assign m_axi.wdata = 'd0;
-assign m_axi.bready = 0;
 
 // NOTE: First, set up the scanout address, then enable video scanout
 logic [31:0] scanaddr = 32'h00000000;
@@ -62,27 +55,28 @@ dmacmdmodetype cmdmode = WCMD;
 logic [31:0] dmacmd = 'd0;
 
 // TODO: DMA queue FIFO and wires, first word fallthrough
+wire dmaqueuefull;
 wire dmaqueuevalid;
 wire dmaqueueempty;
 logic dmaqueuewe = 1'b0;
-logic [127:0] dmaqueuedin = 0;
+logic [95:0] dmaqueuedin = 0;
 logic dmaqueuere = 1'b0;
-wire [127:0] dmaqueuedout;
+wire [95:0] dmaqueuedout;
 
 dmaqueue dmaqueueinst(
-	.full(),
+	.full(dmaqueuefull),
 	.din(dmaqueuedin),
 	.wr_en(dmaqueuewe),
 	.empty(dmaqueueempty),
 	.dout(dmaqueuedout),
 	.rd_en(dmaqueuere),
-	.valid(dmaqueuvalid),
+	.valid(dmaqueuevalid),
 	.clk(aclk),
 	.srst(~aresetn) );
 
 logic [31:0] dmasourceaddr;
 logic [31:0] dmatargetaddr;
-logic [31:0] dmabytecount;
+logic [31:0] dmablockcount;
 
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
@@ -135,7 +129,7 @@ always_ff @(posedge aclk) begin
 				if (dmafifovalid && ~dmafifoempty) begin
 					// NOTE: Need to generate leadmask and trailmask for misaligned
 					// start/end bits and manage the middle section count
-					dmabytecount <= dmafifodout;
+					dmablockcount <= dmafifodout;
 					// Advance FIFO
 					cmdre <= 1'b1;
 					cmdmode <= FINALIZE;
@@ -143,7 +137,7 @@ always_ff @(posedge aclk) begin
 			end
 
 			DMAENQUEUE: begin
-				dmaqueuedin <= {dmasourceaddr, dmatargetaddr, dmabytecount, dmabytecount};
+				dmaqueuedin <= {dmasourceaddr, dmatargetaddr, dmablockcount};
 				dmaqueuewe <= 1'b1;
 				// Advance FIFO
 				cmdre <= 1'b1;
@@ -162,9 +156,13 @@ end
 // DMA logic
 // ------------------------------------------------------------------------------------
 
-typedef enum logic [2:0] {DETECTCMD, STARTDMA} dmastatetype;
+typedef enum logic [2:0] {DETECTCMD, STARTDMA, DMAREADSOURCE, COPYBLOCK, DMAWRITEDEST, DMACOMPLETERW, DMARESUME} dmastatetype;
 dmastatetype dmastate = DETECTCMD;
-logic [127:0] dmaoperation;
+
+logic [31:0] dmaop_source;
+logic [31:0] dmaop_target;
+logic [31:0] dmaop_count;
+logic [127:0] copydata;
 
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
@@ -179,26 +177,95 @@ always_ff @(posedge aclk) begin
 			DETECTCMD: begin
 				// TODO: Instead of strobe, write command to a DMA fifo
 				if (~dmaqueueempty && dmaqueuevalid) begin
-					// TODO: Start the burst read/write ops
 					// TBD: This unit doesn't handle misaligned copies yet
-					dmaoperation <= dmaqueuedout;
+					// TBD: This unit doesn't do burst copy yet
+
+					dmaop_source <= dmaqueuedout[95:64];
+					dmaop_target <= dmaqueuedout[63:32];
+					dmaop_count <= dmaqueuedout[31:0];
+
 					dmainprogress <= 1'b1;
 					// Advance FIFO
 					dmaqueuere <= 1'b1;
 					dmastate <= STARTDMA;
 				end
 			end
+
 			STARTDMA: begin
 				// TODO: Generate leadmask / trailmask for misaligned copies (start address and/or length not a multiple of 128 bits)
-				// ...
 
-				// Mark end of DMA for the CPU when done
-				dmainprogress <= 1'b0;
+				// Set up read
+				m_axi.arvalid <= 1;
+				m_axi.araddr <= dmaop_source;
+				dmaop_source <= dmaop_source + 32'd16; // Next batch
 
 				// Dummy state, go back to where we were
-				dmastate <= DETECTCMD;
+				dmastate <= DMAREADSOURCE;
 			end
-		endcase
+
+			DMAREADSOURCE: begin
+				if (/*m_axi.arvalid && */m_axi.arready) begin
+					m_axi.arvalid <= 0;
+					m_axi.rready <= 1;
+					dmastate <= COPYBLOCK;
+				end
+			end
+
+			COPYBLOCK: begin
+				if (m_axi.rvalid  /*&& m_axi.rready*/) begin
+					m_axi.rready <= 1'b0;
+
+					copydata <= m_axi.rdata;
+
+					m_axi.awvalid = 1'b1;
+					m_axi.awaddr = dmaop_target;
+					dmaop_target <= dmaop_target + 32'd16; // Next batch
+
+					dmastate <= DMAWRITEDEST;
+				end
+			end
+
+			DMAWRITEDEST: begin
+				if (/*m_axi.awvalid &&*/ m_axi.awready) begin
+					m_axi.awvalid = 1'b0;
+
+					m_axi.wvalid = 1'b1;
+					m_axi.wstrb = 16'hFFFF; // TBD: depends on leadmask / trailmask
+					m_axi.wdata <= copydata;
+					m_axi.wlast = 1'b1;
+
+					dmastate <= DMACOMPLETERW;
+				end
+			end
+
+			DMACOMPLETERW: begin
+				if (/*m_axi.wvalid &&*/ m_axi.wready) begin
+					m_axi.wvalid <= 0;
+
+					m_axi.wstrb <= 16'h0000;
+					m_axi.wlast <= 0;
+					m_axi.bready <= 1;
+
+					dmaop_count <= dmaop_count - 'd1;
+					dmastate <= DMARESUME;
+				end
+			end
+
+			DMARESUME: begin
+				if (m_axi.bvalid /*&& m_axi.bready*/) begin
+					m_axi.bready <= 0;
+
+					// Set up next read, if there's one
+					m_axi.arvalid <= (dmaop_count == 'd0) ? 1'b0 : 1'b1;
+					m_axi.araddr <= dmaop_source;
+					dmaop_source <= dmaop_source + 32'd16; // Next batch
+
+					// If we're done, listen to next command
+					dmastate <= (dmaop_count == 'd0) ? DETECTCMD : DMAREADSOURCE;
+					dmainprogress <= (dmaop_count == 'd0) ? 1'b0 : 1'b1;
+				end
+			end
+	endcase
 	end
 end
 
