@@ -11,6 +11,12 @@ module uncacheddevicechain(
 	input wire uartbaseclock,
 	input wire spibaseclock,
     axi_if.slave axi4if,
+	// DMA
+	output wire dmafifoempty,
+	output wire [31:0] dmafifodout,
+	input wire dmafifore,
+	output wire dmafifovalid,
+	input wire dmabusy,
 	// GPU
 	output wire gpufifoempty,
 	output wire [31:0] gpufifodout,
@@ -33,32 +39,35 @@ logic validwaddr_leds = 1'b0, validraddr_leds = 1'b0;
 logic validwaddr_hart = 1'b0, validraddr_hart = 1'b0;
 logic validwaddr_gpu = 1'b0, validraddr_gpu = 1'b0;
 logic validwaddr_audio = 1'b0, validraddr_audio = 1'b0;
+logic validwaddr_dma = 1'b0, validraddr_dma = 1'b0;
 
 always_comb begin
 	casex (axi4if.awaddr)
-		32'b1000_0000_0000_0000_0000_xxxx_xxxx_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b10000000;
-		32'b1000_0000_0000_0000_0001_0000_0000_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b01000000;
-		32'b1000_0000_0000_0000_0001_0000_0001_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00100000;
-		32'b1000_0000_0000_0000_0001_0000_0010_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00010000;
-		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00001000;
-		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000100;
-		32'b1000_0000_0000_0000_0001_0000_0101_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000010;
-		32'b1000_0000_0000_0000_0001_0000_0110_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000001;
-		default :										{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio} = 8'b00000000;
+		32'b1000_0000_0000_0000_0000_xxxx_xxxx_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b100000000;
+		32'b1000_0000_0000_0000_0001_0000_0000_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b010000000;
+		32'b1000_0000_0000_0000_0001_0000_0001_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b001000000;
+		32'b1000_0000_0000_0000_0001_0000_0010_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b000100000;
+		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b000010000;
+		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b000001000;
+		32'b1000_0000_0000_0000_0001_0000_0101_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b000000100;
+		32'b1000_0000_0000_0000_0001_0000_0110_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b000000010;
+		32'b1000_0000_0000_0000_0001_0000_0111_xxxx :	{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b000000001;
+		default :										{validwaddr_mailbox, validwaddr_uart, validwaddr_spi, validwaddr_ps2, validwaddr_leds, validwaddr_hart, validwaddr_gpu, validwaddr_audio, validwaddr_dma} = 9'b000000000;
 	endcase
 end
 
 always_comb begin
 	casex (axi4if.araddr)
-		32'b1000_0000_0000_0000_0000_xxxx_xxxx_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b10000000;
-		32'b1000_0000_0000_0000_0001_0000_0000_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b01000000;
-		32'b1000_0000_0000_0000_0001_0000_0001_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00100000;
-		32'b1000_0000_0000_0000_0001_0000_0010_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00010000;
-		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00001000;
-		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000100;
-		32'b1000_0000_0000_0000_0001_0000_0101_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000010;
-		32'b1000_0000_0000_0000_0001_0000_0110_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000001;
-		default :										{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio} = 8'b00000000;
+		32'b1000_0000_0000_0000_0000_xxxx_xxxx_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b100000000;
+		32'b1000_0000_0000_0000_0001_0000_0000_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b010000000;
+		32'b1000_0000_0000_0000_0001_0000_0001_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b001000000;
+		32'b1000_0000_0000_0000_0001_0000_0010_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b000100000;
+		32'b1000_0000_0000_0000_0001_0000_0011_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b000010000;
+		32'b1000_0000_0000_0000_0001_0000_0100_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b000001000;
+		32'b1000_0000_0000_0000_0001_0000_0101_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b000000100;
+		32'b1000_0000_0000_0000_0001_0000_0110_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b000000010;
+		32'b1000_0000_0000_0000_0001_0000_0111_xxxx :	{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b000000001;
+		default :										{validraddr_mailbox, validraddr_uart, validraddr_spi, validraddr_ps2, validraddr_leds, validraddr_hart, validraddr_gpu, validraddr_audio, validraddr_dma} = 9'b000000000;
 	endcase
 end
 
@@ -139,6 +148,17 @@ a4i2saudio APU(
     .ac_lrclk(wires.ac_lrclk),
     .ac_dac_sdata(wires.ac_dac_sdata),
     .ac_adc_sdata(wires.ac_adc_sdata) );
+
+axi_if dmaif();
+dmacommanddevice dmacmdinst(
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.s_axi(dmaif),
+	.fifoempty(dmafifoempty),
+	.fifodout(dmafifodout),
+	.fifore(dmafifore),
+	.fifovalid(dmafifovalid),
+	.dmabusy(dmabusy));
 
 // ------------------------------------------------------------------------------------
 // interrupt setup
@@ -248,6 +268,17 @@ always_comb begin
 	audioif.bready = validwaddr_audio ? axi4if.bready : 1'b0;
 	audioif.wlast = validwaddr_audio ? axi4if.wlast : 1'b0;
 
+	dmaif.awaddr = validwaddr_dma ? waddr : 32'd0;
+	dmaif.awvalid = validwaddr_dma ? axi4if.awvalid : 1'b0;
+	dmaif.awlen = validwaddr_dma ? axi4if.awlen : 0;
+	dmaif.awsize = validwaddr_dma ? axi4if.awsize : 0;
+	dmaif.awburst = validwaddr_dma ? axi4if.awburst : 0;
+	dmaif.wdata = validwaddr_dma ? axi4if.wdata : 0;
+	dmaif.wstrb = validwaddr_dma ? axi4if.wstrb : 'd0;
+	dmaif.wvalid = validwaddr_dma ? axi4if.wvalid : 1'b0;
+	dmaif.bready = validwaddr_dma ? axi4if.bready : 1'b0;
+	dmaif.wlast = validwaddr_dma ? axi4if.wlast : 1'b0;
+
 	if (validwaddr_uart) begin
 		axi4if.awready = uartif.awready;
 		axi4if.bresp = uartif.bresp;
@@ -288,6 +319,11 @@ always_comb begin
 		axi4if.bresp = audioif.bresp;
 		axi4if.bvalid = audioif.bvalid;
 		axi4if.wready = audioif.wready;
+	end else if (validwaddr_dma) begin
+		axi4if.awready = dmaif.awready;
+		axi4if.bresp = dmaif.bresp;
+		axi4if.bvalid = dmaif.bvalid;
+		axi4if.wready = dmaif.wready;
 	end else begin
 		axi4if.awready = 0;
 		axi4if.bresp = 0;
@@ -360,6 +396,13 @@ always_comb begin
 	audioif.arvalid = validraddr_audio ? axi4if.arvalid : 1'b0;
 	audioif.rready = validraddr_audio ? axi4if.rready : 1'b0;
 
+	dmaif.araddr = validraddr_dma ? raddr : 32'd0;
+	dmaif.arlen = validraddr_dma ? axi4if.arlen : 0;
+	dmaif.arsize = validraddr_dma ? axi4if.arsize : 0;
+	dmaif.arburst = validraddr_dma ? axi4if.arburst : 0;
+	dmaif.arvalid = validraddr_dma ? axi4if.arvalid : 1'b0;
+	dmaif.rready = validraddr_dma ? axi4if.rready : 1'b0;
+
 	if (validraddr_uart) begin
 		axi4if.arready = uartif.arready;
 		axi4if.rdata = uartif.rdata;
@@ -408,6 +451,12 @@ always_comb begin
 		axi4if.rresp = audioif.rresp;
 		axi4if.rvalid = audioif.rvalid;
 		axi4if.rlast = audioif.rlast;
+	end else if (validraddr_dma) begin
+		axi4if.arready = dmaif.arready;
+		axi4if.rdata = dmaif.rdata;
+		axi4if.rresp = dmaif.rresp;
+		axi4if.rvalid = dmaif.rvalid;
+		axi4if.rlast = dmaif.rlast;
 	end else begin
 		axi4if.arready = 0;
 		axi4if.rdata = 0;

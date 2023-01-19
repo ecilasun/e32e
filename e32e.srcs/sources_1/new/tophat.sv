@@ -117,7 +117,8 @@ gpudataoutput gpudata(
 // HARTIRQ: 80001040..8000104F : uncached w
 //   GPUIO: 81001050..8100105F : uncached w
 //     APU: 80001060..8000106F : uncached w
-//   ...  : 80001070..FFFFFFFF : unused
+//     DMA: 80001070..8000107F : uncached w
+//   ...  : 80001080..FFFFFFFF : unused
 
 // ----------------------------------------------------------------------------
 // Clock / Reset generator
@@ -178,8 +179,8 @@ axi_if A4CH1(), A4UCH1();
 axi_if A4CH(), A4UCH();
 
 // IRQs in descending bit order
-//  11 10 9  8  7   6  5  4  3      2   1      0
-// [-- -- -- -- GPU -- H1 H0 unused PS2 unused UART]
+//  11 10 9  8   7   6  5  4  3      2   1      0
+// [-- -- -- DMA GPU -- H1 H0 unused PS2 unused UART]
 wire [11:0] irq;
 
 // ----------------------------------------------------------------------------
@@ -233,7 +234,24 @@ gpucore GPU(
 	.gpufifodout(gpufifodout),
 	.gpufifore(gpufifore),
 	.gpufifovalid(gpufifovalid),
-	.vblankcount(vblankcount));
+	.vblankcount(vblankcount) );
+
+// DMA
+axi_if dmabus();
+wire dmafifoempty;
+wire [31:0] dmafifodout;
+wire dmafifore;
+wire dmafifovalid;
+wire dmabusy;
+dmacore DMA(
+	.aclk(aclk),
+	.aresetn(aresetn),
+	.m_axi(dmabus),
+	.dmafifoempty(dmafifoempty),
+	.dmafifodout(dmafifodout),
+	.dmafifore(dmafifore),
+	.dmafifovalid(dmafifovalid),
+	.dmabusy(dmabusy) );
 
 // ----------------------------------------------------------------------------
 // HART arbiters for cached and uncached busses
@@ -285,6 +303,12 @@ uncacheddevicechain UCDEVICECHAIN(
 	.aresetn(aresetn),
 	.axi4if(A4UCH),
 	.irq(irq),
+	// DMA
+	.dmafifoempty(dmafifoempty),
+	.dmafifodout(dmafifodout),
+	.dmafifore(dmafifore),
+	.dmafifovalid(dmafifovalid),
+	.dmabusy(dmabusy),
 	// GPU
 	.gpufifoempty(gpufifoempty),
 	.gpufifodout(gpufifodout),

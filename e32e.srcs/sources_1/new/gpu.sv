@@ -39,7 +39,7 @@ logic scanmode = 1'b0;			// 320 pixel mode (640 when high)
 // Scanline cache and output address selection
 // ------------------------------------------------------------------------------------
 
-logic [127:0] scanlinecache [0:63]; // 63 blocks of 16 pixels worth of scanline cache (20 used in index color 320*240 mode)
+logic [127:0] scanlinecache [0:63]; // 64 blocks of 16 pixels worth of scanline cache (20 used in index color 320*240 mode)
 
 logic palettewe = 1'b0;
 logic [7:0] palettewa = 8'h00;
