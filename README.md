@@ -22,6 +22,8 @@ It is designed to work on Digilent's Nexys Video FPGA board, and has the followi
   - Current ROM image supports a user timer interrupt handler to be installed via MAILBOX/HARTIRQ memory mapped writes
 - A Doom port is available at https://github.com/ecilasun/riscvtool/tree/main/doom
   - Build the project at https://github.com/ecilasun/riscvtool/tree/main/doom/src/riscv via the Makefile to generate a doom.elf executable (you'll need a shareware doom wad file on the sdcard alongside doom.elf and a PS2 keyboard attached to the board to run it)
+- A simple DMA device which currently copies between 16byte aligned addresses, in increments of 16 bytes
+  - Will improve this in the future to handle misaligned addresses and uneven multiples of 16 bytes (using write masks)
 - A simple GPU and a dynamic framebuffer pointer to anywhere in addressible memory
   - Video output is set to 8bit paletted 320x240 or 640x480 resolution (user can control this via a GPU command)
   - Video scanout hardware burst reads from memory at end of each scanline and outputs DVI signal over HDMI
