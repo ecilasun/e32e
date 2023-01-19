@@ -1,7 +1,7 @@
 # E32E - Experimental 32 bit RISC-V processor for Educational purposes
 
 ## Features
-This system contains three RISC-V (2*RV32IMZicsr + 1*RV32IMFZicsr) hardware threads clocked at 100MHz.
+This system contains two RISC-V (1*RV32IMZicsr + 1*RV32IMFZicsr) hardware threads clocked at 100MHz each.
 It is designed to work on Digilent's Nexys Video FPGA board, and has the following features:
 
 - Each core tries to conform to minimal feature set of rv32imzicsr (DIV/MUL, base integer, CSR registers)
