@@ -173,14 +173,13 @@ end
 // Wires between each core and their cached/uncached bus i/o
 axi_if A4CH0(), A4UCH0();
 axi_if A4CH1(), A4UCH1();
-axi_if A4CH2(), A4UCH2();
 
 // Arbitrated cached and uncached busses
 axi_if A4CH(), A4UCH();
 
 // IRQs in descending bit order
 //  11 10 9  8  7   6  5  4  3      2   1      0
-// [-- -- -- -- GPU H2 H1 H0 unused PS2 unused UART]
+// [-- -- -- -- GPU -- H1 H0 unused PS2 unused UART]
 wire [11:0] irq;
 
 // ----------------------------------------------------------------------------
@@ -216,15 +215,6 @@ rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(1)) HART1 (
 	.a4buscached(A4CH1),
 	.a4busuncached(A4UCH1) );
 
-rv32cpunofpu #(.RESETVECTOR(32'h20000000), .HARTID(2)) HART2 (
-	.aclk(aclk),
-	.wc0(wallclocktime),
-	.cc0(cpuclocktime),
-	.aresetn(aresetn),
-	.irq({irq[6], irq[3:0]}),	// H2 unused PS2 unused UART
-	.a4buscached(A4CH2),
-	.a4busuncached(A4UCH2) );
-
 // GPU + SCANOUT
 axi_if gpubus();
 wire gpufifoempty;
@@ -250,17 +240,17 @@ gpucore GPU(
 // ----------------------------------------------------------------------------
 
 // Cached bus arbiter
-arbiter4x1 CARB(
+arbiter3x1 CARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.axi_s({gpubus, A4CH2, A4CH1, A4CH0}),
+	.axi_s({gpubus, A4CH1, A4CH0}),
 	.axi_m(A4CH) );
 
 // Uncached bus arbiter
-arbiter3x1 UCARB(
+arbiter2x1 UCARB(
 	.aclk(aclk),
 	.aresetn(aresetn),
-	.axi_s({A4UCH2, A4UCH1, A4UCH0}),
+	.axi_s({A4UCH1, A4UCH0}),
 	.axi_m(A4UCH) );
 
 // ----------------------------------------------------------------------------

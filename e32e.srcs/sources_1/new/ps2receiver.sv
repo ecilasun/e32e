@@ -5,6 +5,10 @@
   Computer Principles and Design in Verilog HDL
   by Yamin Li, published by A JOHN WILEY & SONS
 ************************************************/
+
+// Minor modifications made to make it work with E32E requirements
+// For reference only; to be replaced with custom version
+
 module ps2_keyboard (clk,clrn,ps2_clk,ps2_data,rdn,data,ready,overflow);
     input        clk, clrn;                    // 50 MHz
     input        ps2_clk;                      // ps2 clock
@@ -16,7 +20,7 @@ module ps2_keyboard (clk,clrn,ps2_clk,ps2_data,rdn,data,ready,overflow);
     reg    [9:0] buffer;                       // ps2_data bits
     reg    [7:0] fifo[0:7];                    // circular fifo
     reg    [3:0] count;                        // count ps2_data bits
-    reg    [2:0] w_ptr,r_ptr;                  // fifo w/r pointers
+    reg    [2:0] w_ptr, r_ptr;                 // fifo w/r pointers
     reg    [1:0] ps2_clk_sync;                 // for detecting falling edge
     reg    [7:0] dataprev;                     // previous data
 
