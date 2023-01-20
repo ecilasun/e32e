@@ -156,7 +156,7 @@ end
 // DMA logic
 // ------------------------------------------------------------------------------------
 
-typedef enum logic [2:0] {DETECTCMD, STARTDMA, DMAREADSOURCE, COPYBLOCK, DMAWRITEDEST, DMACOMPLETERW, DMARESUME} dmastatetype;
+typedef enum logic [2:0] {DETECTCMD, STARTDMA, DMAREADSOURCE, COPYBLOCK, DMAWRITEDEST, DMACOMPLETERW} dmastatetype;
 dmastatetype dmastate = DETECTCMD;
 
 logic [31:0] dmaop_source;
@@ -207,6 +207,7 @@ always_ff @(posedge aclk) begin
 				if (/*m_axi.arvalid && */m_axi.arready) begin
 					m_axi.arvalid <= 0;
 					m_axi.rready <= 1;
+					dmaop_count <= dmaop_count - 'd1;
 					dmastate <= COPYBLOCK;
 				end
 			end
@@ -217,8 +218,8 @@ always_ff @(posedge aclk) begin
 
 					copydata <= m_axi.rdata;
 
-					m_axi.awvalid = 1'b1;
-					m_axi.awaddr = dmaop_target;
+					m_axi.awvalid <= 1'b1;
+					m_axi.awaddr <= dmaop_target;
 					dmaop_target <= dmaop_target + 32'd16; // Next batch
 
 					dmastate <= DMAWRITEDEST;
@@ -227,12 +228,12 @@ always_ff @(posedge aclk) begin
 
 			DMAWRITEDEST: begin
 				if (/*m_axi.awvalid &&*/ m_axi.awready) begin
-					m_axi.awvalid = 1'b0;
+					m_axi.awvalid <= 1'b0;
 
-					m_axi.wvalid = 1'b1;
-					m_axi.wstrb = 16'hFFFF; // TBD: depends on leadmask / trailmask
+					m_axi.wvalid <= 1'b1;
+					m_axi.wstrb <= 16'hFFFF; // TBD: depends on leadmask / trailmask
 					m_axi.wdata <= copydata;
-					m_axi.wlast = 1'b1;
+					m_axi.wlast <= 1'b1;
 
 					dmastate <= DMACOMPLETERW;
 				end
@@ -246,14 +247,7 @@ always_ff @(posedge aclk) begin
 					m_axi.wlast <= 0;
 					m_axi.bready <= 1;
 
-					dmaop_count <= dmaop_count - 'd1;
-					dmastate <= DMARESUME;
-				end
-			end
-
-			DMARESUME: begin
-				if (m_axi.bvalid /*&& m_axi.bready*/) begin
-					m_axi.bready <= 0;
+					// NOTE: Ignoring if (m_axi.bvalid /*&& m_axi.bready*/) m_axi.bready <= 0;, we just push a write and forget it
 
 					// Set up next read, if there's one
 					m_axi.arvalid <= (dmaop_count == 'd0) ? 1'b0 : 1'b1;

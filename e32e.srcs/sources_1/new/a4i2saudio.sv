@@ -167,5 +167,6 @@ assign s_axi.rlast = 1'b1;
 assign s_axi.arready = 1'b1;
 assign s_axi.rvalid = 1'b1;
 assign s_axi.rresp = 2'b00;
+assign s_axi.rdata = 0;
 
 endmodule
