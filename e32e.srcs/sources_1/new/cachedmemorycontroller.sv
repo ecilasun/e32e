@@ -64,9 +64,9 @@ module cachedmemorycontroller (
 					if (/*m_axi.wvalid &&*/ m_axi.wready) begin
 						m_axi.wdata <= din[wdata_cnt];
 						m_axi.wlast <= (wdata_cnt == (burstlen-1)) ? 1 : 0;
+						m_axi.bready <= (wdata_cnt == (burstlen-1)) ? 1 : 0;
 						wdata_cnt <= wdata_cnt + 1;
 					end
-					m_axi.bready <= (wdata_cnt == (burstlen-1));
 					writestate <= (wdata_cnt == (burstlen-1)) ? WRESP : WDATA;
 				end
 
