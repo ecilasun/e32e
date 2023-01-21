@@ -2,8 +2,6 @@
 
 module dmacore(
 	input wire aclk,
-	input wire clk25,
-	input wire clk250,
 	input wire aresetn,
 	axi_if.master m_axi,
 	input wire dmafifoempty,
@@ -21,23 +19,15 @@ assign dmabusy = dmainprogress;
 // Setup
 // ------------------------------------------------------------------------------------
 
-logic [7:0] burstlen = 'd20;
-logic dmastrobe = 1'b0;
+localparam burstcount = 8'd1;		// Single burst
 
-assign m_axi.arlen = 0;	// one burst
+assign m_axi.arlen = burstcount - 8'd1;
 assign m_axi.arsize = SIZE_16_BYTE; // 128bit read bus
-assign m_axi.arburst = BURST_INCR;
+assign m_axi.arburst = BURST_INCR;	// auto address increment for burst
 
-assign m_axi.awlen = 0;				// one burst
+assign m_axi.awlen = burstcount - 8'd1;
 assign m_axi.awsize = SIZE_16_BYTE; // 128bit write bus
-assign m_axi.awburst = BURST_INCR;
-
-// NOTE: First, set up the scanout address, then enable video scanout
-logic [31:0] scanaddr = 32'h00000000;
-logic [31:0] scanoffset = 0;
-logic scanenable = 1'b0;
-
-logic [5:0] rdata_cnt = 'd0;
+assign m_axi.awburst = BURST_INCR;	// auto address increment for burst
 
 // ------------------------------------------------------------------------------------
 // Command FIFO
@@ -54,7 +44,6 @@ dmacmdmodetype cmdmode = WCMD;
 
 logic [31:0] dmacmd = 'd0;
 
-// TODO: DMA queue FIFO and wires, first word fallthrough
 wire dmaqueuefull;
 wire dmaqueuevalid;
 wire dmaqueueempty;
@@ -153,30 +142,54 @@ always_ff @(posedge aclk) begin
 end
 
 // ------------------------------------------------------------------------------------
-// DMA logic
+// Output data fifo (populated by read unit)
 // ------------------------------------------------------------------------------------
 
-typedef enum logic [2:0] {DETECTCMD, STARTDMA, DMAREADSOURCE, COPYBLOCK, DMAWRITEDEST, DMACOMPLETERW} dmastatetype;
-dmastatetype dmastate = DETECTCMD;
+wire dmacopyfull, dmacopyempty, dmacopyvalid;
+logic [127:0] dmacopydin;
+wire [127:0] dmacopydout;
+logic dmacopyre = 0;
+logic dmacopywe = 0;
+
+dmadatafifo dmadatafifoinst(
+	.full(dmacopyfull),
+	.din(dmacopydin),
+	.wr_en(dmacopywe),
+	.empty(dmacopyempty),
+	.dout(dmacopydout),
+	.rd_en(dmacopyre),
+	.valid(dmacopyvalid),
+	.clk(aclk),
+	.srst(~aresetn) );
+
+// ------------------------------------------------------------------------------------
+// DMA logic - Read
+// ------------------------------------------------------------------------------------
+
+typedef enum logic [2:0] {DETECTCMD, STARTDMA, DMAREADSOURCE, COPYBLOCK, COPYLOOP, WAITFORPENDINGWRITES} dmareadstatetype;
+dmareadstatetype dmareadstate = DETECTCMD;
 
 logic [31:0] dmaop_source;
 logic [31:0] dmaop_target;
 logic [31:0] dmaop_count;
-logic [127:0] copydata;
+logic writestrobe = 0;
 
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
 		m_axi.arvalid <= 0;
 		m_axi.rready <= 0;
-		dmastate <= DETECTCMD;
+		dmareadstate <= DETECTCMD;
 	end else begin
 
 		dmaqueuere <= 1'b0;
+		dmacopywe <= 1'b0;
+		writestrobe <= 1'b0;
 
-		case (dmastate)
+		case (dmareadstate)
 			DETECTCMD: begin
 				// TODO: Instead of strobe, write command to a DMA fifo
 				if (~dmaqueueempty && dmaqueuevalid) begin
+
 					// TBD: This unit doesn't handle misaligned copies yet
 					// TBD: This unit doesn't do burst copy yet
 
@@ -185,22 +198,22 @@ always_ff @(posedge aclk) begin
 					dmaop_count <= dmaqueuedout[31:0];
 
 					dmainprogress <= 1'b1;
+					writestrobe <= 1'b1;
+
 					// Advance FIFO
 					dmaqueuere <= 1'b1;
-					dmastate <= STARTDMA;
+					dmareadstate <= STARTDMA;
 				end
 			end
 
 			STARTDMA: begin
-				// TODO: Generate leadmask / trailmask for misaligned copies (start address and/or length not a multiple of 128 bits)
-
 				// Set up read
 				m_axi.arvalid <= 1;
 				m_axi.araddr <= dmaop_source;
 				dmaop_source <= dmaop_source + 32'd16; // Next batch
 
 				// Dummy state, go back to where we were
-				dmastate <= DMAREADSOURCE;
+				dmareadstate <= DMAREADSOURCE;
 			end
 
 			DMAREADSOURCE: begin
@@ -208,7 +221,7 @@ always_ff @(posedge aclk) begin
 					m_axi.arvalid <= 0;
 					m_axi.rready <= 1;
 					dmaop_count <= dmaop_count - 'd1;
-					dmastate <= COPYBLOCK;
+					dmareadstate <= COPYBLOCK;
 				end
 			end
 
@@ -216,14 +229,77 @@ always_ff @(posedge aclk) begin
 				if (m_axi.rvalid  /*&& m_axi.rready*/) begin
 					m_axi.rready <= 1'b0;
 
-					copydata <= m_axi.rdata;
+					// Let write module take care of it
+					dmacopywe <= 1'b1;
+					dmacopydin <= m_axi.rdata;
 
-					m_axi.awvalid <= 1'b1;
-					m_axi.awaddr <= dmaop_target;
-					dmaop_target <= dmaop_target + 32'd16; // Next batch
-
-					dmastate <= DMAWRITEDEST;
+					dmareadstate <= COPYLOOP;
 				end
+			end
+
+			COPYLOOP: begin
+				// Set up next read, if there's one
+				m_axi.arvalid <= (dmaop_count == 'd0) ? 1'b0 : 1'b1;
+				m_axi.araddr <= dmaop_source;
+				dmaop_source <= dmaop_source + 32'd16; // Next batch
+
+				// If we're done reading, wait for the writes trailing behind
+				dmareadstate <= (dmaop_count == 'd0) ? WAITFORPENDINGWRITES : DMAREADSOURCE;
+			end
+
+			WAITFORPENDINGWRITES: begin
+				dmainprogress <= ~dmacopyempty;
+				dmareadstate <= dmacopyempty ? DETECTCMD : WAITFORPENDINGWRITES;
+			end
+
+		endcase
+	end
+end
+
+// ------------------------------------------------------------------------------------
+// DMA logic - Write
+// ------------------------------------------------------------------------------------
+
+typedef enum logic [2:0] {WRITEIDLE, DETECTFIFO, STARTWRITE, DMAWRITEDEST, DMAWRITELOOP} dmawritestatetype;
+dmawritestatetype dmawritestate = WRITEIDLE;
+
+logic [127:0] copydata;
+logic [31:0] dmaop_target_copy;
+
+always_ff @(posedge aclk) begin
+	if (~aresetn) begin
+		m_axi.awvalid <= 0;
+		m_axi.wvalid <= 0;
+		m_axi.wstrb <= 16'h0000;
+		m_axi.wlast <= 0;
+		m_axi.bready <= 0;
+		dmawritestate <= WRITEIDLE;
+	end else begin
+
+		dmacopyre <= 1'b0;
+
+		case (dmawritestate)
+			WRITEIDLE: begin
+				if (writestrobe) begin
+					dmaop_target_copy <= dmaop_target;
+					dmawritestate <= DETECTFIFO;
+				end
+			end
+			
+			DETECTFIFO: begin
+				if (~dmacopyempty && dmacopyvalid) begin
+					copydata <= dmacopydout;
+					// Advance FIFO
+					dmacopyre <= 1'b1;
+					dmawritestate <= STARTWRITE;
+				end
+			end
+
+			STARTWRITE: begin
+				m_axi.awvalid <= 1'b1;
+				m_axi.awaddr <= dmaop_target_copy;
+				dmaop_target_copy <= dmaop_target_copy + 32'd16; // Next batch
+				dmawritestate <= DMAWRITEDEST;
 			end
 
 			DMAWRITEDEST: begin
@@ -231,15 +307,15 @@ always_ff @(posedge aclk) begin
 					m_axi.awvalid <= 1'b0;
 
 					m_axi.wvalid <= 1'b1;
-					m_axi.wstrb <= 16'hFFFF; // TBD: depends on leadmask / trailmask
+					m_axi.wstrb <= 16'hFFFF;
 					m_axi.wdata <= copydata;
 					m_axi.wlast <= 1'b1;
 
-					dmastate <= DMACOMPLETERW;
+					dmawritestate <= DMAWRITELOOP;
 				end
 			end
 
-			DMACOMPLETERW: begin
+			DMAWRITELOOP: begin
 				if (/*m_axi.wvalid &&*/ m_axi.wready) begin
 					m_axi.wvalid <= 0;
 
@@ -247,19 +323,11 @@ always_ff @(posedge aclk) begin
 					m_axi.wlast <= 0;
 					m_axi.bready <= 1;
 
-					// NOTE: Ignoring if (m_axi.bvalid /*&& m_axi.bready*/) m_axi.bready <= 0;, we just push a write and forget it
-
-					// Set up next read, if there's one
-					m_axi.arvalid <= (dmaop_count == 'd0) ? 1'b0 : 1'b1;
-					m_axi.araddr <= dmaop_source;
-					dmaop_source <= dmaop_source + 32'd16; // Next batch
-
-					// If we're done, listen to next command
-					dmastate <= (dmaop_count == 'd0) ? DETECTCMD : DMAREADSOURCE;
-					dmainprogress <= (dmaop_count == 'd0) ? 1'b0 : 1'b1;
+					// Done with one write, go fetch the next, if any
+					dmawritestate <= DETECTFIFO;
 				end
 			end
-	endcase
+		endcase
 	end
 end
 
