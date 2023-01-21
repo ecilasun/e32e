@@ -260,7 +260,7 @@ end
 // DMA logic - Write
 // ------------------------------------------------------------------------------------
 
-typedef enum logic [2:0] {WRITEIDLE, DETECTFIFO, STARTWRITE, DMAWRITEDEST, DMAWRITELOOP} dmawritestatetype;
+typedef enum logic [2:0] {WRITEIDLE, DETECTFIFO, STARTWRITE, DMAWRITEDEST, DMAWRITELOOP, DMAWRITETRAIL} dmawritestatetype;
 dmawritestatetype dmawritestate = WRITEIDLE;
 
 logic [127:0] copydata;
@@ -327,6 +327,13 @@ always_ff @(posedge aclk) begin
 					m_axi.wlast <= 0;
 					m_axi.bready <= 1;
 
+					dmawritestate <= DMAWRITETRAIL;
+				end
+			end
+
+			DMAWRITETRAIL: begin
+				if (m_axi.bvalid /*&& m_axi.bready*/) begin
+					m_axi.bready <= 0;
 					// Done with one write, go fetch the next, if any
 					dmawritestate <= (dmaop_count_copy == 0) ? WRITEIDLE : DETECTFIFO;
 				end
