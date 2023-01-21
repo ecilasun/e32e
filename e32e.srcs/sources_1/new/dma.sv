@@ -265,6 +265,7 @@ dmawritestatetype dmawritestate = WRITEIDLE;
 
 logic [127:0] copydata;
 logic [31:0] dmaop_target_copy;
+logic [31:0] dmaop_count_copy;
 
 always_ff @(posedge aclk) begin
 	if (~aresetn) begin
@@ -282,6 +283,7 @@ always_ff @(posedge aclk) begin
 			WRITEIDLE: begin
 				if (writestrobe) begin
 					dmaop_target_copy <= dmaop_target;
+					dmaop_count_copy <= dmaop_count;
 					dmawritestate <= DETECTFIFO;
 				end
 			end
@@ -311,6 +313,8 @@ always_ff @(posedge aclk) begin
 					m_axi.wdata <= copydata;
 					m_axi.wlast <= 1'b1;
 
+					dmaop_count_copy <= dmaop_count_copy - 'd1;
+
 					dmawritestate <= DMAWRITELOOP;
 				end
 			end
@@ -324,7 +328,7 @@ always_ff @(posedge aclk) begin
 					m_axi.bready <= 1;
 
 					// Done with one write, go fetch the next, if any
-					dmawritestate <= DETECTFIFO;
+					dmawritestate <= (dmaop_count_copy == 0) ? WRITEIDLE : DETECTFIFO;
 				end
 			end
 		endcase
