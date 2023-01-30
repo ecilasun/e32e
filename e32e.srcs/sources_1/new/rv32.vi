@@ -103,6 +103,10 @@ wire [31:0] frval2;
 wire [31:0] frval3;
 logic [31:0] frdin;
 
+logic [31:0] fltA;
+logic [31:0] fltB;
+logic [31:0] fltC;
+
 floatregisterfile FREGS(
 	.clock(aclk),
 	.rs1(rs1),
@@ -243,9 +247,9 @@ floatingpointunit FPU(
 	.resetn(aresetn),
 
 	// Inputs
-	.frval1((fi2fstrobe | fui2fstrobe) ? rval1 : frval1),
-	.frval2(frval2),
-	.frval3(frval3),
+	.frval1((fi2fstrobe | fui2fstrobe) ? rval1 : fltA),
+	.frval2(fltB),
+	.frval3(fltC),
 
 	// Operation select strobe
 	.fmaddstrobe(fmaddstrobe),
@@ -428,6 +432,11 @@ always @(posedge aclk) begin
 				ifetch <= ~rready;
 				rwaddress <= rval1 + immed;
 				csrprevval <= csrdout;
+`ifdef ENABLEFPU
+				fltA <= frval1;
+				fltB <= frval2;
+				fltC <= frval3;
+`endif
 				cpustate <= rready ? EXECUTE : FETCH;
 			end
 
@@ -506,7 +515,7 @@ always @(posedge aclk) begin
 							end
 							default: begin // DWORD
 `ifdef ENABLEFPU
-								dout <= instrOneHotOut[`O_H_FLOAT_STW] ? frval2 : rval2;
+								dout <= instrOneHotOut[`O_H_FLOAT_STW] ? fltB : rval2;
 `else
 								dout <= rval2;
 `endif // ENABLEFPU
@@ -684,13 +693,13 @@ always @(posedge aclk) begin
 						frwe <= 1'b1;
 						case(func3)
 							3'b000: begin // FSGNJ
-								frdin <= {frval2[31], frval1[30:0]}; 
+								frdin <= {fltB[31], fltA[30:0]}; 
 							end
 							3'b001: begin  // FSGNJN
-								frdin <= {~frval2[31], frval1[30:0]};
+								frdin <= {~fltB[31], fltA[30:0]};
 							end
 							3'b010: begin  // FSGNJX
-								frdin <= {frval1[31]^frval2[31], frval1[30:0]};
+								frdin <= {fltA[31]^fltB[31], fltA[30:0]};
 							end
 						endcase
 						cpustate <= RETIRE;
@@ -698,7 +707,7 @@ always @(posedge aclk) begin
 					`F7_FMVXW: begin
 						rwe <= 1'b1;
 						if (func3 == 3'b000) // FMVXW
-							rdin <= frval1;
+							rdin <= fltA;
 						else // FCLASS
 							rdin <= 32'd0; // TODO: classify the float
 						cpustate <= RETIRE;
@@ -772,9 +781,9 @@ always @(posedge aclk) begin
 						`F7_FMIN: begin
 							frwe <= 1'b1;
 							if (func3==3'b000) // FMIN
-								frdin <= FPUResult[0] ? frval1 : frval2;
+								frdin <= FPUResult[0] ? fltA : fltB;
 							else // FMAX
-								frdin <= FPUResult[0] ? frval2 : frval1;
+								frdin <= FPUResult[0] ? fltB : fltA;
 						end
 					endcase
 					cpustate <= RETIRE;
