@@ -109,16 +109,16 @@ gpudataoutput gpudata(
 //    BRAM: 20000000..2000FFFF : cached r/w - 64 KBytes
 //   ...  : 20010000..7FFFFFFF : unused
 //          ---- UNCACHED ----
-// MAILBOX: 80000000..80000FFF : uncached r/w - 4 Kbytes
-//    UART: 80001000..8000100F : uncached r/w
-//     SPI: 80001010..8000101F : uncached r/w
-//    PS/2: 80001020..8000102F : uncached r/w
-//     LED: 80001030..8000103F : uncached r/w
-// HARTIRQ: 80001040..8000104F : uncached w
-//   GPUIO: 81001050..8100105F : uncached w
-//     APU: 80001060..8000106F : uncached w
-//     DMA: 80001070..8000107F : uncached w
-//   ...  : 80001080..FFFFFFFF : unused
+// MAILBOX: 80000000..8000FFFF : uncached r/w - 4 Kbytes
+//    UART: 80001000..80001FFF : uncached r/w
+//     SPI: 80002000..80002FFF : uncached r/w
+//    PS/2: 80003000..80003FFF : uncached r/w
+//     LED: 80004000..80004FFF : uncached r/w
+// HARTIRQ: 80005000..80005FFF : uncached w
+//   GPUIO: 80006000..80006FFF : uncached w
+//     APU: 80007000..80007FFF : uncached w
+//     DMA: 80008000..80008FFF : uncached w
+//   ...  : 80009000..FFFFFFFF : unused
 
 // ----------------------------------------------------------------------------
 // Clock / Reset generator
