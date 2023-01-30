@@ -6,10 +6,6 @@ module systemcache(
 	input wire aclk,
 	input wire aresetn,
 	// custom bus to cpu
-	input wire uncached,
-	input wire [7:0] line,
-	input wire [16:0] tag,
-	input wire [3:0] offset,
 	input wire [2:0] dcacheop,
 	input wire [31:0] addr,
 	input wire [31:0] din,
@@ -21,6 +17,11 @@ module systemcache(
 	output logic wready,
 	axi_if.master a4buscached,
 	axi_if.master a4busuncached );
+
+wire [7:0] line = addr[13:6];	// Cache line
+wire [16:0] tag = addr[30:14];	// Cache tag
+wire [3:0] offset = addr[5:2];	// Cache word offset
+wire isuncached = addr[31];		// Uncached access
 
 logic [31:0] cacheaddress;
 data_t cachedin[0:3];
@@ -149,19 +150,17 @@ always_ff @(posedge aclk) begin
 				cline <= {ifetch, line};					// Cache line
 				ctag <= tag;								// Cache tag 00000..1ffff
 				ptag <= cachelinetags[{ifetch, line}];		// Previous cache tag
+				dccount <= 8'h00;
+				cacheid <= dcacheop[2];
 
-				if (dcacheop[0]) begin
-					// Start cache flush / invalidate op
-					dccount <= 8'h00;
-					cacheid <= dcacheop[2];
-					cachestate <= dcacheop[1] ? CDATAFLUSHBEGIN : CDATANOFLUSHBEGIN;
-				end else begin
-					case ({ren, |wstrb})
-						3'b001: cachestate <= uncached ? UCWRITE : CWRITE;
-						3'b010: cachestate <= uncached ? UCREAD : CREAD;
-						default: cachestate <= IDLE;
-					endcase
-				end
+				casex ({dcacheop[0], isuncached, ren, |wstrb})
+					4'b0001: cachestate <= CWRITE;
+					4'b0010: cachestate <= CREAD;
+					4'b0101: cachestate <= UCWRITE;
+					4'b0110: cachestate <= UCREAD;
+					4'b1xxx: cachestate <= dcacheop[1] ? CDATAFLUSHBEGIN : CDATANOFLUSHBEGIN;
+					default: cachestate <= IDLE;
+				endcase
 			end
 
 			CDATANOFLUSHBEGIN: begin
