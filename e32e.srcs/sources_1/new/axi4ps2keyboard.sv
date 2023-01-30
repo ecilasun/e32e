@@ -106,7 +106,7 @@ always @(posedge aclk) begin
 			end
 			2'b01: begin
 				if (s_axi.rready) begin
-					if (s_axi.araddr[3:0] == 4'h8) begin // incoming data available?
+					if (s_axi.araddr[3:0] == 4'h4) begin // incoming data available?
 						s_axi.rdata[31:0] <= {31'd0, ~ps2fifoempty};
 						s_axi.rvalid <= 1'b1;
 						raddrstate <= 2'b11;

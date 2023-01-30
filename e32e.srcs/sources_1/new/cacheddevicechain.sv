@@ -22,18 +22,20 @@ logic validwaddr_ddr3 = 1'b0, validraddr_ddr3 = 1'b0;
 logic validwaddr_bram = 1'b0, validraddr_bram = 1'b0;
 
 always_comb begin
-	casex (axi4if.awaddr)
-		32'b000x_xxxx_xxxx_xxxx_xxxx_xxxx_xxxx_xxxx :	{validwaddr_ddr3, validwaddr_bram} = 2'b10;
-		32'b0010_0000_0000_0000_xxxx_xxxx_xxxx_xxxx :	{validwaddr_ddr3, validwaddr_bram} = 2'b01;
-		default :										{validwaddr_ddr3, validwaddr_bram} = 2'b00;
+	unique case (axi4if.awaddr[31:28])
+		4'b0000,
+		4'b0001:	{validwaddr_ddr3, validwaddr_bram} = 2'b10;
+		4'b0010:	{validwaddr_ddr3, validwaddr_bram} = 2'b01;
+		default:	{validwaddr_ddr3, validwaddr_bram} = 2'b00;
 	endcase
 end
 
 always_comb begin
-	casex (axi4if.araddr)
-		32'b000x_xxxx_xxxx_xxxx_xxxx_xxxx_xxxx_xxxx :	{validraddr_ddr3, validraddr_bram} = 2'b10;
-		32'b0010_0000_0000_0000_xxxx_xxxx_xxxx_xxxx :	{validraddr_ddr3, validraddr_bram} = 2'b01;
-		default :										{validraddr_ddr3, validraddr_bram} = 2'b00;
+	unique case (axi4if.araddr[31:28])
+		4'b0000,
+		4'b0001:	{validraddr_ddr3, validraddr_bram} = 2'b10;
+		4'b0010:	{validraddr_ddr3, validraddr_bram} = 2'b01;
+		default:	{validraddr_ddr3, validraddr_bram} = 2'b00;
 	endcase
 end
 
