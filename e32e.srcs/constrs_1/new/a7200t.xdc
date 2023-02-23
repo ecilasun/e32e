@@ -385,18 +385,13 @@ set_false_path -from [get_pins {wallclocktime_reg[*]/C}]
 set_false_path -from [get_pins {cpuclocktime_reg[*]/C}]
 
 # MISC
-set_false_path -to [get_ports led[*]]
+set_false_path -to [get_ports {led[*]}]
 # set_false_path -to [get_ports uart_txd_in]
 # set_false_path -to [get_ports uart_rxd_out]
 
-
-
-
-
-
-
-
-
-
-
-
+set_clock_groups -name asyncgrpA -asynchronous -group [get_clocks -of_objects [get_pins ClockAndResetGen/centralclock/inst/plle2_adv_inst/CLKOUT0]] -group [get_clocks -of_objects [get_pins CDEVICECHAIN/DDR3512M/ddr3instance/u_mig_7series_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i/CLKFBOUT]]
+set_clock_groups -name asyncgrpB -asynchronous -group [get_clocks -of_objects [get_pins ClockAndResetGen/centralclock/inst/plle2_adv_inst/CLKOUT1]] -group [get_clocks -of_objects [get_pins ClockAndResetGen/peripheralclock/inst/plle2_adv_inst/CLKOUT2]]
+set_clock_groups -name asyncgrpC -asynchronous -group [get_clocks -of_objects [get_pins ClockAndResetGen/peripheralclock/inst/plle2_adv_inst/CLKOUT1]] -group [get_clocks -of_objects [get_pins ClockAndResetGen/centralclock/inst/plle2_adv_inst/CLKOUT0]]
+set_clock_groups -name asyncgrpD -asynchronous -group [get_clocks -of_objects [get_pins ClockAndResetGen/peripheralclock/inst/plle2_adv_inst/CLKOUT1]] -group [get_clocks -of_objects [get_pins ClockAndResetGen/peripheralclock/inst/plle2_adv_inst/CLKOUT0]]
+set_clock_groups -name asyncgrpE -asynchronous -group [get_clocks -of_objects [get_pins ClockAndResetGen/peripheralclock/inst/plle2_adv_inst/CLKOUT2]] -group [get_clocks -of_objects [get_pins ClockAndResetGen/centralclock/inst/plle2_adv_inst/CLKOUT0]]
+set_clock_groups -name asyncgrpF -asynchronous -group [get_clocks -of_objects [get_pins ClockAndResetGen/ddr3memoryclock/inst/plle2_adv_inst/CLKOUT1]] -group [get_clocks -of_objects [get_pins CDEVICECHAIN/DDR3512M/ddr3instance/u_mig_7series_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i/CLKFBOUT]]

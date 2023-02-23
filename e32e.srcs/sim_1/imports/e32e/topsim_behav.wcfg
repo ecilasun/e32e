@@ -13,13 +13,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="184,026.400000 ns"></ZoomStartTime>
-      <ZoomEndTime time="187,236.400001 ns"></ZoomEndTime>
-      <Cursor1Time time="185,370.400000 ns"></Cursor1Time>
+      <ZoomStartTime time="16,654.463937 ns"></ZoomStartTime>
+      <ZoomEndTime time="21,094.463938 ns"></ZoomEndTime>
+      <Cursor1Time time="20,354.463937 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="222"></NameColumnWidth>
-      <ValueColumnWidth column_width="100"></ValueColumnWidth>
+      <ValueColumnWidth column_width="94"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="264" />
    <wave_markers>
@@ -855,6 +855,10 @@
       <obj_property name="label">ddr3</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
+   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3instance/init_calib_complete" type="logic">
+      <obj_property name="ElementShortName">init_calib_complete</obj_property>
+      <obj_property name="ObjectShortName">init_calib_complete</obj_property>
+   </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3instance/ddr3_dq" type="array">
       <obj_property name="ElementShortName">ddr3_dq[15:0]</obj_property>
       <obj_property name="ObjectShortName">ddr3_dq[15:0]</obj_property>
@@ -1106,10 +1110,6 @@
    <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3instance/s_axi_rvalid" type="logic">
       <obj_property name="ElementShortName">s_axi_rvalid</obj_property>
       <obj_property name="ObjectShortName">s_axi_rvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3instance/init_calib_complete" type="logic">
-      <obj_property name="ElementShortName">init_calib_complete</obj_property>
-      <obj_property name="ObjectShortName">init_calib_complete</obj_property>
    </wvobject>
    <wvobject fp_name="/topsim/tophatsiminst/CDEVICECHAIN/DDR3512M/ddr3instance/device_temp" type="array">
       <obj_property name="ElementShortName">device_temp[11:0]</obj_property>
