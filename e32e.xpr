@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Product Version: Vivado v2022.1.2 (64-bit)              -->
+<!-- Product Version: Vivado v2022.2 (64-bit)              -->
 <!--                                                         -->
 <!-- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="60" Path="G:/e32e/e32e.xpr">
+<Project Version="7" Minor="61" Path="G:/e32e/e32e.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="8221a9d6005e4863b8b11bee6ceecec5"/>
@@ -28,13 +28,13 @@
     <Option Name="SimulatorGccInstallDirVCS" Val=""/>
     <Option Name="SimulatorGccInstallDirRiviera" Val=""/>
     <Option Name="SimulatorGccInstallDirActiveHdl" Val=""/>
-    <Option Name="SimulatorVersionXsim" Val="2022.1"/>
-    <Option Name="SimulatorVersionModelSim" Val="2021.3"/>
-    <Option Name="SimulatorVersionQuesta" Val="2021.3"/>
+    <Option Name="SimulatorVersionXsim" Val="2022.2"/>
+    <Option Name="SimulatorVersionModelSim" Val="2022.2"/>
+    <Option Name="SimulatorVersionQuesta" Val="2022.2"/>
     <Option Name="SimulatorVersionXcelium" Val="20.09.006"/>
     <Option Name="SimulatorVersionVCS" Val="R-2020.12"/>
-    <Option Name="SimulatorVersionRiviera" Val="2021.04"/>
-    <Option Name="SimulatorVersionActiveHdl" Val="12.0"/>
+    <Option Name="SimulatorVersionRiviera" Val="2022.04"/>
+    <Option Name="SimulatorVersionActiveHdl" Val="13.0"/>
     <Option Name="SimulatorGccVersionXsim" Val="6.2.0"/>
     <Option Name="SimulatorGccVersionModelSim" Val="7.4.0"/>
     <Option Name="SimulatorGccVersionQuesta" Val="7.4.0"/>
@@ -52,6 +52,7 @@
     <Option Name="IPCachePermission" Val="write"/>
     <Option Name="EnableCoreContainer" Val="TRUE"/>
     <Option Name="EnableResourceEstimation" Val="FALSE"/>
+    <Option Name="SimCompileState" Val="TRUE"/>
     <Option Name="CreateRefXciForCoreContainers" Val="FALSE"/>
     <Option Name="IPUserFilesDir" Val="$PIPUSERFILESDIR"/>
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
@@ -64,13 +65,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="562"/>
-    <Option Name="WTModelSimExportSim" Val="562"/>
-    <Option Name="WTQuestaExportSim" Val="562"/>
+    <Option Name="WTXSimExportSim" Val="578"/>
+    <Option Name="WTModelSimExportSim" Val="578"/>
+    <Option Name="WTQuestaExportSim" Val="578"/>
     <Option Name="WTIesExportSim" Val="442"/>
-    <Option Name="WTVcsExportSim" Val="562"/>
-    <Option Name="WTRivieraExportSim" Val="562"/>
-    <Option Name="WTActivehdlExportSim" Val="561"/>
+    <Option Name="WTVcsExportSim" Val="578"/>
+    <Option Name="WTRivieraExportSim" Val="578"/>
+    <Option Name="WTActivehdlExportSim" Val="577"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -467,38 +468,6 @@
         <FileInfo>
           <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/fp_madd/fp_madd.xci"/>
           <Attr Name="ImportTime" Val="1651350118"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/ip/videoclockgen.xcix">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/ip/videoclockgen/videoclockgen.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/videoclockgen/videoclockgen.xci"/>
-          <Attr Name="ImportTime" Val="1651350135"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/ip/centralclockgen.xcix">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/ip/centralclockgen/centralclockgen.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/centralclockgen/centralclockgen.xci"/>
-          <Attr Name="ImportTime" Val="1645679782"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -979,28 +948,6 @@
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
-    <FileSet Name="ddr3clk" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ddr3clk" RelGenDir="$PGENDIR/ddr3clk">
-      <File Path="$PSRCDIR/sources_1/ip/ddr3clk.xcix">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/ip/ddr3clk/ddr3clk.xci">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/ddr3clk/ddr3clk.xci"/>
-          <Attr Name="ImportTime" Val="1651350097"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <Config>
-        <Option Name="TopModule" Val="ddr3clk"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
     <FileSet Name="mig_7series_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/mig_7series_0" RelGenDir="$PGENDIR/mig_7series_0">
       <File Path="$PSRCDIR/sources_1/ip/mig_7series_0_1/mig_7series_0.xci">
         <FileInfo>
@@ -1074,6 +1021,72 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
+    <FileSet Name="centralclockgen" Type="BlockSrcs" RelSrcDir="$PSRCDIR/centralclockgen" RelGenDir="$PGENDIR/centralclockgen">
+      <File Path="$PSRCDIR/sources_1/ip/centralclockgen.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/centralclockgen/centralclockgen.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/centralclockgen/centralclockgen.xci"/>
+          <Attr Name="ImportTime" Val="1645679782"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="centralclockgen"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="ddr3clk" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ddr3clk" RelGenDir="$PGENDIR/ddr3clk">
+      <File Path="$PSRCDIR/sources_1/ip/ddr3clk.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/ddr3clk/ddr3clk.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/ddr3clk/ddr3clk.xci"/>
+          <Attr Name="ImportTime" Val="1651350097"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="ddr3clk"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="videoclockgen" Type="BlockSrcs" RelSrcDir="$PSRCDIR/videoclockgen" RelGenDir="$PGENDIR/videoclockgen">
+      <File Path="$PSRCDIR/sources_1/ip/videoclockgen.xcix">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/ip/videoclockgen/videoclockgen.xci">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/videoclockgen/videoclockgen.xci"/>
+          <Attr Name="ImportTime" Val="1651350135"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="videoclockgen"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
   </FileSets>
   <Simulators>
     <Simulator Name="XSim">
@@ -1101,16 +1114,6 @@
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="ddr3clk_synth_1" Type="Ft3:Synth" SrcSet="ddr3clk" Part="xc7a200tsbg484-1" ConstrsSet="ddr3clk" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/ddr3clk_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ddr3clk_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ddr3clk_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
@@ -1154,6 +1157,42 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
+    <Run Id="centralclockgen_synth_1" Type="Ft3:Synth" SrcSet="centralclockgen" Part="xc7a200tsbg484-1" ConstrsSet="centralclockgen" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/centralclockgen_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/centralclockgen_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/centralclockgen_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ddr3clk_synth_1" Type="Ft3:Synth" SrcSet="ddr3clk" Part="xc7a200tsbg484-1" ConstrsSet="ddr3clk" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/ddr3clk_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ddr3clk_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ddr3clk_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="videoclockgen_synth_1" Type="Ft3:Synth" SrcSet="videoclockgen" Part="xc7a200tsbg484-1" ConstrsSet="videoclockgen" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/videoclockgen_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/videoclockgen_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/videoclockgen_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
     <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="F:/FPGA/e32e/e32e.srcs/utils_1/imports/impl_1" AutoRQSDir="F:/FPGA/e32e/e32e.srcs/utils_1/imports/impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
@@ -1171,23 +1210,6 @@
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="ddr3clk_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="ddr3clk" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="ddr3clk_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ddr3clk_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ddr3clk_impl_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
@@ -1245,6 +1267,63 @@
     <Run Id="dmadatafifo_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="dmadatafifo" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="dmadatafifo_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/dmadatafifo_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/dmadatafifo_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="centralclockgen_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="centralclockgen" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="centralclockgen_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/centralclockgen_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/centralclockgen_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ddr3clk_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="ddr3clk" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="ddr3clk_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ddr3clk_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ddr3clk_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="videoclockgen_impl_1" Type="Ft2:EntireDesign" Part="xc7a200tsbg484-1" ConstrsSet="videoclockgen" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="videoclockgen_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/videoclockgen_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/videoclockgen_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022">
+          <Desc>Default settings for Implementation.</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

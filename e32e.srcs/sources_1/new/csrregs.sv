@@ -9,11 +9,11 @@ module csrregisterfile #(
 	input wire [63:0] wallclocktime,
 	input wire [63:0] cpuclocktime,
 	input wire [63:0] retired,
-	output logic [63:0] tcmp = 64'hFFFFFFFFFFFFFFFF,
-	output logic [31:0] mie = 0,
-	output logic [31:0] mip = 0,
-	output logic [31:0] mtvec = 0,
-	output logic [31:0] mepc = 0,
+	output wire [63:0] tcmp,
+	output wire [31:0] mie,
+	output wire [31:0] mip,
+	output wire [31:0] mtvec,
+	output wire [31:0] mepc,
 	input wire [4:0] csrindex,
 	input wire we,
 	output logic [31:0] dout,
@@ -23,6 +23,18 @@ logic [31:0] csrreg [0:`CSR_REGISTER_COUNT-1];
 logic csrwe = 1'b0;
 logic [31:0] csrin = 32'd0;
 logic [31:0] csrval = 32'd0;
+
+logic [63:0] tcmpreg = 64'hFFFFFFFFFFFFFFFF;
+logic [31:0] miereg = 0;
+logic [31:0] mipreg = 0;
+logic [31:0] mtvecreg = 0;
+logic [31:0] mepcreg = 0;
+
+assign tcmp = tcmpreg;
+assign mie = miereg;
+assign mip = mipreg;
+assign mtvec = mtvecreg;
+assign mepc = mepcreg;
 
 // see https://cv32e40p.readthedocs.io/en/latest/control_status_registers/#cs-registers for defaults
 initial begin
@@ -51,12 +63,12 @@ always @(posedge clock) begin
 		csrreg[csrindex] <= din;
 		// Reflect to shadow copy
 		case(csrindex)
-			`CSR_MIE:		mie <= din;
-			`CSR_MIP:		mip <= din;
-			`CSR_MTVEC:		mtvec <= din;
-			`CSR_TIMECMPLO:	tcmp[31:0] <= din;
-			`CSR_TIMECMPHI:	tcmp[63:32] <= din;
-			`CSR_MEPC:		mepc <= din;
+			`CSR_MIE:		miereg <= din;
+			`CSR_MIP:		mipreg <= din;
+			`CSR_MTVEC:		mtvecreg <= din;
+			`CSR_TIMECMPLO:	tcmpreg[31:0] <= din;
+			`CSR_TIMECMPHI:	tcmpreg[63:32] <= din;
+			`CSR_MEPC:		mepcreg <= din;
 			default:	;
 		endcase
 	end
@@ -69,12 +81,12 @@ always_comb begin
 		`CSR_MCAUSE,
 		`CSR_MSTATUS:	dout = csrreg[csrindex];
 		// Reads routed to external wires
-		`CSR_MEPC:		dout = mepc;
+		`CSR_MEPC:		dout = mepcreg;
 		`CSR_TIMECMPLO:	dout = tcmp[31:0];
 		`CSR_TIMECMPHI:	dout = tcmp[63:32];
-		`CSR_MIE:		dout = mie;
-		`CSR_MIP:		dout = mip;
-		`CSR_MTVEC:		dout = mtvec;
+		`CSR_MIE:		dout = miereg;
+		`CSR_MIP:		dout = mipreg;
+		`CSR_MTVEC:		dout = mtvecreg;
 		`CSR_MHARTID:	dout = HARTID; // Immutable
 		`CSR_CYCLELO:	dout = cpuclocktime[31:0];
 		`CSR_CYCLEHI:	dout = cpuclocktime[63:32];
